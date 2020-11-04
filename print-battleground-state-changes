@@ -5,6 +5,7 @@ import datetime
 import json
 import pprint
 import subprocess
+import humanize
 
 AZ_INDEX = 3
 GA_INDEX = 10
@@ -86,17 +87,10 @@ for state_index in STATE_INDEXES:
         # Save info for the next iteration
         last_iteration_info = iteration_info
 
-
-print('┌────────────────────────────────┐')
-print('│ Legend:                        │')
-print('│   *** less than 30 minutes ago │')
-print('│   --- more than 30 minutes ago │')
-print('└────────────────────────────────┘')
-
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
     for (timestamp, candidate_votes) in reversed(timestamped_results.items()):
-        minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
-        symbology = '---' if minutes_ago > 30 else '***'
+        delta = (datetime.datetime.utcnow() - timestamp)
+        delta_str = humanize.naturaltime(delta)
         formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
-        print(f'  {formatted_timestamp} {symbology} {candidate_votes}')
+        print(f'  {formatted_timestamp} ({delta_str}) {candidate_votes}')
