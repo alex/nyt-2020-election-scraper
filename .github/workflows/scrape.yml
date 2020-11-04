@@ -15,6 +15,7 @@ jobs:
     - name: Fetch latest data
       run: |-
         curl "https://static01.nyt.com/elections-assets/2020/data/api/2020-11-03/votes-remaining-page/national/president.json" | jq . > results.json
+        ./print-battleground-state-changes > battleground-state-changes.txt
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
