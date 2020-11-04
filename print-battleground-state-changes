@@ -48,7 +48,7 @@ for state_index in STATE_INDEXES:
         vote_diff = candidate1['votes'] - candidate2['votes']
         precints_reporting = state_blob['precincts_reporting']
         precints_total = state_blob['precincts_total']
-        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes (precints reporting: {precints_reporting}/{precints_total})'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes (precincts reported: {precints_reporting}/{precints_total})'
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
 
