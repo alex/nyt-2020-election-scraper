@@ -55,12 +55,11 @@ for state_index in STATE_INDEXES:
         precints_total = state_blob['precincts_total']
 
         hurdle = (((votes_remaining - vote_diff)/2) + vote_diff) / votes_remaining
-        hurdle_pct = str.format("{:.2%}", hurdle)
-        change_pct = str.format("{:.3%}", hurdle - last)
-        last = hurdle
 
         # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) (underdog needs {hurdle_pct} [{change_pct}])'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) (underdog needs {hurdle:.2%} [{hurdle-last:.3%}])'
+
+        last = hurdle
 
         # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
