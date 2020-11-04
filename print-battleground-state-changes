@@ -40,7 +40,7 @@ summarized = {}
 jsons = fetch_all_results_jsons()
 
 for state_index in STATE_INDEXES:
-    state_name = jsons[0]['data']['races'][state_index]['state_id']
+    state_name = jsons[0]['data']['races'][state_index]['state_name']
     summarized[state_name] = collections.OrderedDict()
     for json in jsons:
         timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
