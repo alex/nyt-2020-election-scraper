@@ -46,8 +46,8 @@ for state_index in STATE_INDEXES:
 
         # Retrieve relevant data from the state’s JSON blob
         state_blob = json['data']['races'][state_index]
-        candidate1 = state_blob['candidates'][0]
-        candidate2 = state_blob['candidates'][1]
+        candidate1 = state_blob['candidates'][0] # Leading candidate
+        candidate2 = state_blob['candidates'][1] # Trailing candidate
         candidate1_name = candidate1['last_name']
         candidate2_name = candidate2['last_name']
         vote_diff = candidate1['votes'] - candidate2['votes']
