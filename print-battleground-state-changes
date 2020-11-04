@@ -36,14 +36,19 @@ def fetch_all_results_jsons():
     git_checkout('master')
     return jsons
 
-summarized = {}
+# List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
+
+# Where we’ll aggregate the data from the JSON files
+summarized = {}
 
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     summarized[state_name] = collections.OrderedDict()
     for json in jsons:
         timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
+
+        # Retrieve relevant data from the state’s JSON blob
         state_blob = json['data']['races'][state_index]
         candidate1 = state_blob['candidates'][0]
         candidate2 = state_blob['candidates'][1]
@@ -52,7 +57,11 @@ for state_index in STATE_INDEXES:
         votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
         precints_reporting = state_blob['precincts_reporting']
         precints_total = state_blob['precincts_total']
+
+        # Generate the string we’ll output
         candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. votes remaining: {votes_remaining:,}) (precincts reported: {precints_reporting}/{precints_total})'
+
+        # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
 
