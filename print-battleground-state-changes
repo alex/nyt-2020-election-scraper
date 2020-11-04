@@ -33,9 +33,6 @@ def fetch_all_results_jsons():
 # List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
 
-with open('all-results.json', 'w') as f:
-  json.dump(jsons, f)
-
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
