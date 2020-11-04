@@ -78,4 +78,5 @@ for (state, timestamped_results) in summarized.items():
     for (timestamp, candidate_votes) in timestamped_results.items():
         minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
         print_fn = print if minutes_ago > 30 else print_bold
-        print_fn(f'  {timestamp}  --  {candidate_votes}')
+        formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
+        print_fn(f'  {formatted_timestamp}  --  {candidate_votes}')
