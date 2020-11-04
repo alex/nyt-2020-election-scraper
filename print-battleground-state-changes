@@ -18,22 +18,6 @@ WI_INDEX = 48
 
 STATE_INDEXES = [AZ_INDEX, GA_INDEX, MI_INDEX, NC_INDEX, NV_INDEX, PA_INDEX, WI_INDEX]
 
-class Color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
-
-
-def print_bold(text):
-    print(Color.BOLD + str(text) + Color.END)
-
 
 def git_checkout(ref):
     subprocess.check_output(['git', 'checkout', '--quiet', ref])
@@ -77,6 +61,6 @@ for (state, timestamped_results) in summarized.items():
     print(state)
     for (timestamp, candidate_votes) in timestamped_results.items():
         minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
-        print_fn = print if minutes_ago > 30 else print_bold
+        symbology = '---' if minutes_ago > 30 else '***'
         formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
-        print_fn(f'  {formatted_timestamp}  --  {candidate_votes}')
+        print_fn(f'  {formatted_timestamp} {symbology} {candidate_votes}')
