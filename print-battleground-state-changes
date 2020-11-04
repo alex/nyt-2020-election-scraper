@@ -33,7 +33,7 @@ def fetch_all_results_jsons():
     while current_commit_short_sha() != FIRST_COMMIT_SHORT_SHA:
         with open('results.json') as f:
             jsons.insert(0, json.load(f))
-        git_checkout('HEAD^')
+        git_checkout(current_commit_short_sha() + '^')
     git_checkout('master')
     return jsons
 
