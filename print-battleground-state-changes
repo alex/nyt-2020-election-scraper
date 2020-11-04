@@ -67,6 +67,7 @@ for state_index in STATE_INDEXES:
         votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
         precincts_reporting = state_blob['precincts_reporting']
         precincts_total = state_blob['precincts_total']
+        counted_since = 0 if last_iteration_info.votes_remaining is None else (last_iteration_info.votes_remaining - votes_remaining)
 
         hurdle = (((votes_remaining - vote_diff)/2) + vote_diff) / votes_remaining
 
@@ -82,7 +83,7 @@ for state_index in STATE_INDEXES:
             continue
 
         # Generate the string we’ll output and store it
-        summarized[state_name][timestamp] = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
+        summarized[state_name][timestamp] = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}, {counted_since:,} counted since last update) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
