@@ -31,6 +31,12 @@ def fetch_all_results_jsons():
     jsons.sort(key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
     return jsons
 
+# Information that is shared across loop iterations
+IterationInfo = collections.namedtuple(
+    'IterationInfo',
+    ['vote_diff', 'votes_remaining', 'precincts_reporting', 'hurdle']
+)
+
 # List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
 
@@ -41,10 +47,12 @@ for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     summarized[state_name] = collections.OrderedDict()
 
-    last_hurdle = 0
-
-    # Vote diff, votes remaining, precincts reporting
-    last_info = (None, None, None)
+    last_iteration_info = IterationInfo(
+        vote_diff=None,
+        votes_remaining=None,
+        precincts_reporting=None,
+        hurdle=0
+    )
 
     for json in jsons:
         timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -62,15 +70,22 @@ for state_index in STATE_INDEXES:
 
         hurdle = (((votes_remaining - vote_diff)/2) + vote_diff) / votes_remaining
 
-        # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_hurdle:.3%}])'
+        iteration_info = IterationInfo(
+            vote_diff=vote_diff,
+            votes_remaining=votes_remaining,
+            precincts_reporting=precincts_reporting,
+            hurdle=hurdle,
+        )
+        if last_iteration_info == iteration_info:
+            continue
 
-        last_hurdle = hurdle
-        last_info = (vote_diff, votes_remaining, precincts_reporting)
+        # Generate the string we’ll output
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
+
+        last_iteration_info = iteration_info
 
         # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
-        if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
-            summarized[state_name][timestamp] = candidate_votes
+        summarized[state_name][timestamp] = candidate_votes
 
 
 print('┌────────────────────────────────┐')
