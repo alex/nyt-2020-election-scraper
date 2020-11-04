@@ -61,12 +61,14 @@ for state_index in STATE_INDEXES:
             summarized[state_name][timestamp] = candidate_votes
 
 
-print('Legend:')
-print('  --- indicates more than 30 minutes ago')
-print('  *** indicates less than 30 minutes ago')
+print('┌────────────────────────────────┐')
+print('│ Legend:                        │')
+print('│   *** less than 30 minutes ago │')
+print('│   --- more than 30 minutes ago │')
+print('└────────────────────────────────┘')
 
 for (state, timestamped_results) in summarized.items():
-    print(f'\n{state}')
+    print(f'\n{state}:')
     for (timestamp, candidate_votes) in reversed(timestamped_results.items()):
         minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
         symbology = '---' if minutes_ago > 30 else '***'
