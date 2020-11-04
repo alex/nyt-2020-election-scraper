@@ -25,9 +25,9 @@ jobs:
         timestamp=$(date -u)
         git commit -m "Latest data: ${timestamp}" || exit 0
         git push
-    - name: Install Python module
+    - name: Install Python requirements
       run: |-
-        pip install humanize
+        pip install -r requirements.txt
     - name: Generate battleground-state-changes.txt
       run: |-
         ./print-battleground-state-changes > tmp
