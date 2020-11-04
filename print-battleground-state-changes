@@ -33,6 +33,9 @@ def fetch_all_results_jsons():
 # List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
 
+with open('all-results.json', 'w') as f:
+  json.dump(jsons, f)
+
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
@@ -52,13 +55,17 @@ for state_index in STATE_INDEXES:
         precints_reporting = state_blob['precincts_reporting']
         precints_total = state_blob['precincts_total']
 
+        hurdle = (((votes_remaining - vote_diff)/2) + vote_diff) / votes_remaining
+        hurdle_pct = str.format("{:.2%}", hurdle)
+        change_pct = str.format("{:.3%}", hurdle - last)
+        last = hurdle
+
         # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. votes remaining: {votes_remaining:,}) (precincts reported: {precints_reporting}/{precints_total})'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) (underdog needs {hurdle_pct} [{change_pct}])'
 
         # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
-
 
 print('Legend:')
 print('  --- indicates more than 30 minutes ago')
