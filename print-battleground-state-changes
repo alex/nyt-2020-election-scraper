@@ -40,6 +40,7 @@ summarized = {}
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     summarized[state_name] = collections.OrderedDict()
+    last = 0
     for json in jsons:
         timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
@@ -53,8 +54,13 @@ for state_index in STATE_INDEXES:
         precints_reporting = state_blob['precincts_reporting']
         precints_total = state_blob['precincts_total']
 
+        hurdle = (((votes_remaining - vote_diff)/2) + vote_diff) / votes_remaining
+        hurdle_pct = str.format("{:.2%}", hurdle)
+        change_pct = str.format("{:.3%}", hurdle - last)
+        last = hurdle
+
         # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. votes remaining: {votes_remaining:,}) (precincts reported: {precints_reporting}/{precints_total})'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) (underdog needs {hurdle_pct} [{change_pct}])'
 
         # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
