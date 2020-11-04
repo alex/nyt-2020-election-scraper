@@ -49,6 +49,7 @@ for state_index in STATE_INDEXES:
         candidate1 = state_blob['candidates'][0]
         candidate2 = state_blob['candidates'][1]
         candidate1_name = candidate1['last_name']
+        candidate2_name = candidate2['last_name']
         vote_diff = candidate1['votes'] - candidate2['votes']
         votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
         precints_reporting = state_blob['precincts_reporting']
@@ -60,7 +61,7 @@ for state_index in STATE_INDEXES:
         last = hurdle
 
         # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) (underdog needs {hurdle_pct} [{change_pct}])'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precints_reporting}/{precints_total}) ({candidate2_name} needs {hurdle_pct} [{change_pct}])'
 
         # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
