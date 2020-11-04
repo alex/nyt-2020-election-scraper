@@ -5,10 +5,12 @@ import subprocess
 
 FIRST_COMMIT_SHORT_SHA = '6ab578d'
 
+GA_INDEX = 10
 MI_INDEX = 22
+NC_INDEX = 27
 PA_INDEX = 38
 
-STATE_INDEXES = [MI_INDEX, PA_INDEX]
+STATE_INDEXES = [GA_INDEX, MI_INDEX, NC_INDEX, PA_INDEX]
 
 def git_checkout(ref):
     subprocess.check_output(['git', 'checkout', '--quiet', ref])
