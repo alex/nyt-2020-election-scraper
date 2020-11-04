@@ -63,4 +63,4 @@ for (state, timestamped_results) in summarized.items():
         minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
         symbology = '---' if minutes_ago > 30 else '***'
         formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
-        print_fn(f'  {formatted_timestamp} {symbology} {candidate_votes}')
+        print(f'  {formatted_timestamp} {symbology} {candidate_votes}')
