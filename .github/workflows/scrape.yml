@@ -27,7 +27,7 @@ jobs:
         git push
     - name: Install Python requirements
       run: |-
-        pip install -r requirements.txt
+        pip3 install -r requirements.txt
     - name: Generate battleground-state-changes.txt
       run: |-
         ./print-battleground-state-changes > tmp
