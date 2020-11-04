@@ -28,6 +28,7 @@ def fetch_all_results_jsons():
         with open('results.json') as f:
             jsons.insert(0, json.load(f))
         git_checkout('HEAD^')
+    git_checkout('master')
     return jsons
 
 summarized = {}
