@@ -8,6 +8,7 @@ import json
 import pprint
 import subprocess
 import humanize
+from tabulate import tabulate
 
 AZ_INDEX = 3
 GA_INDEX = 10
@@ -87,16 +88,16 @@ for state_index in STATE_INDEXES:
         if last_iteration_info == iteration_info:
             continue
 
+        delta = (datetime.datetime.utcnow() - timestamp)
+        delta_str = humanize.naturaltime(delta)
+        formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
+
         # Generate the string we’ll output and store it
-        summarized[state_name][timestamp] = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}, {counted_since:,} counted since last update) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
+        summarized[state_name][timestamp] = [f'{formatted_timestamp} ({delta_str})', f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}, {counted_since:,} counted since last update', f'precincts: {precincts_reporting}/{precincts_total}', f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]']
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
 
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
-    for (timestamp, candidate_votes) in reversed(timestamped_results.items()):
-        delta = (datetime.datetime.utcnow() - timestamp)
-        delta_str = humanize.naturaltime(delta)
-        formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
-        print(f'  {formatted_timestamp} ({delta_str}) {candidate_votes}')
+    print(tabulate(reversed(timestamped_results.values())))
