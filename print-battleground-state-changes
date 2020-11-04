@@ -52,7 +52,7 @@ for state_index in STATE_INDEXES:
         votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
         precints_reporting = state_blob['precincts_reporting']
         precints_total = state_blob['precincts_total']
-        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes (est. votes remaining: {votes_remaining}) (precincts reported: {precints_reporting}/{precints_total})'
+        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. votes remaining: {votes_remaining:,}) (precincts reported: {precints_reporting}/{precints_total})'
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
 
