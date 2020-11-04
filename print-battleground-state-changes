@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import collections
+import concurrent.futures
 import datetime
+from functools import partial
 import json
 import pprint
 import subprocess
@@ -25,11 +27,14 @@ def git_show(ref, name):
 
 
 def fetch_all_results_jsons():
-    jsons = []
-    for rev in git_commits_for("results.json"):
-        jsons.append(json.loads(git_show(rev, 'results.json')))
-    jsons.sort(key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
-    return jsons
+    commits = git_commits_for("results.json")
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        blobs = executor.map(partial(git_show, name="results.json"), commits)
+
+    jsons = (json.loads(blob) for blob in blobs)
+
+    return sorted(jsons, key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
 
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
