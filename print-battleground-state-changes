@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import collections
+import datetime
 import json
 import pprint
 import subprocess
@@ -17,11 +18,30 @@ WI_INDEX = 48
 
 STATE_INDEXES = [AZ_INDEX, GA_INDEX, MI_INDEX, NC_INDEX, NV_INDEX, PA_INDEX, WI_INDEX]
 
+class Color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
+
+
+def print_bold(text):
+    print(Color.BOLD + str(text) + Color.END)
+
+
 def git_checkout(ref):
     subprocess.check_output(['git', 'checkout', '--quiet', ref])
 
+
 def current_commit_short_sha():
     return subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+
 
 def fetch_all_results_jsons():
     jsons = []
@@ -40,7 +60,7 @@ for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_id']
     summarized[state_name] = collections.OrderedDict()
     for json in jsons:
-        timestamp = json['meta']['timestamp']
+        timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
         state_blob = json['data']['races'][state_index]
         candidate1 = state_blob['candidates'][0]
         candidate2 = state_blob['candidates'][1]
@@ -56,4 +76,6 @@ for state_index in STATE_INDEXES:
 for (state, timestamped_results) in summarized.items():
     print(state)
     for (timestamp, candidate_votes) in timestamped_results.items():
-        print(f'  {timestamp}  --  {candidate_votes}')
+        minutes_ago = (datetime.datetime.utcnow() - timestamp).total_seconds() / 60
+        print_fn = print if minutes_ago > 30 else print_bold
+        print_fn(f'  {timestamp}  --  {candidate_votes}')
