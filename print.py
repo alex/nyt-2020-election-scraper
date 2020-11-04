@@ -37,10 +37,9 @@ for state_index in STATE_INDEXES:
         timestamp = json['meta']['timestamp']
         candidate1 = json['data']['races'][state_index]['candidates'][0]
         candidate2 = json['data']['races'][state_index]['candidates'][1]
-        candidate_votes = {
-            candidate1['candidate_key']: candidate1['votes'],
-            candidate2['candidate_key']: candidate2['votes'],
-        }
+        candidate1_name = candidate1['candidate_key']
+        vote_diff = candidate1['votes'] - candidate2['votes']
+        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes'
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
 
