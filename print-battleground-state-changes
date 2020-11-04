@@ -75,16 +75,16 @@ for state_index in STATE_INDEXES:
             precincts_reporting=precincts_reporting,
             hurdle=hurdle,
         )
+
+        # Avoid writing duplicate rows
         if last_iteration_info == iteration_info:
             continue
 
-        # Generate the string we’ll output
-        candidate_votes = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
+        # Generate the string we’ll output and store it
+        summarized[state_name][timestamp] = f'{candidate1_name} leading by {vote_diff:,} votes (est. remaining: {votes_remaining:,}) (precincts: {precincts_reporting}/{precincts_total}) ({candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}])'
 
+        # Save info for the next iteration
         last_iteration_info = iteration_info
-
-        # Add to `summarized` if we don’t have any entries for this state yet or if the last entry is different than this one
-        summarized[state_name][timestamp] = candidate_votes
 
 
 print('┌────────────────────────────────┐')
