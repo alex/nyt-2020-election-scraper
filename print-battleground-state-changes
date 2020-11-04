@@ -6,8 +6,6 @@ import json
 import pprint
 import subprocess
 
-FIRST_COMMIT_SHORT_SHA = '6ab578d'
-
 AZ_INDEX = 3
 GA_INDEX = 10
 MI_INDEX = 22
@@ -18,22 +16,18 @@ PA_INDEX = 38
 STATE_INDEXES = [AZ_INDEX, GA_INDEX, MI_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
 
-def git_checkout(ref):
-    subprocess.check_output(['git', 'checkout', '--quiet', ref])
+def git_rev_list(ref):
+    return subprocess.check_output(['git', 'rev-list', ref]).strip().decode().split()
 
 
-def current_commit_short_sha():
-    return subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+def git_show(ref, name):
+    return subprocess.check_output(['git', 'show', ref + ':' + name])
 
 
 def fetch_all_results_jsons():
     jsons = []
-    git_checkout('master')
-    while current_commit_short_sha() != FIRST_COMMIT_SHORT_SHA:
-        with open('results.json') as f:
-            jsons.insert(0, json.load(f))
-        git_checkout(current_commit_short_sha() + '^')
-    git_checkout('master')
+    for rev in git_rev_list('HEAD')[::-1][1:]:
+        jsons.append(json.loads(git_show(rev, 'results.json')))
     return jsons
 
 # List of results.json dicts, in chronological order
