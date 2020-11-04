@@ -16,8 +16,8 @@ PA_INDEX = 38
 STATE_INDEXES = [AZ_INDEX, GA_INDEX, MI_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
 
-def git_rev_list(ref):
-    return subprocess.check_output(['git', 'rev-list', ref]).strip().decode().split()
+def git_commits_for(path):
+    return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
 
 
 def git_show(ref, name):
@@ -26,7 +26,7 @@ def git_show(ref, name):
 
 def fetch_all_results_jsons():
     jsons = []
-    for rev in git_rev_list('HEAD')[::-1][1:]:
+    for rev in git_commits_for("results.json"):
         jsons.append(json.loads(git_show(rev, 'results.json')))
     jsons.sort(key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
     return jsons
