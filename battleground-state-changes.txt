@@ -1,15 +1,18 @@
-Legend:
-  --- indicates more than 30 minutes ago
-  *** indicates less than 30 minutes ago
+┌────────────────────────────────┐
+│ Legend:                        │
+│   *** less than 30 minutes ago │
+│   --- more than 30 minutes ago │
+└────────────────────────────────┘
 
-Arizona
+Arizona:
   2020-11-04 20:28 *** Biden leading by 93,016 votes (est. votes remaining: 432,476) (precincts reported: 1294/1489)
   2020-11-04 19:44 --- Biden leading by 93,518 votes (est. votes remaining: 433,261) (precincts reported: 1294/1489)
   2020-11-04 18:56 --- Biden leading by 93,518 votes (est. votes remaining: 433,327) (precincts reported: 1294/1489)
   2020-11-04 14:47 --- Biden leading by 93,509 votes (est. votes remaining: 433,537) (precincts reported: 1294/1489)
   2020-11-04 13:28 --- Biden leading by 130,665 votes (est. votes remaining: 560,441) (precincts reported: 1243/1489)
 
-Georgia
+Georgia:
+  2020-11-04 20:53 *** Trump leading by 77,967 votes (est. votes remaining: 351,953) (precincts reported: 2513/2655)
   2020-11-04 20:48 *** Trump leading by 78,429 votes (est. votes remaining: 361,937) (precincts reported: 2510/2655)
   2020-11-04 20:37 *** Trump leading by 78,423 votes (est. votes remaining: 361,948) (precincts reported: 2510/2655)
   2020-11-04 20:14 --- Trump leading by 78,424 votes (est. votes remaining: 361,949) (precincts reported: 2510/2655)
@@ -28,7 +31,7 @@ Georgia
   2020-11-04 14:15 --- Trump leading by 103,705 votes (est. votes remaining: 406,687) (precincts reported: 2493/2655)
   2020-11-04 13:28 --- Trump leading by 103,760 votes (est. votes remaining: 406,765) (precincts reported: 2493/2655)
 
-Michigan
+Michigan:
   2020-11-04 20:40 *** Biden leading by 37,310 votes (est. votes remaining: 328,608) (precincts reported: 4709/4974)
   2020-11-04 20:28 *** Biden leading by 37,145 votes (est. votes remaining: 329,301) (precincts reported: 4709/4974)
   2020-11-04 20:14 --- Biden leading by 37,967 votes (est. votes remaining: 333,895) (precincts reported: 4709/4974)
@@ -66,16 +69,17 @@ Michigan
   2020-11-04 13:44 --- Trump leading by 27,623 votes (est. votes remaining: 749,075) (precincts reported: 4212/4974)
   2020-11-04 13:28 --- Trump leading by 27,533 votes (est. votes remaining: 781,935) (precincts reported: 4189/4974)
 
-North Carolina
+North Carolina:
   2020-11-04 13:28 --- Trump leading by 76,737 votes (est. votes remaining: 292,632) (precincts reported: 2423/2662)
 
-Nevada
+Nevada:
   2020-11-04 13:28 --- Biden leading by 7,647 votes (est. votes remaining: 202,085) (precincts reported: 1610/1993)
 
-Pennsylvania
+Pennsylvania:
+  2020-11-04 20:53 *** Trump leading by 353,834 votes (est. votes remaining: 1,229,021) (precincts reported: 7538/9128)
   2020-11-04 20:48 *** Trump leading by 356,423 votes (est. votes remaining: 1,234,548) (precincts reported: 7531/9128)
   2020-11-04 20:37 *** Trump leading by 379,700 votes (est. votes remaining: 1,259,202) (precincts reported: 7479/9128)
-  2020-11-04 20:23 *** Trump leading by 388,889 votes (est. votes remaining: 1,274,742) (precincts reported: 7451/9128)
+  2020-11-04 20:23 --- Trump leading by 388,889 votes (est. votes remaining: 1,274,742) (precincts reported: 7451/9128)
   2020-11-04 20:14 --- Trump leading by 398,656 votes (est. votes remaining: 1,290,956) (precincts reported: 7423/9128)
   2020-11-04 20:10 --- Trump leading by 424,125 votes (est. votes remaining: 1,322,445) (precincts reported: 7368/9128)
   2020-11-04 20:06 --- Trump leading by 435,204 votes (est. votes remaining: 1,350,943) (precincts reported: 7343/9128)
