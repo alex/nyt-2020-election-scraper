@@ -39,6 +39,7 @@ summarized = {}
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     summarized[state_name] = collections.OrderedDict()
+    last = 0
     for json in jsons:
         timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
