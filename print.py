@@ -35,11 +35,14 @@ for state_index in STATE_INDEXES:
     summarized[state_name] = collections.OrderedDict()
     for json in jsons:
         timestamp = json['meta']['timestamp']
-        candidate1 = json['data']['races'][state_index]['candidates'][0]
-        candidate2 = json['data']['races'][state_index]['candidates'][1]
+        state_blob = json['data']['races'][state_index]
+        candidate1 = state_blob['candidates'][0]
+        candidate2 = state_blob['candidates'][1]
         candidate1_name = candidate1['candidate_key']
         vote_diff = candidate1['votes'] - candidate2['votes']
-        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes'
+        precints_reporting = state_blob['precincts_reporting']
+        precints_total = state_blob['precincts_total']
+        candidate_votes = f'{candidate1_name} leading by {vote_diff} votes (precints reporting: {precints_reporting}/{precints_total})'
         if len(summarized[state_name]) == 0 or candidate_votes != next(reversed(summarized[state_name].values())):
             summarized[state_name][timestamp] = candidate_votes
 
