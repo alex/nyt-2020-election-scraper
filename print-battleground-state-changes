@@ -57,6 +57,11 @@ for state_index in STATE_INDEXES:
             summarized[state_name][timestamp] = candidate_votes
 
 
+print('Legend:')
+print('  --- indicates more than 30 minutes ago')
+print('  *** indicates less than 30 minutes ago')
+print()
+
 for (state, timestamped_results) in summarized.items():
     print(state)
     for (timestamp, candidate_votes) in timestamped_results.items():
