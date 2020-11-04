@@ -28,6 +28,7 @@ def fetch_all_results_jsons():
     jsons = []
     for rev in git_rev_list('HEAD')[::-1][1:]:
         jsons.append(json.loads(git_show(rev, 'results.json')))
+    jsons.sort(key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
     return jsons
 
 # List of results.json dicts, in chronological order
