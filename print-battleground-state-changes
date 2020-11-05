@@ -196,7 +196,8 @@ for state_index in STATE_INDEXES:
         candidate2_name = candidate2['last_name']
         vote_diff = candidate1['votes'] - candidate2['votes']
         votes = state_blob['votes']
-        votes_remaining = state_blob['tot_exp_vote'] - votes
+        expected_votes = sum(map(lambda n: n['tot_exp_vote'], state_blob['counties']))
+        votes_remaining = expected_votes - votes
         precincts_reporting = state_blob['precincts_reporting']
         precincts_total = state_blob['precincts_total']
         new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
