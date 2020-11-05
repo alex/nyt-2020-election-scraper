@@ -101,10 +101,6 @@ def string_summary(summary):
 
 def html_write_state_head(state: str):
     return f'''
-        <thead class="thead-light">
-        <tr>
-            <th class="text-center" colspan="9">{state}</th>
-        </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -266,7 +262,7 @@ for (state, timestamped_results) in summarized.items():
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
     state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
-    html_chunks.append(f"<button type="button" class="collapsible"></button><div class="content"><table id='{state_slug}' class='table table-bordered'>")
+    html_chunks.append(f"<button type="button" class="collapsible">{state}</button><div class="content"><table id='{state_slug}' class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
