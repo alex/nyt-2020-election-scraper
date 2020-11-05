@@ -29,8 +29,19 @@
     .Trump{
         background-color: #ED98A9;
     }
-}
     </style>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var rows = parseInt(urlParams.get("rows"))
+        console.log(rows)
+        if (rows) {
+            console.log("hello")
+            var style=document.createElement('style');
+            style.type='text/css';
+            style.appendChild(document.createTextNode('tbody tr:nth-child(n+'+ (rows + 1) + ') { display:none;}'));
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }
+    </script>
     <title>Election 2020 | Last scrape: {% SCRAPE %}</title>
 </head>
 
