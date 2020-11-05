@@ -103,7 +103,7 @@ def html_write_state_head(state: str):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">{state}</th>
+            <th class="text-center" colspan="9"><a name="{state}">{state}</a></th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
