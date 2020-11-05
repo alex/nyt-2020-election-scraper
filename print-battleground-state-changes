@@ -4,6 +4,7 @@ import collections
 import concurrent.futures
 import datetime
 from functools import partial
+import itertools
 import json
 import subprocess
 from tabulate import tabulate
@@ -249,7 +250,7 @@ with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
 
 html_chunks = []
 
-batch_time = datetime.datetime.strptime(jsons[0]['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
+batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
 print(tabulate([
     ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
     ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
