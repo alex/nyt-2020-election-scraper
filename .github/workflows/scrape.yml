@@ -30,9 +30,7 @@ jobs:
         pip3 install -r requirements.txt
     - name: Generate battleground-state-changes.txt
       run: |-
-        echo "Data retrieved at approximately $(date)" > tmp
-        echo "" >> tmp
-        ./print-battleground-state-changes >> tmp
+        ./print-battleground-state-changes > tmp
         mv tmp battleground-state-changes.txt
     - name: Commit and push if it changed
       run: |-
