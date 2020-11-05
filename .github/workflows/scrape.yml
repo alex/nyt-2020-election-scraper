@@ -2,6 +2,8 @@ name: Scrape latest data
 
 on:
   push:
+    branches:
+      - master
   workflow_dispatch:
   schedule:
     - cron:  '*/5 * * * *'
@@ -28,7 +30,7 @@ jobs:
     - name: Install Python requirements
       run: |-
         pip3 install -r requirements.txt
-    - name: Generate battleground-state-changes.txt
+    - name: Generate battleground-state-changes.txt/html
       run: |-
         ./print-battleground-state-changes > tmp
         mv tmp battleground-state-changes.txt
@@ -38,5 +40,5 @@ jobs:
         git config user.email "actions@users.noreply.github.com"
         git add -A
         timestamp=$(date -u)
-        git commit -m "Regenerate battleground-state-changes.txt" || exit 0
+        git commit -m "Regenerate battleground-state-changes.txt/html" || exit 0
         git push

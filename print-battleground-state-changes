@@ -42,6 +42,75 @@ IterationInfo = collections.namedtuple(
     ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
 )
 
+IterationSummary = collections.namedtuple(
+    'IterationSummary',
+    [
+        'timestamp',
+        'leading_candidate_name',
+        'trailing_candidate_name',
+        'vote_differential',
+        'votes_remaining',
+        'new_votes',
+        'leading_candidate_partition',
+        'trailing_candidate_partition',
+        'precincts_reporting',
+        'precincts_total',
+        'hurdle',
+        'hurdle_change'
+    ]
+)
+
+def string_summary(summary):
+    delta_str = humanize.naturaltime(datetime.datetime.utcnow() - summary.timestamp)
+    return [
+        f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")} ({delta_str})',
+        f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
+        f'Remaining (est.): {summary.votes_remaining:,}',
+        f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
+        f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
+        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]'
+    ]
+
+def html_write_state_head(state: str):
+    return f'''
+        <tr>
+            <th class="text-center" colspan="11">{state}</th>
+        </tr>
+        <tr>
+            <th>Timestamp</th>
+            <th>Leading Candidate</th>
+            <th>Trailing Candidate</th>
+            <th>Vote Differential</th>
+            <th>Votes Remaining (est.)</th>
+            <th>Change</th>
+            <th>Leading Candidate Partition</th>
+            <th>Trailing Candidate Partition</th>
+            <th>Precincts Reporting</th>
+            <th>Trailing Candidate Hurdle</th>
+            <th>Hurdle Change</th>
+        </tr>
+    '''
+
+def html_summary(summary: IterationSummary):
+    html = f'''
+        <tr>
+            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%dT%H:%M:%S.%fZ')}</td>
+            <td>{summary.leading_candidate_name}</td>
+            <td>{summary.trailing_candidate_name}</td>
+            <td>{summary.vote_differential:,}</td>
+            <td>{summary.votes_remaining:,}</td>
+            <td>{summary.new_votes:,}</td>
+    '''
+    html += (f'<td>{summary.leading_candidate_partition:.1%}</td>' if summary.leading_candidate_partition != 0 else "<td>N/A</td>")
+    html += (f'<td>{summary.trailing_candidate_partition:.1%}</td>' if summary.trailing_candidate_partition != 0 else "<td>N/A</td>")
+    html += f'''
+            <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
+            <td>{summary.hurdle:.2%}</td>
+            <td>{summary.hurdle_change:.3%}</td>
+        </tr>
+    '''
+    return html
+
 # List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
 
@@ -73,13 +142,11 @@ for state_index in STATE_INDEXES:
         candidate2_name = candidate2['last_name']
         vote_diff = candidate1['votes'] - candidate2['votes']
         votes = state_blob['votes']
-        votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
+        votes_remaining = state_blob['tot_exp_vote'] - votes
         precincts_reporting = state_blob['precincts_reporting']
         precincts_total = state_blob['precincts_total']
         new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
-        delta = (datetime.datetime.utcnow() - timestamp)
-        delta_str = humanize.naturaltime(delta)
-        formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
+
         hurdle = (((votes_remaining + vote_diff) / 2)) / votes_remaining
 
         if new_votes != 0:
@@ -97,19 +164,44 @@ for state_index in STATE_INDEXES:
         if last_iteration_info == iteration_info:
             continue
 
+        summary = IterationSummary(
+            timestamp,
+            candidate1_name,
+            candidate2_name,
+            vote_diff,
+            votes_remaining,
+            new_votes,
+            1-repartition1 if new_votes else 0,
+            repartition1 if new_votes else 0,
+            precincts_reporting,
+            precincts_total,
+            hurdle,
+            hurdle-last_iteration_info.hurdle
+        )
+
         # Generate the string we’ll output and store it
-        summarized[state_name].insert(0, [
-            f'{formatted_timestamp} ({delta_str})',
-            f'{candidate1_name} leading by {vote_diff:,} votes',
-            f'Remaining (est.): {votes_remaining:,}',
-            f'Change: {new_votes:7,} ({f"{candidate1_name} {1-repartition1:5.01%} / {repartition1:5.01%} {candidate2_name}" if new_votes else "n/a"})',
-            f'Precincts: {precincts_reporting}/{precincts_total}',
-            f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]'
-        ])
+        summarized[state_name].insert(0, summary)
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
 
+# print the summaries
+
+html_template = ''
+with open("battleground-state-changes.html.tmpl", "r") as f:
+    html_template = f.read()
+
+html_chunks = []
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
-    print(tabulate(timestamped_results))
+    print(tabulate([string_summary(summary) for summary in timestamped_results]))
+
+    html_chunks.append("<table class='table'>")
+    html_chunks.append(html_write_state_head(state))
+    for summary in timestamped_results:
+        html_chunks.append(html_summary(summary))
+    html_chunks.append("</table>")
+
+with open("battleground-state-changes.html","w") as f:
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks))
+    f.write(html)
