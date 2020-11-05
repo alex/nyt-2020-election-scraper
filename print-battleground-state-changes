@@ -8,13 +8,14 @@ import json
 import subprocess
 from tabulate import tabulate
 
+AK_INDEX = 2
 AZ_INDEX = 3
 GA_INDEX = 10
 NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
 
-STATE_INDEXES = [AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
+STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
 
 def git_commits_for(path):
