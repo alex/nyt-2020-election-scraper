@@ -104,7 +104,7 @@ def html_summary(summary: IterationSummary):
     html = f'''
         <tr>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
-            <td>{summary.leading_candidate_name}</td>
+            <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
             <td>{summary.votes_remaining:,}</td>
             <td>{summary.new_votes:7,}</td>
