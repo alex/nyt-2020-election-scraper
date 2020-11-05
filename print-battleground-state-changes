@@ -94,7 +94,7 @@ def html_write_state_head(state: str):
 def html_summary(summary: IterationSummary):
     html = f'''
         <tr>
-            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')}</td>
+            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%dT%H:%M:%S.%fZ')}</td>
             <td>{summary.leading_candidate_name}</td>
             <td>{summary.trailing_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
