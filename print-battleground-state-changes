@@ -176,9 +176,12 @@ jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
-def json_to_summary(state_name, state_blob) -> Tuple[IterationInfo, IterationSummary]:
-    timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
-
+def json_to_summary(
+    state_name: str,
+    state_blob,
+    last_iteration_info: IterationInfo,
+    batch_time: datetime.datetime,
+) -> Tuple[IterationInfo, IterationSummary]:
     candidate1 = state_blob['candidates'][0] # Leading candidate
     candidate2 = state_blob['candidates'][1] # Trailing candidate
     candidate1_name = candidate1['last_name']
@@ -208,7 +211,7 @@ def json_to_summary(state_name, state_blob) -> Tuple[IterationInfo, IterationSum
     hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
 
     summary = IterationSummary(
-        timestamp,
+        batch_time,
         candidate1_name,
         candidate2_name,
         vote_diff,
@@ -240,9 +243,15 @@ for state_index in STATE_INDEXES:
     for json in jsons:
         state_blob = json['data']['races'][state_index]
 
-        iteration_info, summary = json_to_summary(state_name, state_blob)
+        iteration_info, summary = json_to_summary(
+            state_name,
+            state_blob,
+            last_iteration_info,
+            batch_time=datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ'),
+        )
 
-        if iteration_info == last_iteration_info:
+        # Avoid writing duplicate rows
+        if last_iteration_info == iteration_info:
             continue
 
         # Generate the string we’ll output and store it
