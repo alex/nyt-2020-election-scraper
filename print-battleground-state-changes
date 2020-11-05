@@ -10,6 +10,7 @@ import simdjson
 import subprocess
 from tabulate import tabulate
 from typing import Tuple
+from figures import update_figures
 
 AK_INDEX = 0
 AZ_INDEX = 3
@@ -25,7 +26,13 @@ CACHE_DIR = '_cache'
 CACHE_VERSION = 1
 
 def git_commits_for(path):
-    return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
+    return (
+        subprocess.check_output(["git", "log", "--format=%H", path])
+        .strip()
+        .decode()
+        .splitlines()
+    )
+
 
 def git_show(ref, name, repo_client):
     commit_tree = repo_client.commit(ref).tree
@@ -100,12 +107,11 @@ InputRecord = collections.namedtuple(
 
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
-    'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
+    "IterationInfo", ["vote_diff", "votes", "precincts_reporting", "hurdle"]
 )
 
 IterationSummary = collections.namedtuple(
-    'IterationSummary',
+    "IterationSummary",
     [
         'timestamp',
         'leading_candidate_name',
@@ -125,6 +131,7 @@ IterationSummary = collections.namedtuple(
     ]
 )
 
+
 def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
     """
     trend gain of last 30k (or more) votes for trailing candidate
@@ -140,7 +147,9 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         step += 1
         if this_summary.new_votes > 0:
             agg_votes += this_summary.new_votes
-            agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+            agg_c2_votes += round(
+                this_summary.trailing_candidate_partition * this_summary.new_votes
+            )
 
     if agg_votes:
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
@@ -149,21 +158,22 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
 
 
 def string_summary(summary):
-    thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
+    thirty_ago = datetime.datetime.utcnow() - datetime.timedelta(minutes=30)
 
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
-        '***' if summary.timestamp > thirty_ago else '---',
-        f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
-        f'Remaining (est.): {summary.votes_remaining:,}',
+        "***" if summary.timestamp > thirty_ago else "---",
+        f"{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes",
+        f"Remaining (est.): {summary.votes_remaining:,}",
         f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
-        f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
-        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
-        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
+        f"Precincts: {summary.precincts_reporting}/{summary.precincts_total}",
+        f"{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]",
+        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}',
     ]
 
-def html_write_state_head(state: str, summary: IterationSummary):
-    return f'''
+
+def html_write_state_head(state: str):
+    return f"""
         <thead class="thead-light">
         <tr>
             <th class="text-center has-tip" colspan="9">
@@ -192,44 +202,46 @@ def html_write_state_head(state: str, summary: IterationSummary):
             </th>
         </tr>
         </thead>
-    '''
+    """
+
 
 def html_summary(summary: IterationSummary):
-    html = f'''
+    html = f"""
         <tr>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
             <td>{summary.votes_remaining:,}</td>
             <td>{summary.new_votes:7,}</td>
-    '''
+    """
 
-    if (summary.leading_candidate_partition):
-        html += f'''
+    if summary.leading_candidate_partition:
+        html += f"""
             <td>
                 {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
                 {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
             </td>
-        '''
+        """
     else:
-        html += '<td>N/A</td>'
+        html += "<td>N/A</td>"
 
-    if (summary.hurdle_mov_avg):
-        html += f'''
+    if summary.hurdle_mov_avg:
+        html += f"""
             <td>
                 {summary.trailing_candidate_name} is averaging {summary.hurdle_mov_avg:5.01%}
             </td>
-        '''
+        """
     else:
-        html += '<td>N/A</td>'
+        html += "<td>N/A</td>"
 
-    html += f'''
+    html += f"""
             <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
         </tr>
-    '''
+    """
 
     return html
+
 
 # Capture the time at the top of the main script logic so it's closer to when the pull of data happened
 scrape_time = datetime.datetime.utcnow()
@@ -304,10 +316,7 @@ for _, rows in records.items():
     summarized[state_name] = []
 
     last_iteration_info = IterationInfo(
-        vote_diff=None,
-        votes=None,
-        precincts_reporting=None,
-        hurdle=0
+        vote_diff=None, votes=None, precincts_reporting=None, hurdle=0
     )
 
     for row in rows:
@@ -331,31 +340,46 @@ for _, rows in records.items():
 # print the summaries
 
 html_template = "<!-- Don't update me by hand, I'm generated by a program -->\n\n"
-with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
+with open("battleground-state-changes.html.tmpl", "r", encoding="utf8") as f:
     html_template += f.read()
 
 html_chunks = []
 
-batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
-print(tabulate([
-    ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
-    ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
-    ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
-]))
+batch_time = max(
+    itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp
+).timestamp
+print(
+    tabulate(
+        [
+            ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
+            ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
+            [
+                "Prettier web version:",
+                "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html",
+            ],
+        ]
+    )
+)
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state} Total Votes: ({timestamped_results[1][1]}: {timestamped_results[1][3]:,}, {timestamped_results[1][2]}: {timestamped_results[1][4]:,})')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
-    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    state_slug = state.split("(")[0].strip().replace(" ", "-").lower()
     html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state, timestamped_results[0]))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
     html_chunks.append("</table><hr>")
 
-with open("battleground-state-changes.html","w", encoding='utf8') as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
+links = '<p>Links to graphs</p>\n<ul><li><a href="figures/Alaska.html">Alaska</a></li><li><a href="figures/Arizona.html">Arizona</a></li><li><a href="figures/Georgia.html">Georgia</a></li><li><a href="figures/Nevada.html">Nevada</a></li><li><a href="figures/North Carolina.html">North Carolina</a></li><li><a href="figures/Pennsylvania.html">Pennsylvania</a></li></ul>'
+
+with open("battleground-state-changes.html", "w", encoding="utf8") as f:
+    html = (
+        html_template.replace("{% TABLES %}", "\n".join(html_chunks))
+        .replace("{% SCRAPE %}", scrape_time.strftime("%c (UTC)"))
+        .replace("{% LINKS %}", links)
+    )
     f.write(html)
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
@@ -364,3 +388,4 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
     for state, results in summarized.items():
         for row in results:
             wr.writerow((state,) + row)
+update_figures()
