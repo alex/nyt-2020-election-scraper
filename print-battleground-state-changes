@@ -264,7 +264,9 @@ for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
-    html_chunks.append("<table class='table table-bordered'>")
+    # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
+    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
