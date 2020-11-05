@@ -6,7 +6,6 @@ import datetime
 from functools import partial
 import json
 import subprocess
-import humanize
 from tabulate import tabulate
 
 AZ_INDEX = 3
@@ -61,9 +60,8 @@ IterationSummary = collections.namedtuple(
 )
 
 def string_summary(summary):
-    delta_str = humanize.naturaltime(datetime.datetime.utcnow() - summary.timestamp)
     return [
-        f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")} ({delta_str})',
+        f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
         f'Remaining (est.): {summary.votes_remaining:,}',
         f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
