@@ -175,6 +175,7 @@ summarized = {}
 
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
+    state_name += f" ({jsons[0]['data']['races'][state_index]['electoral_votes']})"
     summarized[state_name] = []
 
     last_iteration_info = IterationInfo(
