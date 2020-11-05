@@ -7,6 +7,7 @@ import itertools
 import simdjson
 import subprocess
 from tabulate import tabulate
+from typing import Tuple
 
 AK_INDEX = 0
 AZ_INDEX = 3
@@ -175,6 +176,58 @@ jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
+def json_to_summary(
+    state_name: str,
+    state_blob,
+    last_iteration_info: IterationInfo,
+    batch_time: datetime.datetime,
+) -> Tuple[IterationInfo, IterationSummary]:
+    candidate1 = state_blob['candidates'][0] # Leading candidate
+    candidate2 = state_blob['candidates'][1] # Trailing candidate
+    candidate1_name = candidate1['last_name']
+    candidate2_name = candidate2['last_name']
+    vote_diff = candidate1['votes'] - candidate2['votes']
+    votes = state_blob['votes']
+    expected_votes = sum(map(lambda n: n['tot_exp_vote'], state_blob['counties']))
+    votes_remaining = expected_votes - votes
+    precincts_reporting = state_blob['precincts_reporting']
+    precincts_total = state_blob['precincts_total']
+    new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
+
+    hurdle = ((((votes_remaining + vote_diff) / 2)) / votes_remaining) if votes_remaining > 0 else 0
+
+    if new_votes != 0:
+        repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
+
+    # Info we’ll need for the next loop iteration
+    iteration_info = IterationInfo(
+        vote_diff=vote_diff,
+        votes=votes,
+        precincts_reporting=precincts_reporting,
+        hurdle=hurdle,
+    )
+
+    # Compute aggregate of last 5 hurdle, if available
+    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+
+    summary = IterationSummary(
+        batch_time,
+        candidate1_name,
+        candidate2_name,
+        vote_diff,
+        votes_remaining,
+        new_votes,
+        1-repartition1 if new_votes else 0,
+        repartition1 if new_votes else 0,
+        precincts_reporting,
+        precincts_total,
+        hurdle,
+        hurdle-last_iteration_info.hurdle,
+        hurdle_mov_avg
+    )
+
+    return iteration_info, summary
+
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     state_name += f" ({jsons[0]['data']['races'][state_index]['electoral_votes']})"
@@ -188,57 +241,18 @@ for state_index in STATE_INDEXES:
     )
 
     for json in jsons:
-        timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
-
-        # Retrieve relevant data from the state’s JSON blob
         state_blob = json['data']['races'][state_index]
-        candidate1 = state_blob['candidates'][0] # Leading candidate
-        candidate2 = state_blob['candidates'][1] # Trailing candidate
-        candidate1_name = candidate1['last_name']
-        candidate2_name = candidate2['last_name']
-        vote_diff = candidate1['votes'] - candidate2['votes']
-        votes = state_blob['votes']
-        expected_votes = sum(map(lambda n: n['tot_exp_vote'], state_blob['counties']))
-        votes_remaining = expected_votes - votes
-        precincts_reporting = state_blob['precincts_reporting']
-        precincts_total = state_blob['precincts_total']
-        new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
-        hurdle = ((((votes_remaining + vote_diff) / 2)) / votes_remaining) if votes_remaining > 0 else 0
-
-        if new_votes != 0:
-            repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
-
-        # Info we’ll need for the next loop iteration
-        iteration_info = IterationInfo(
-            vote_diff=vote_diff,
-            votes=votes,
-            precincts_reporting=precincts_reporting,
-            hurdle=hurdle,
+        iteration_info, summary = json_to_summary(
+            state_name,
+            state_blob,
+            last_iteration_info,
+            batch_time=datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ'),
         )
 
         # Avoid writing duplicate rows
         if last_iteration_info == iteration_info:
             continue
-
-        # Compute aggregate of last 5 hurdle, if available
-        hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
-
-        summary = IterationSummary(
-            timestamp,
-            candidate1_name,
-            candidate2_name,
-            vote_diff,
-            votes_remaining,
-            new_votes,
-            1-repartition1 if new_votes else 0,
-            repartition1 if new_votes else 0,
-            precincts_reporting,
-            precincts_total,
-            hurdle,
-            hurdle-last_iteration_info.hurdle,
-            hurdle_mov_avg
-        )
 
         # Generate the string we’ll output and store it
         summarized[state_name].insert(0, summary)
