@@ -10,12 +10,25 @@ from tabulate import tabulate
 
 AK_INDEX = 0
 AZ_INDEX = 3
+FL_INDEX = 9
 GA_INDEX = 10
+MI_INDEX = 22
 NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
+WI_INDEX = 48
 
-STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
+STATE_INDEXES = [
+    AK_INDEX,
+    AZ_INDEX,
+    FL_INDEX,
+    GA_INDEX,
+    MI_INDEX,
+    NC_INDEX,
+    NV_INDEX,
+    PA_INDEX,
+    WI_INDEX,
+]
 
 
 def git_commits_for(path):
