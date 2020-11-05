@@ -55,7 +55,8 @@ IterationSummary = collections.namedtuple(
         'precincts_reporting',
         'precincts_total',
         'hurdle',
-        'hurdle_change'
+        'hurdle_change',
+        'hurdle_mov_avg'
     ]
 )
 
@@ -66,7 +67,8 @@ def string_summary(summary):
         f'Remaining (est.): {summary.votes_remaining:,}',
         f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
         f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
-        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]'
+        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
+        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
 def html_write_state_head(state: str):
@@ -165,6 +167,20 @@ for state_index in STATE_INDEXES:
         if last_iteration_info == iteration_info:
             continue
 
+        # Compute aggregate of last 5 hurdle, if available
+        hurdle_mov_avg = None
+        moving_window = 5
+        if len(summarized[state_name]) > moving_window - 1:
+            moving_window_iters = summarized[state_name][0:moving_window]
+            agg_votes = 0
+            agg_c2_votes = 0
+            for prev_summary in moving_window_iters:
+                if prev_summary.new_votes > 0:
+                    agg_votes += prev_summary.new_votes
+                    agg_c2_votes += round(prev_summary.trailing_candidate_partition * prev_summary.new_votes)
+
+            hurdle_mov_avg = float(agg_c2_votes) / agg_votes
+
         summary = IterationSummary(
             timestamp,
             candidate1_name,
@@ -177,7 +193,8 @@ for state_index in STATE_INDEXES:
             precincts_reporting,
             precincts_total,
             hurdle,
-            hurdle-last_iteration_info.hurdle
+            hurdle-last_iteration_info.hurdle,
+            hurdle_mov_avg
         )
 
         # Generate the string we’ll output and store it
