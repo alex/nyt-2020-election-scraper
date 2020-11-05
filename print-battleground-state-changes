@@ -8,7 +8,7 @@ import json
 import subprocess
 from tabulate import tabulate
 
-AK_INDEX = 1
+AK_INDEX = 0
 AZ_INDEX = 3
 GA_INDEX = 10
 NC_INDEX = 27
