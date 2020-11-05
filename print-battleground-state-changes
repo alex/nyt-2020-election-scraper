@@ -169,6 +169,10 @@ def html_summary(summary: IterationSummary):
 scrape_time = datetime.datetime.utcnow()
 
 # List of results.json dicts, in chronological order
+#
+# Implementation note: `_pysimdjson_lifetime_hacks` is here because if the
+# `simdjson.Parser` object isn't around when you access one the values it
+# returns from `Parser.parse` it'll coredump.
 jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
 
 # Where we’ll aggregate the data from the JSON files
