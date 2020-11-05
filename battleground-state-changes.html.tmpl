@@ -43,7 +43,7 @@
     </p>
 
     <p class="text-right">
-      <button type='button' id='collapse_button' class='btn btn-secondary'>Collapse</button>
+      <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
 
 
@@ -76,15 +76,34 @@
             tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
 
-        $('#shrink_button').on('click', function() {
-          var $this = $(this);
-          if ($this.html() === 'Collapse') {
-            $this.html('Expand');
-            $('.table').each(function() { $(this).find('tbody tr:gt(1)').hide(); })
-          } else {
-            $this.html('Collapse');
-            $('.table').each(function() { $(this).find('tbody tr').show(); })
-          }
+        const $shrinkButton = $('#shrink_button');
+
+        const shrinkTables = () => {
+            $shrinkButton.html('Expand Tables');
+            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+            localStorage.setItem(shrunkLocalStorageKey, 'true');
+        };
+
+        const expandTables = () => {
+            $shrinkButton.html('Shrink Tables');
+            $('.table').each(function() { $(this).find('tbody tr').show(); });
+            localStorage.removeItem(shrunkLocalStorageKey);
+        };
+
+        const isShrunk = () => localStorage.getItem(shrunkLocalStorageKey) === 'true';
+
+        const shrunkLocalStorageKey = 'shrunk';
+
+        $shrinkButton.on('click', function() {
+            if (isShrunk()) {
+                expandTables();
+            } else {
+                shrinkTables();
+            }
         });
+
+        if (localStorage.getItem(shrunkLocalStorageKey)) {
+            shrinkTables();
+        }
     </script>
 </body>
