@@ -4,7 +4,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=80%, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -13,8 +13,13 @@
     .table td, .table th {
         padding: .25rem .5rem;
     }
+
+    .has-tip:after{
+        content: "�";
+    }
+}
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 05:03:05 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Thu Nov  5 05:16:52 2020 (UTC)</title>
 </head>
 
 <body>
@@ -22,147 +27,178 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="11">Arizona</th>
+            <th class="text-center" colspan="9">Arizona</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>Leading Candidate</th>
-            <th>Trailing Candidate</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Leading Candidate Partition</th>
-            <th>Trailing Candidate Partition</th>
-            <th>Precincts Reporting</th>
-            <th>Trailing Candidate Hurdle</th>
-            <th>Hurdle Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">                Hurdle
+            </th>
         </tr>
         </thead>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:03:34.937000Z</td>
+            <td class="timestamp">2020-11-05 02:03:34 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>79,173</td>
             <td>551,325</td>
-            <td>75,537</td>
-    <td>41.0%</td><td>59.0%</td>
+            <td> 75,537</td>
+    
+            <td>
+                Biden 41.0% /
+                59.0% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 55.4%
+            </td>
+        
             <td><abbr title="1325/1489">89.0%</abbr></td>
-            <td>57.18%</td>
-            <td>-0.223%</td>
+            <td>Trump needs 57.18% [-0.223%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:44:49.776000Z</td>
+            <td class="timestamp">2020-11-05 00:44:49 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>92,817</td>
             <td>626,862</td>
-            <td>5,614</td>
-    <td>48.2%</td><td>51.8%</td>
+            <td>  5,614</td>
+    
+            <td>
+                Biden 48.2% /
+                51.8% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 73.2%
+            </td>
+        
             <td><abbr title="1296/1489">87.0%</abbr></td>
-            <td>57.40%</td>
-            <td>0.050%</td>
+            <td>Trump needs 57.40% [0.050%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:20:56.454000Z</td>
+            <td class="timestamp">2020-11-05 00:20:56 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,016</td>
             <td>632,476</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Trump is averaging 64.7%
+            </td>
+        
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>57.35%</td>
-            <td>-1.381%</td>
+            <td>Trump needs 57.35% [-1.381%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:14:43.498000Z</td>
+            <td class="timestamp">2020-11-04 23:14:43 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,016</td>
             <td>532,476</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Trump is averaging 64.7%
+            </td>
+        
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>58.73%</td>
-            <td>-2.020%</td>
+            <td>Trump needs 58.73% [-2.020%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:28:27.938000Z</td>
+            <td class="timestamp">2020-11-04 20:28:27 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,016</td>
             <td>432,476</td>
-            <td>785</td>
-    <td>18.0%</td><td>82.0%</td>
+            <td>    785</td>
+    
+            <td>
+                Biden 18.0% /
+                82.0% Trump
+            </td>
+        <td>N/A</td>
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>60.75%</td>
-            <td>-0.038%</td>
+            <td>Trump needs 60.75% [-0.038%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:44:32.496000Z</td>
+            <td class="timestamp">2020-11-04 19:44:32 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,518</td>
             <td>433,261</td>
-            <td>66</td>
-    <td>50.0%</td><td>50.0%</td>
+            <td>     66</td>
+    
+            <td>
+                Biden 50.0% /
+                50.0% Trump
+            </td>
+        <td>N/A</td>
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>60.79%</td>
-            <td>0.002%</td>
+            <td>Trump needs 60.79% [0.002%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:56:14.325000Z</td>
+            <td class="timestamp">2020-11-04 18:56:14 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,518</td>
             <td>433,327</td>
-            <td>210</td>
-    <td>52.1%</td><td>47.9%</td>
+            <td>    210</td>
+    
+            <td>
+                Biden 52.1% /
+                47.9% Trump
+            </td>
+        <td>N/A</td>
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>60.79%</td>
-            <td>0.006%</td>
+            <td>Trump needs 60.79% [0.006%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T14:47:51.946000Z</td>
+            <td class="timestamp">2020-11-04 14:47:51 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>93,509</td>
             <td>433,537</td>
             <td>126,904</td>
-    <td>35.4%</td><td>64.6%</td>
+    
+            <td>
+                Biden 35.4% /
+                64.6% Trump
+            </td>
+        <td>N/A</td>
             <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>60.78%</td>
-            <td>-0.873%</td>
+            <td>Trump needs 60.78% [-0.873%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T13:28:22.084000Z</td>
+            <td class="timestamp">2020-11-04 13:28:22 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>130,665</td>
             <td>560,441</td>
-            <td>0</td>
+            <td>      0</td>
     <td>N/A</td><td>N/A</td>
             <td><abbr title="1243/1489">83.5%</abbr></td>
-            <td>61.66%</td>
-            <td>61.657%</td>
+            <td>Trump needs 61.66% [61.657%]</td>
         </tr>
     
 </table><hr>
@@ -170,693 +206,977 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="11">Georgia</th>
+            <th class="text-center" colspan="9">Georgia</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>Leading Candidate</th>
-            <th>Trailing Candidate</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Leading Candidate Partition</th>
-            <th>Trailing Candidate Partition</th>
-            <th>Precincts Reporting</th>
-            <th>Trailing Candidate Hurdle</th>
-            <th>Hurdle Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">                Hurdle
+            </th>
         </tr>
         </thead>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T04:22:05.599000Z</td>
+            <td class="timestamp">2020-11-05 04:22:05 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 74.8%
+            </td>
+        
             <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>56.42%</td>
-            <td>0.000%</td>
+            <td>Biden needs 56.42% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:57:56.031000Z</td>
+            <td class="timestamp">2020-11-05 03:57:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 78.4%
+            </td>
+        
             <td><abbr title="2605/2655">98.1%</abbr></td>
-            <td>56.42%</td>
-            <td>0.000%</td>
+            <td>Biden needs 56.42% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:53:56.881000Z</td>
+            <td class="timestamp">2020-11-05 03:53:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 78.4%
+            </td>
+        
             <td><abbr title="2575/2655">97.0%</abbr></td>
-            <td>56.42%</td>
-            <td>0.000%</td>
+            <td>Biden needs 56.42% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:53:39.589000Z</td>
+            <td class="timestamp">2020-11-05 03:53:39 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 78.4%
+            </td>
+        
             <td><abbr title="2572/2655">96.9%</abbr></td>
-            <td>56.42%</td>
-            <td>0.000%</td>
+            <td>Biden needs 56.42% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:49:40.100000Z</td>
+            <td class="timestamp">2020-11-05 03:49:40 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>0</td>
-    <td>N/A</td><td>N/A</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 79.0%
+            </td>
+        
             <td><abbr title="2557/2655">96.3%</abbr></td>
-            <td>56.42%</td>
-            <td>0.000%</td>
+            <td>Biden needs 56.42% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:41:08.025000Z</td>
+            <td class="timestamp">2020-11-05 03:41:08 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>31,748</td>
             <td>247,135</td>
-            <td>3,128</td>
-    <td>25.2%</td><td>74.8%</td>
+            <td>  3,128</td>
+    
+            <td>
+                Trump 25.2% /
+                74.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 78.4%
+            </td>
+        
             <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>56.42%</td>
-            <td>-0.230%</td>
+            <td>Biden needs 56.42% [-0.230%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:11:54.084000Z</td>
+            <td class="timestamp">2020-11-05 03:11:54 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>33,300</td>
             <td>250,263</td>
-            <td>6,682</td>
-    <td>19.9%</td><td>80.1%</td>
+            <td>  6,682</td>
+    
+            <td>
+                Trump 19.9% /
+                80.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.2%
+            </td>
+        
             <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>56.65%</td>
-            <td>-0.610%</td>
+            <td>Biden needs 56.65% [-0.610%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:58:35.521000Z</td>
+            <td class="timestamp">2020-11-05 02:58:35 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>37,322</td>
             <td>256,945</td>
-            <td>-1,366</td>
-    <td>51.8%</td><td>48.2%</td>
+            <td> -1,366</td>
+    
+            <td>
+                Trump 51.8% /
+                48.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.4%
+            </td>
+        
             <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>57.26%</td>
-            <td>-0.048%</td>
+            <td>Biden needs 57.26% [-0.048%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:51:15.131000Z</td>
+            <td class="timestamp">2020-11-05 02:51:15 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>37,370</td>
             <td>255,579</td>
-            <td>-3,242</td>
-    <td>75.1%</td><td>24.9%</td>
+            <td> -3,242</td>
+    
+            <td>
+                Trump 75.1% /
+                24.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.9%
+            </td>
+        
             <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>57.31%</td>
-            <td>-0.416%</td>
+            <td>Biden needs 57.31% [-0.416%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:19:13.643000Z</td>
+            <td class="timestamp">2020-11-05 02:19:13 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>38,996</td>
             <td>252,337</td>
-            <td>1,414</td>
-    <td>17.3%</td><td>82.7%</td>
+            <td>  1,414</td>
+    
+            <td>
+                Trump 17.3% /
+                82.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.3%
+            </td>
+        
             <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>57.73%</td>
-            <td>-0.139%</td>
+            <td>Biden needs 57.73% [-0.139%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:03:34.937000Z</td>
+            <td class="timestamp">2020-11-05 02:03:34 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>39,921</td>
             <td>253,751</td>
-            <td>423</td>
-    <td>63.0%</td><td>37.0%</td>
+            <td>    423</td>
+    
+            <td>
+                Trump 63.0% /
+                37.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.9%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>57.87%</td>
-            <td>0.035%</td>
+            <td>Biden needs 57.87% [0.035%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:34:39.911000Z</td>
+            <td class="timestamp">2020-11-05 01:34:39 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>39,811</td>
             <td>254,174</td>
-            <td>10</td>
-    <td>20.0%</td><td>80.0%</td>
+            <td>     10</td>
+    
+            <td>
+                Trump 20.0% /
+                80.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 64.7%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>57.83%</td>
-            <td>-0.001%</td>
+            <td>Biden needs 57.83% [-0.001%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:28:06.762000Z</td>
+            <td class="timestamp">2020-11-05 01:28:06 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>39,817</td>
             <td>254,184</td>
-            <td>14,511</td>
-    <td>28.7%</td><td>71.3%</td>
+            <td> 14,511</td>
+    
+            <td>
+                Trump 28.7% /
+                71.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.9%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>57.83%</td>
-            <td>-0.726%</td>
+            <td>Biden needs 57.83% [-0.726%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:16:26.657000Z</td>
+            <td class="timestamp">2020-11-05 01:16:26 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>45,991</td>
             <td>268,695</td>
-            <td>261</td>
-    <td>59.6%</td><td>40.4%</td>
+            <td>    261</td>
+    
+            <td>
+                Trump 59.6% /
+                40.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.9%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>58.56%</td>
-            <td>0.018%</td>
+            <td>Biden needs 58.56% [0.018%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:00:02.101000Z</td>
+            <td class="timestamp">2020-11-05 01:00:02 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>45,941</td>
             <td>268,956</td>
-            <td>752</td>
-    <td>40.2%</td><td>59.8%</td>
+            <td>    752</td>
+    
+            <td>
+                Trump 40.2% /
+                59.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.1%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>58.54%</td>
-            <td>-0.003%</td>
+            <td>Biden needs 58.54% [-0.003%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:55:32.963000Z</td>
+            <td class="timestamp">2020-11-05 00:55:32 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>46,088</td>
             <td>269,708</td>
-            <td>2,796</td>
-    <td>18.9%</td><td>81.1%</td>
+            <td>  2,796</td>
+    
+            <td>
+                Trump 18.9% /
+                81.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.5%
+            </td>
+        
             <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>58.54%</td>
-            <td>-0.231%</td>
+            <td>Biden needs 58.54% [-0.231%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:44:49.776000Z</td>
+            <td class="timestamp">2020-11-05 00:44:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>47,827</td>
             <td>272,504</td>
-            <td>6,580</td>
-    <td>55.4%</td><td>44.6%</td>
+            <td>  6,580</td>
+    
+            <td>
+                Trump 55.4% /
+                44.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.5%
+            </td>
+        
             <td><abbr title="2553/2655">96.2%</abbr></td>
-            <td>58.78%</td>
-            <td>0.335%</td>
+            <td>Biden needs 58.78% [0.335%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:20:56.454000Z</td>
+            <td class="timestamp">2020-11-05 00:20:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>47,111</td>
             <td>279,084</td>
-            <td>16,690</td>
-    <td>21.2%</td><td>78.8%</td>
+            <td> 16,690</td>
+    
+            <td>
+                Trump 21.2% /
+                78.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.8%
+            </td>
+        
             <td><abbr title="2553/2655">96.2%</abbr></td>
-            <td>58.44%</td>
-            <td>-1.151%</td>
+            <td>Biden needs 58.44% [-1.151%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:16:49.306000Z</td>
+            <td class="timestamp">2020-11-05 00:16:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>56,739</td>
             <td>295,774</td>
-            <td>1,610</td>
-    <td>33.6%</td><td>66.4%</td>
+            <td>  1,610</td>
+    
+            <td>
+                Trump 33.6% /
+                66.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.8%
+            </td>
+        
             <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>59.59%</td>
-            <td>-0.037%</td>
+            <td>Biden needs 59.59% [-0.037%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:14:43.498000Z</td>
+            <td class="timestamp">2020-11-04 23:14:43 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>57,266</td>
             <td>297,384</td>
-            <td>518</td>
-    <td>37.4%</td><td>62.6%</td>
+            <td>    518</td>
+    
+            <td>
+                Trump 37.4% /
+                62.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.1%
+            </td>
+        
             <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>59.63%</td>
-            <td>-0.005%</td>
+            <td>Biden needs 59.63% [-0.005%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:01:02.939000Z</td>
+            <td class="timestamp">2020-11-04 23:01:02 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>57,397</td>
             <td>297,902</td>
-            <td>7,324</td>
-    <td>28.1%</td><td>71.9%</td>
+            <td>  7,324</td>
+    
+            <td>
+                Trump 28.1% /
+                71.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 63.1%
+            </td>
+        
             <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>59.63%</td>
-            <td>-0.293%</td>
+            <td>Biden needs 59.63% [-0.293%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:54:27.393000Z</td>
+            <td class="timestamp">2020-11-04 22:54:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>60,598</td>
             <td>305,226</td>
-            <td>24,030</td>
-    <td>35.3%</td><td>64.7%</td>
+            <td> 24,030</td>
+    
+            <td>
+                Trump 35.3% /
+                64.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.7%
+            </td>
+        
             <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>59.93%</td>
-            <td>-0.346%</td>
+            <td>Biden needs 59.93% [-0.346%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:44:27.984000Z</td>
+            <td class="timestamp">2020-11-04 22:44:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>67,644</td>
             <td>329,256</td>
-            <td>1,128</td>
-    <td>18.1%</td><td>81.9%</td>
+            <td>  1,128</td>
+    
+            <td>
+                Trump 18.1% /
+                81.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.4%
+            </td>
+        
             <td><abbr title="2515/2655">94.7%</abbr></td>
-            <td>60.27%</td>
-            <td>-0.074%</td>
+            <td>Biden needs 60.27% [-0.074%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:27:15.940000Z</td>
+            <td class="timestamp">2020-11-04 22:27:15 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>68,363</td>
             <td>330,384</td>
-            <td>4</td>
-    <td>50.0%</td><td>50.0%</td>
+            <td>      4</td>
+    
+            <td>
+                Trump 50.0% /
+                50.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.7%
+            </td>
+        
             <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>60.35%</td>
-            <td>0.000%</td>
+            <td>Biden needs 60.35% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:12:35.528000Z</td>
+            <td class="timestamp">2020-11-04 22:12:35 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>68,363</td>
             <td>330,388</td>
-            <td>1,366</td>
-    <td>51.8%</td><td>48.2%</td>
+            <td>  1,366</td>
+    
+            <td>
+                Trump 51.8% /
+                48.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.9%
+            </td>
+        
             <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>60.35%</td>
-            <td>0.050%</td>
+            <td>Biden needs 60.35% [0.050%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:55:46.318000Z</td>
+            <td class="timestamp">2020-11-04 21:55:46 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>68,315</td>
             <td>331,754</td>
-            <td>1,638</td>
-    <td>61.2%</td><td>38.8%</td>
+            <td>  1,638</td>
+    
+            <td>
+                Trump 61.2% /
+                38.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 68.4%
+            </td>
+        
             <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>60.30%</td>
-            <td>0.106%</td>
+            <td>Biden needs 60.30% [0.106%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:45:13.182000Z</td>
+            <td class="timestamp">2020-11-04 21:45:13 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>67,948</td>
             <td>333,392</td>
-            <td>16,952</td>
-    <td>21.4%</td><td>78.6%</td>
+            <td> 16,952</td>
+    
+            <td>
+                Trump 21.4% /
+                78.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 53.4%
+            </td>
+        
             <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>60.19%</td>
-            <td>-0.890%</td>
+            <td>Biden needs 60.19% [-0.890%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:37:45.330000Z</td>
+            <td class="timestamp">2020-11-04 21:37:45 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>77,636</td>
             <td>350,344</td>
-            <td>575</td>
-    <td>57.8%</td><td>42.2%</td>
+            <td>    575</td>
+    
+            <td>
+                Trump 57.8% /
+                42.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 54.0%
+            </td>
+        
             <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>61.08%</td>
-            <td>0.031%</td>
+            <td>Biden needs 61.08% [0.031%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:29:17.571000Z</td>
+            <td class="timestamp">2020-11-04 21:29:17 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>77,546</td>
             <td>350,919</td>
-            <td>691</td>
-    <td>18.0%</td><td>82.0%</td>
+            <td>    691</td>
+    
+            <td>
+                Trump 18.0% /
+                82.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 55.0%
+            </td>
+        
             <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>61.05%</td>
-            <td>-0.041%</td>
+            <td>Biden needs 61.05% [-0.041%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:12:19.926000Z</td>
+            <td class="timestamp">2020-11-04 21:12:19 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>77,988</td>
             <td>351,610</td>
-            <td>343</td>
-    <td>53.1%</td><td>46.9%</td>
+            <td>    343</td>
+    
+            <td>
+                Trump 53.1% /
+                46.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 62.9%
+            </td>
+        
             <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>61.09%</td>
-            <td>0.014%</td>
+            <td>Biden needs 61.09% [0.014%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:53:17.620000Z</td>
+            <td class="timestamp">2020-11-04 20:53:17 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>77,967</td>
             <td>351,953</td>
-            <td>9,984</td>
-    <td>47.7%</td><td>52.3%</td>
+            <td>  9,984</td>
+    
+            <td>
+                Trump 47.7% /
+                52.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.9%
+            </td>
+        
             <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>61.08%</td>
-            <td>0.242%</td>
+            <td>Biden needs 61.08% [0.242%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:48:16.492000Z</td>
+            <td class="timestamp">2020-11-04 20:48:16 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>78,429</td>
             <td>361,937</td>
-            <td>11</td>
-    <td>77.3%</td><td>22.7%</td>
+            <td>     11</td>
+    
+            <td>
+                Trump 77.3% /
+                22.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.8%
+            </td>
+        
             <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>60.83%</td>
-            <td>0.001%</td>
+            <td>Biden needs 60.83% [0.001%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:37:49.641000Z</td>
+            <td class="timestamp">2020-11-04 20:37:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>78,423</td>
             <td>361,948</td>
-            <td>1</td>
-    <td>N/A</td><td>100.0%</td>
+            <td>      1</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 69.5%
+            </td>
+        
             <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>60.83%</td>
-            <td>-0.000%</td>
+            <td>Biden needs 60.83% [-0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:14:42.157000Z</td>
+            <td class="timestamp">2020-11-04 20:14:42 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>78,424</td>
             <td>361,949</td>
-            <td>4,905</td>
-    <td>38.9%</td><td>61.1%</td>
+            <td>  4,905</td>
+    
+            <td>
+                Trump 38.9% /
+                61.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.9%
+            </td>
+        
             <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>60.83%</td>
-            <td>-0.003%</td>
+            <td>Biden needs 60.83% [-0.003%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:44:32.496000Z</td>
+            <td class="timestamp">2020-11-04 19:44:32 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>79,509</td>
             <td>366,854</td>
-            <td>5,924</td>
-    <td>17.7%</td><td>82.3%</td>
+            <td>  5,924</td>
+    
+            <td>
+                Trump 17.7% /
+                82.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.6%
+            </td>
+        
             <td><abbr title="2508/2655">94.5%</abbr></td>
-            <td>60.84%</td>
-            <td>-0.340%</td>
+            <td>Biden needs 60.84% [-0.340%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:36:47.711000Z</td>
+            <td class="timestamp">2020-11-04 19:36:47 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>83,331</td>
             <td>372,778</td>
-            <td>811</td>
-    <td>65.7%</td><td>34.3%</td>
+            <td>    811</td>
+    
+            <td>
+                Trump 65.7% /
+                34.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 79.2%
+            </td>
+        
             <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>61.18%</td>
-            <td>0.058%</td>
+            <td>Biden needs 61.18% [0.058%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:33:35.022000Z</td>
+            <td class="timestamp">2020-11-04 19:33:35 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>83,076</td>
             <td>373,589</td>
-            <td>80</td>
-    <td>50.6%</td><td>49.4%</td>
+            <td>     80</td>
+    
+            <td>
+                Trump 50.6% /
+                49.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.3%
+            </td>
+        
             <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>61.12%</td>
-            <td>0.003%</td>
+            <td>Biden needs 61.12% [0.003%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:28:48.570000Z</td>
+            <td class="timestamp">2020-11-04 19:28:48 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>83,075</td>
             <td>373,669</td>
-            <td>291</td>
-    <td>45.4%</td><td>54.6%</td>
+            <td>    291</td>
+    
+            <td>
+                Trump 45.4% /
+                54.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.3%
+            </td>
+        
             <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>61.12%</td>
-            <td>0.005%</td>
+            <td>Biden needs 61.12% [0.005%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:13:03.482000Z</td>
+            <td class="timestamp">2020-11-04 19:13:03 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>83,102</td>
             <td>373,960</td>
-            <td>499</td>
-    <td>61.5%</td><td>38.5%</td>
+            <td>    499</td>
+    
+            <td>
+                Trump 61.5% /
+                38.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 83.1%
+            </td>
+        
             <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>61.11%</td>
-            <td>0.030%</td>
+            <td>Biden needs 61.11% [0.030%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:40:57.265000Z</td>
+            <td class="timestamp">2020-11-04 18:40:57 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>82,987</td>
             <td>374,459</td>
-            <td>4,131</td>
-    <td>15.5%</td><td>84.5%</td>
+            <td>  4,131</td>
+    
+            <td>
+                Trump 15.5% /
+                84.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 82.2%
+            </td>
+        
             <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>61.08%</td>
-            <td>-0.255%</td>
+            <td>Biden needs 61.08% [-0.255%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:57:21.547000Z</td>
+            <td class="timestamp">2020-11-04 17:57:21 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>85,835</td>
             <td>378,590</td>
-            <td>2,376</td>
-    <td>17.6%</td><td>82.4%</td>
+            <td>  2,376</td>
+    
+            <td>
+                Trump 17.6% /
+                82.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 81.7%
+            </td>
+        
             <td><abbr title="2504/2655">94.3%</abbr></td>
-            <td>61.34%</td>
-            <td>-0.132%</td>
+            <td>Biden needs 61.34% [-0.132%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:44:28.196000Z</td>
+            <td class="timestamp">2020-11-04 17:44:28 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>87,376</td>
             <td>380,966</td>
-            <td>2,438</td>
-    <td>45.1%</td><td>54.9%</td>
+            <td>  2,438</td>
+    
+            <td>
+                Trump 45.1% /
+                54.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 84.5%
+            </td>
+        
             <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>61.47%</td>
-            <td>0.041%</td>
+            <td>Biden needs 61.47% [0.041%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:41:18.740000Z</td>
+            <td class="timestamp">2020-11-04 17:41:18 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>87,617</td>
             <td>383,404</td>
-            <td>247</td>
-    <td>51.8%</td><td>48.2%</td>
+            <td>    247</td>
+    
+            <td>
+                Trump 51.8% /
+                48.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 84.9%
+            </td>
+        
             <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>61.43%</td>
-            <td>0.009%</td>
+            <td>Biden needs 61.43% [0.009%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:16:47.676000Z</td>
+            <td class="timestamp">2020-11-04 17:16:47 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>87,608</td>
             <td>383,651</td>
-            <td>19,244</td>
-    <td>13.0%</td><td>87.0%</td>
+            <td> 19,244</td>
+    
+            <td>
+                Trump 13.0% /
+                87.0% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>61.42%</td>
-            <td>-1.220%</td>
+            <td>Biden needs 61.42% [-1.220%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:37:07.239000Z</td>
+            <td class="timestamp">2020-11-04 16:37:07 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>101,837</td>
             <td>402,895</td>
-            <td>3,290</td>
-    <td>22.9%</td><td>77.1%</td>
+            <td>  3,290</td>
+    
+            <td>
+                Trump 22.9% /
+                77.1% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>62.64%</td>
-            <td>-0.117%</td>
+            <td>Biden needs 62.64% [-0.117%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:35:11.828000Z</td>
+            <td class="timestamp">2020-11-04 16:35:11 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>103,620</td>
             <td>406,185</td>
-            <td>502</td>
-    <td>41.5%</td><td>58.5%</td>
+            <td>    502</td>
+    
+            <td>
+                Trump 41.5% /
+                58.5% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>62.76%</td>
-            <td>0.005%</td>
+            <td>Biden needs 62.76% [0.005%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T14:15:56.618000Z</td>
+            <td class="timestamp">2020-11-04 14:15:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>103,705</td>
             <td>406,687</td>
-            <td>78</td>
-    <td>14.7%</td><td>85.3%</td>
+            <td>     78</td>
+    
+            <td>
+                Trump 14.7% /
+                85.3% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>62.75%</td>
-            <td>-0.004%</td>
+            <td>Biden needs 62.75% [-0.004%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T13:28:22.084000Z</td>
+            <td class="timestamp">2020-11-04 13:28:22 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>103,760</td>
             <td>406,765</td>
-            <td>0</td>
+            <td>      0</td>
     <td>N/A</td><td>N/A</td>
             <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>62.75%</td>
-            <td>62.754%</td>
+            <td>Biden needs 62.75% [62.754%]</td>
         </tr>
     
 </table><hr>
@@ -864,49 +1184,53 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="11">North Carolina</th>
+            <th class="text-center" colspan="9">North Carolina</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>Leading Candidate</th>
-            <th>Trailing Candidate</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Leading Candidate Partition</th>
-            <th>Trailing Candidate Partition</th>
-            <th>Precincts Reporting</th>
-            <th>Trailing Candidate Hurdle</th>
-            <th>Hurdle Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">                Hurdle
+            </th>
         </tr>
         </thead>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:41:50.861000Z</td>
+            <td class="timestamp">2020-11-04 21:41:50 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>76,737</td>
             <td>292,412</td>
-            <td>220</td>
-    <td>50.0%</td><td>50.0%</td>
+            <td>    220</td>
+    
+            <td>
+                Trump 50.0% /
+                50.0% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="2423/2662">91.0%</abbr></td>
-            <td>63.12%</td>
-            <td>0.010%</td>
+            <td>Biden needs 63.12% [0.010%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T13:28:22.084000Z</td>
+            <td class="timestamp">2020-11-04 13:28:22 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>76,737</td>
             <td>292,632</td>
-            <td>0</td>
+            <td>      0</td>
     <td>N/A</td><td>N/A</td>
             <td><abbr title="2423/2662">91.0%</abbr></td>
-            <td>63.11%</td>
-            <td>63.112%</td>
+            <td>Biden needs 63.11% [63.112%]</td>
         </tr>
     
 </table><hr>
@@ -914,35 +1238,36 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="11">Nevada</th>
+            <th class="text-center" colspan="9">Nevada</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>Leading Candidate</th>
-            <th>Trailing Candidate</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Leading Candidate Partition</th>
-            <th>Trailing Candidate Partition</th>
-            <th>Precincts Reporting</th>
-            <th>Trailing Candidate Hurdle</th>
-            <th>Hurdle Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">                Hurdle
+            </th>
         </tr>
         </thead>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T13:28:22.084000Z</td>
+            <td class="timestamp">2020-11-04 13:28:22 UTC</td>
             <td>Biden</td>
-            <td>Trump</td>
             <td>7,647</td>
             <td>202,085</td>
-            <td>0</td>
+            <td>      0</td>
     <td>N/A</td><td>N/A</td>
             <td><abbr title="1610/1993">80.8%</abbr></td>
-            <td>51.89%</td>
-            <td>51.892%</td>
+            <td>Trump needs 51.89% [51.892%]</td>
         </tr>
     
 </table><hr>
@@ -950,1035 +1275,1520 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="11">Pennsylvania</th>
+            <th class="text-center" colspan="9">Pennsylvania</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>Leading Candidate</th>
-            <th>Trailing Candidate</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Leading Candidate Partition</th>
-            <th>Trailing Candidate Partition</th>
-            <th>Precincts Reporting</th>
-            <th>Trailing Candidate Hurdle</th>
-            <th>Hurdle Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">                Hurdle
+            </th>
         </tr>
         </thead>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T04:22:05.599000Z</td>
+            <td class="timestamp">2020-11-05 04:22:05 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>164,414</td>
             <td>801,292</td>
-            <td>38,652</td>
-    <td>26.3%</td><td>73.7%</td>
+            <td> 38,652</td>
+    
+            <td>
+                Trump 26.3% /
+                73.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.9%
+            </td>
+        
             <td><abbr title="8031/9128">88.0%</abbr></td>
-            <td>60.26%</td>
-            <td>-0.619%</td>
+            <td>Biden needs 60.26% [-0.619%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:57:56.031000Z</td>
+            <td class="timestamp">2020-11-05 03:57:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>182,743</td>
             <td>839,944</td>
-            <td>1,318</td>
-    <td>56.9%</td><td>43.1%</td>
+            <td>  1,318</td>
+    
+            <td>
+                Trump 56.9% /
+                43.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.1%
+            </td>
+        
             <td><abbr title="8000/9128">87.6%</abbr></td>
-            <td>60.88%</td>
-            <td>0.028%</td>
+            <td>Biden needs 60.88% [0.028%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:53:39.589000Z</td>
+            <td class="timestamp">2020-11-05 03:53:39 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>182,561</td>
             <td>841,262</td>
-            <td>5,743</td>
-    <td>34.0%</td><td>66.0%</td>
+            <td>  5,743</td>
+    
+            <td>
+                Trump 34.0% /
+                66.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.3%
+            </td>
+        
             <td><abbr title="7998/9128">87.6%</abbr></td>
-            <td>60.85%</td>
-            <td>-0.035%</td>
+            <td>Biden needs 60.85% [-0.035%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T03:16:30.149000Z</td>
+            <td class="timestamp">2020-11-05 03:16:30 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>184,397</td>
             <td>847,005</td>
-            <td>4,549</td>
-    <td>24.1%</td><td>75.9%</td>
+            <td>  4,549</td>
+    
+            <td>
+                Trump 24.1% /
+                75.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.3%
+            </td>
+        
             <td><abbr title="7990/9128">87.5%</abbr></td>
-            <td>60.89%</td>
-            <td>-0.080%</td>
+            <td>Biden needs 60.89% [-0.080%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:47:23.734000Z</td>
+            <td class="timestamp">2020-11-05 02:47:23 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>186,755</td>
             <td>851,554</td>
-            <td>10,173</td>
-    <td>29.2%</td><td>70.8%</td>
+            <td> 10,173</td>
+    
+            <td>
+                Trump 29.2% /
+                70.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.3%
+            </td>
+        
             <td><abbr title="7982/9128">87.4%</abbr></td>
-            <td>60.97%</td>
-            <td>-0.116%</td>
+            <td>Biden needs 60.97% [-0.116%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:26:44.708000Z</td>
+            <td class="timestamp">2020-11-05 02:26:44 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>190,984</td>
             <td>861,727</td>
-            <td>1,285</td>
-    <td>-4.3%</td><td>104.3%</td>
+            <td>  1,285</td>
+    
+            <td>
+                Trump -4.3% /
+                104.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.7%
+            </td>
+        
             <td><abbr title="7973/9128">87.3%</abbr></td>
-            <td>61.08%</td>
-            <td>-0.064%</td>
+            <td>Biden needs 61.08% [-0.064%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:19:13.643000Z</td>
+            <td class="timestamp">2020-11-05 02:19:13 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>192,380</td>
             <td>863,012</td>
-            <td>440</td>
-    <td>50.0%</td><td>50.0%</td>
+            <td>    440</td>
+    
+            <td>
+                Trump 50.0% /
+                50.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.7%
+            </td>
+        
             <td><abbr title="7972/9128">87.3%</abbr></td>
-            <td>61.15%</td>
-            <td>0.006%</td>
+            <td>Biden needs 61.15% [0.006%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T02:03:34.937000Z</td>
+            <td class="timestamp">2020-11-05 02:03:34 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>192,380</td>
             <td>863,452</td>
-            <td>9,413</td>
-    <td>31.0%</td><td>69.0%</td>
+            <td>  9,413</td>
+    
+            <td>
+                Trump 31.0% /
+                69.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.0%
+            </td>
+        
             <td><abbr title="7971/9128">87.3%</abbr></td>
-            <td>61.14%</td>
-            <td>-0.085%</td>
+            <td>Biden needs 61.14% [-0.085%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:21:51.237000Z</td>
+            <td class="timestamp">2020-11-05 01:21:51 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>195,953</td>
             <td>872,865</td>
-            <td>10,590</td>
-    <td>29.2%</td><td>70.8%</td>
+            <td> 10,590</td>
+    
+            <td>
+                Trump 29.2% /
+                70.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.8%
+            </td>
+        
             <td><abbr title="7958/9128">87.2%</abbr></td>
-            <td>61.22%</td>
-            <td>-0.115%</td>
+            <td>Biden needs 61.22% [-0.115%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:07:02.270000Z</td>
+            <td class="timestamp">2020-11-05 01:07:02 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>200,360</td>
             <td>883,455</td>
-            <td>5,612</td>
-    <td>20.2%</td><td>79.8%</td>
+            <td>  5,612</td>
+    
+            <td>
+                Trump 20.2% /
+                79.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.8%
+            </td>
+        
             <td><abbr title="7948/9128">87.1%</abbr></td>
-            <td>61.34%</td>
-            <td>-0.116%</td>
+            <td>Biden needs 61.34% [-0.116%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T01:02:56.314000Z</td>
+            <td class="timestamp">2020-11-05 01:02:56 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>203,700</td>
             <td>889,067</td>
-            <td>217</td>
-    <td>31.3%</td><td>68.7%</td>
+            <td>    217</td>
+    
+            <td>
+                Trump 31.3% /
+                68.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.1%
+            </td>
+        
             <td><abbr title="7938/9128">87.0%</abbr></td>
-            <td>61.46%</td>
-            <td>-0.002%</td>
+            <td>Biden needs 61.46% [-0.002%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:55:32.963000Z</td>
+            <td class="timestamp">2020-11-05 00:55:32 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>203,781</td>
             <td>889,284</td>
-            <td>24,511</td>
-    <td>32.8%</td><td>67.2%</td>
+            <td> 24,511</td>
+    
+            <td>
+                Trump 32.8% /
+                67.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.8%
+            </td>
+        
             <td><abbr title="7937/9128">87.0%</abbr></td>
-            <td>61.46%</td>
-            <td>-0.155%</td>
+            <td>Biden needs 61.46% [-0.155%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:44:49.776000Z</td>
+            <td class="timestamp">2020-11-05 00:44:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>212,236</td>
             <td>913,795</td>
-            <td>77,985</td>
-    <td>28.4%</td><td>71.6%</td>
+            <td> 77,985</td>
+    
+            <td>
+                Trump 28.4% /
+                71.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.1%
+            </td>
+        
             <td><abbr title="7904/9128">86.6%</abbr></td>
-            <td>61.61%</td>
-            <td>-0.784%</td>
+            <td>Biden needs 61.61% [-0.784%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-05T00:16:49.306000Z</td>
+            <td class="timestamp">2020-11-05 00:16:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>245,891</td>
             <td>991,780</td>
-            <td>19,381</td>
-    <td>23.8%</td><td>76.2%</td>
+            <td> 19,381</td>
+    
+            <td>
+                Trump 23.8% /
+                76.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 68.6%
+            </td>
+        
             <td><abbr title="7818/9128">85.6%</abbr></td>
-            <td>62.40%</td>
-            <td>-0.265%</td>
+            <td>Biden needs 62.40% [-0.265%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:49:45.306000Z</td>
+            <td class="timestamp">2020-11-04 23:49:45 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>256,058</td>
             <td>1,011,161</td>
-            <td>21,097</td>
-    <td>25.9%</td><td>74.1%</td>
+            <td> 21,097</td>
+    
+            <td>
+                Trump 25.9% /
+                74.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.4%
+            </td>
+        
             <td><abbr title="7805/9128">85.5%</abbr></td>
-            <td>62.66%</td>
-            <td>-0.234%</td>
+            <td>Biden needs 62.66% [-0.234%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:41:34.119000Z</td>
+            <td class="timestamp">2020-11-04 23:41:34 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>266,234</td>
             <td>1,032,258</td>
-            <td>3,360</td>
-    <td>58.3%</td><td>41.7%</td>
+            <td>  3,360</td>
+    
+            <td>
+                Trump 58.3% /
+                41.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 74.0%
+            </td>
+        
             <td><abbr title="7787/9128">85.3%</abbr></td>
-            <td>62.90%</td>
-            <td>0.069%</td>
+            <td>Biden needs 62.90% [0.069%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:28:04.977000Z</td>
+            <td class="timestamp">2020-11-04 23:28:04 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>265,676</td>
             <td>1,035,618</td>
-            <td>3,197</td>
-    <td>33.1%</td><td>66.9%</td>
+            <td>  3,197</td>
+    
+            <td>
+                Trump 33.1% /
+                66.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 74.0%
+            </td>
+        
             <td><abbr title="7781/9128">85.2%</abbr></td>
-            <td>62.83%</td>
-            <td>-0.012%</td>
+            <td>Biden needs 62.83% [-0.012%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:24:27.309000Z</td>
+            <td class="timestamp">2020-11-04 23:24:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>266,754</td>
             <td>1,038,815</td>
-            <td>2,190</td>
-    <td>52.3%</td><td>47.7%</td>
+            <td>  2,190</td>
+    
+            <td>
+                Trump 52.3% /
+                47.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 75.7%
+            </td>
+        
             <td><abbr title="7777/9128">85.2%</abbr></td>
-            <td>62.84%</td>
-            <td>0.032%</td>
+            <td>Biden needs 62.84% [0.032%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:16:40.259000Z</td>
+            <td class="timestamp">2020-11-04 23:16:40 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>266,652</td>
             <td>1,041,005</td>
-            <td>4,579</td>
-    <td>26.0%</td><td>74.0%</td>
+            <td>  4,579</td>
+    
+            <td>
+                Trump 26.0% /
+                74.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.4%
+            </td>
+        
             <td><abbr title="7776/9128">85.2%</abbr></td>
-            <td>62.81%</td>
-            <td>-0.049%</td>
+            <td>Biden needs 62.81% [-0.049%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:14:43.498000Z</td>
+            <td class="timestamp">2020-11-04 23:14:43 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>268,846</td>
             <td>1,045,584</td>
-            <td>17,642</td>
-    <td>26.9%</td><td>73.1%</td>
+            <td> 17,642</td>
+    
+            <td>
+                Trump 26.9% /
+                73.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.6%
+            </td>
+        
             <td><abbr title="7771/9128">85.1%</abbr></td>
-            <td>62.86%</td>
-            <td>-0.169%</td>
+            <td>Biden needs 62.86% [-0.169%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T23:01:02.939000Z</td>
+            <td class="timestamp">2020-11-04 23:01:02 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>276,979</td>
             <td>1,063,226</td>
-            <td>27,630</td>
-    <td>22.5%</td><td>77.5%</td>
+            <td> 27,630</td>
+    
+            <td>
+                Trump 22.5% /
+                77.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.3%
+            </td>
+        
             <td><abbr title="7744/9128">84.8%</abbr></td>
-            <td>63.03%</td>
-            <td>-0.365%</td>
+            <td>Biden needs 63.03% [-0.365%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:54:27.393000Z</td>
+            <td class="timestamp">2020-11-04 22:54:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>292,148</td>
             <td>1,090,856</td>
-            <td>1,365</td>
-    <td>40.3%</td><td>59.7%</td>
+            <td>  1,365</td>
+    
+            <td>
+                Trump 40.3% /
+                59.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.5%
+            </td>
+        
             <td><abbr title="7713/9128">84.5%</abbr></td>
-            <td>63.39%</td>
-            <td>0.005%</td>
+            <td>Biden needs 63.39% [0.005%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:44:27.984000Z</td>
+            <td class="timestamp">2020-11-04 22:44:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>292,412</td>
             <td>1,092,221</td>
-            <td>16,361</td>
-    <td>22.6%</td><td>77.4%</td>
+            <td> 16,361</td>
+    
+            <td>
+                Trump 22.6% /
+                77.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.4%
+            </td>
+        
             <td><abbr title="7712/9128">84.5%</abbr></td>
-            <td>63.39%</td>
-            <td>-0.207%</td>
+            <td>Biden needs 63.39% [-0.207%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:38:48.872000Z</td>
+            <td class="timestamp">2020-11-04 22:38:48 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>301,386</td>
             <td>1,108,582</td>
-            <td>10,527</td>
-    <td>40.9%</td><td>59.1%</td>
+            <td> 10,527</td>
+    
+            <td>
+                Trump 40.9% /
+                59.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.5%
+            </td>
+        
             <td><abbr title="7684/9128">84.2%</abbr></td>
-            <td>63.59%</td>
-            <td>0.043%</td>
+            <td>Biden needs 63.59% [0.043%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:21:41.452000Z</td>
+            <td class="timestamp">2020-11-04 22:21:41 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>303,293</td>
             <td>1,119,109</td>
-            <td>2,306</td>
-    <td>50.0%</td><td>50.0%</td>
+            <td>  2,306</td>
+    
+            <td>
+                Trump 50.0% /
+                50.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.5%
+            </td>
+        
             <td><abbr title="7675/9128">84.1%</abbr></td>
-            <td>63.55%</td>
-            <td>0.028%</td>
+            <td>Biden needs 63.55% [0.028%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:19:33.085000Z</td>
+            <td class="timestamp">2020-11-04 22:19:33 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>303,293</td>
             <td>1,121,415</td>
-            <td>7,256</td>
-    <td>15.9%</td><td>84.1%</td>
+            <td>  7,256</td>
+    
+            <td>
+                Trump 15.9% /
+                84.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 76.3%
+            </td>
+        
             <td><abbr title="7671/9128">84.0%</abbr></td>
-            <td>63.52%</td>
-            <td>-0.132%</td>
+            <td>Biden needs 63.52% [-0.132%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:12:35.528000Z</td>
+            <td class="timestamp">2020-11-04 22:12:35 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>308,243</td>
             <td>1,128,671</td>
-            <td>2,056</td>
-    <td>51.8%</td><td>48.2%</td>
+            <td>  2,056</td>
+    
+            <td>
+                Trump 51.8% /
+                48.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.9%
+            </td>
+        
             <td><abbr title="7659/9128">83.9%</abbr></td>
-            <td>63.66%</td>
-            <td>0.028%</td>
+            <td>Biden needs 63.66% [0.028%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T22:04:57.073000Z</td>
+            <td class="timestamp">2020-11-04 22:04:57 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>308,167</td>
             <td>1,130,727</td>
-            <td>21,949</td>
-    <td>24.5%</td><td>75.5%</td>
+            <td> 21,949</td>
+    
+            <td>
+                Trump 24.5% /
+                75.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.4%
+            </td>
+        
             <td><abbr title="7657/9128">83.9%</abbr></td>
-            <td>63.63%</td>
-            <td>-0.227%</td>
+            <td>Biden needs 63.63% [-0.227%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:45:43.150000Z</td>
+            <td class="timestamp">2020-11-04 21:45:43 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>319,377</td>
             <td>1,152,676</td>
-            <td>3,278</td>
-    <td>42.4%</td><td>57.6%</td>
+            <td>  3,278</td>
+    
+            <td>
+                Trump 42.4% /
+                57.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.2%
+            </td>
+        
             <td><abbr title="7639/9128">83.7%</abbr></td>
-            <td>63.85%</td>
-            <td>0.018%</td>
+            <td>Biden needs 63.85% [0.018%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:41:50.861000Z</td>
+            <td class="timestamp">2020-11-04 21:41:50 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>319,876</td>
             <td>1,155,954</td>
-            <td>887</td>
-    <td>46.9%</td><td>53.1%</td>
+            <td>    887</td>
+    
+            <td>
+                Trump 46.9% /
+                53.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.5%
+            </td>
+        
             <td><abbr title="7634/9128">83.6%</abbr></td>
-            <td>63.84%</td>
-            <td>0.008%</td>
+            <td>Biden needs 63.84% [0.008%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:29:17.571000Z</td>
+            <td class="timestamp">2020-11-04 21:29:17 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>319,931</td>
             <td>1,156,841</td>
-            <td>27,598</td>
-    <td>18.0%</td><td>82.0%</td>
+            <td> 27,598</td>
+    
+            <td>
+                Trump 18.0% /
+                82.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 78.1%
+            </td>
+        
             <td><abbr title="7633/9128">83.6%</abbr></td>
-            <td>63.83%</td>
-            <td>-0.424%</td>
+            <td>Biden needs 63.83% [-0.424%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:21:34.232000Z</td>
+            <td class="timestamp">2020-11-04 21:21:34 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>337,616</td>
             <td>1,184,439</td>
-            <td>23,395</td>
-    <td>37.5%</td><td>62.5%</td>
+            <td> 23,395</td>
+    
+            <td>
+                Trump 37.5% /
+                62.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 83.9%
+            </td>
+        
             <td><abbr title="7577/9128">83.0%</abbr></td>
-            <td>64.25%</td>
-            <td>0.034%</td>
+            <td>Biden needs 64.25% [0.034%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T21:04:05.680000Z</td>
+            <td class="timestamp">2020-11-04 21:04:05 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>343,462</td>
             <td>1,207,834</td>
-            <td>12,427</td>
-    <td>25.0%</td><td>75.0%</td>
+            <td> 12,427</td>
+    
+            <td>
+                Trump 25.0% /
+                75.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 84.6%
+            </td>
+        
             <td><abbr title="7557/9128">82.8%</abbr></td>
-            <td>64.22%</td>
-            <td>-0.110%</td>
+            <td>Biden needs 64.22% [-0.110%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:58:39.936000Z</td>
+            <td class="timestamp">2020-11-04 20:58:39 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>349,685</td>
             <td>1,220,261</td>
-            <td>8,760</td>
-    <td>26.3%</td><td>73.7%</td>
+            <td>  8,760</td>
+    
+            <td>
+                Trump 26.3% /
+                73.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 87.6%
+            </td>
+        
             <td><abbr title="7547/9128">82.7%</abbr></td>
-            <td>64.33%</td>
-            <td>-0.067%</td>
+            <td>Biden needs 64.33% [-0.067%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:53:17.620000Z</td>
+            <td class="timestamp">2020-11-04 20:53:17 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>353,834</td>
             <td>1,229,021</td>
-            <td>5,527</td>
-    <td>26.6%</td><td>73.4%</td>
+            <td>  5,527</td>
+    
+            <td>
+                Trump 26.6% /
+                73.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 83.8%
+            </td>
+        
             <td><abbr title="7538/9128">82.6%</abbr></td>
-            <td>64.39%</td>
-            <td>-0.040%</td>
+            <td>Biden needs 64.39% [-0.040%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:48:16.492000Z</td>
+            <td class="timestamp">2020-11-04 20:48:16 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>356,423</td>
             <td>1,234,548</td>
-            <td>24,654</td>
-    <td>2.8%</td><td>97.2%</td>
+            <td> 24,654</td>
+    
+            <td>
+                Trump  2.8% /
+                97.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 80.2%
+            </td>
+        
             <td><abbr title="7531/9128">82.5%</abbr></td>
-            <td>64.44%</td>
-            <td>-0.642%</td>
+            <td>Biden needs 64.44% [-0.642%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:37:49.641000Z</td>
+            <td class="timestamp">2020-11-04 20:37:49 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>379,700</td>
             <td>1,259,202</td>
-            <td>15,540</td>
-    <td>20.4%</td><td>79.6%</td>
+            <td> 15,540</td>
+    
+            <td>
+                Trump 20.4% /
+                79.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 79.6%
+            </td>
+        
             <td><abbr title="7479/9128">81.9%</abbr></td>
-            <td>65.08%</td>
-            <td>-0.177%</td>
+            <td>Biden needs 65.08% [-0.177%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:23:38.149000Z</td>
+            <td class="timestamp">2020-11-04 20:23:38 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>388,889</td>
             <td>1,274,742</td>
-            <td>16,214</td>
-    <td>19.9%</td><td>80.1%</td>
+            <td> 16,214</td>
+    
+            <td>
+                Trump 19.9% /
+                80.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 79.4%
+            </td>
+        
             <td><abbr title="7451/9128">81.6%</abbr></td>
-            <td>65.25%</td>
-            <td>-0.187%</td>
+            <td>Biden needs 65.25% [-0.187%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:14:42.157000Z</td>
+            <td class="timestamp">2020-11-04 20:14:42 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>398,656</td>
             <td>1,290,956</td>
-            <td>31,489</td>
-    <td>9.6%</td><td>90.4%</td>
+            <td> 31,489</td>
+    
+            <td>
+                Trump  9.6% /
+                90.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.8%
+            </td>
+        
             <td><abbr title="7423/9128">81.3%</abbr></td>
-            <td>65.44%</td>
-            <td>-0.595%</td>
+            <td>Biden needs 65.44% [-0.595%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:10:29.212000Z</td>
+            <td class="timestamp">2020-11-04 20:10:29 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>424,125</td>
             <td>1,322,445</td>
-            <td>28,498</td>
-    <td>30.6%</td><td>69.4%</td>
+            <td> 28,498</td>
+    
+            <td>
+                Trump 30.6% /
+                69.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 76.3%
+            </td>
+        
             <td><abbr title="7368/9128">80.7%</abbr></td>
-            <td>66.04%</td>
-            <td>-0.072%</td>
+            <td>Biden needs 66.04% [-0.072%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:06:10.353000Z</td>
+            <td class="timestamp">2020-11-04 20:06:10 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>435,204</td>
             <td>1,350,943</td>
-            <td>197</td>
-    <td>43.1%</td><td>56.9%</td>
+            <td>    197</td>
+    
+            <td>
+                Trump 43.1% /
+                56.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 74.0%
+            </td>
+        
             <td><abbr title="7343/9128">80.4%</abbr></td>
-            <td>66.11%</td>
-            <td>0.001%</td>
+            <td>Biden needs 66.11% [0.001%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T20:03:16.371000Z</td>
+            <td class="timestamp">2020-11-04 20:03:16 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>435,231</td>
             <td>1,351,140</td>
-            <td>23,686</td>
-    <td>22.8%</td><td>77.2%</td>
+            <td> 23,686</td>
+    
+            <td>
+                Trump 22.8% /
+                77.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.4%
+            </td>
+        
             <td><abbr title="7343/9128">80.4%</abbr></td>
-            <td>66.11%</td>
-            <td>-0.192%</td>
+            <td>Biden needs 66.11% [-0.192%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:47:46.988000Z</td>
+            <td class="timestamp">2020-11-04 19:47:46 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>448,129</td>
             <td>1,374,826</td>
-            <td>6,879</td>
-    <td>21.9%</td><td>78.1%</td>
+            <td>  6,879</td>
+    
+            <td>
+                Trump 21.9% /
+                78.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.7%
+            </td>
+        
             <td><abbr title="7310/9128">80.1%</abbr></td>
-            <td>66.30%</td>
-            <td>-0.059%</td>
+            <td>Biden needs 66.30% [-0.059%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:44:32.496000Z</td>
+            <td class="timestamp">2020-11-04 19:44:32 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>451,993</td>
             <td>1,381,705</td>
-            <td>14,117</td>
-    <td>25.2%</td><td>74.8%</td>
+            <td> 14,117</td>
+    
+            <td>
+                Trump 25.2% /
+                74.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 64.4%
+            </td>
+        
             <td><abbr title="7299/9128">80.0%</abbr></td>
-            <td>66.36%</td>
-            <td>-0.086%</td>
+            <td>Biden needs 66.36% [-0.086%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:33:35.022000Z</td>
+            <td class="timestamp">2020-11-04 19:33:35 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>459,000</td>
             <td>1,395,822</td>
-            <td>134</td>
-    <td>81.7%</td><td>18.3%</td>
+            <td>    134</td>
+    
+            <td>
+                Trump 81.7% /
+                18.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.6%
+            </td>
+        
             <td><abbr title="7286/9128">79.8%</abbr></td>
-            <td>66.44%</td>
-            <td>0.005%</td>
+            <td>Biden needs 66.44% [0.005%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:17:39.759000Z</td>
+            <td class="timestamp">2020-11-04 19:17:39 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>458,915</td>
             <td>1,395,956</td>
-            <td>10,555</td>
-    <td>36.5%</td><td>63.5%</td>
+            <td> 10,555</td>
+    
+            <td>
+                Trump 36.5% /
+                63.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.7%
+            </td>
+        
             <td><abbr title="7286/9128">79.8%</abbr></td>
-            <td>66.44%</td>
-            <td>0.022%</td>
+            <td>Biden needs 66.44% [0.022%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T19:13:03.482000Z</td>
+            <td class="timestamp">2020-11-04 19:13:03 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>461,765</td>
             <td>1,406,511</td>
-            <td>4,397</td>
-    <td>29.4%</td><td>70.6%</td>
+            <td>  4,397</td>
+    
+            <td>
+                Trump 29.4% /
+                70.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.0%
+            </td>
+        
             <td><abbr title="7270/9128">79.6%</abbr></td>
-            <td>66.42%</td>
-            <td>-0.013%</td>
+            <td>Biden needs 66.42% [-0.013%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:56:14.325000Z</td>
+            <td class="timestamp">2020-11-04 18:56:14 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>463,576</td>
             <td>1,410,908</td>
-            <td>494</td>
-    <td>36.4%</td><td>63.6%</td>
+            <td>    494</td>
+    
+            <td>
+                Trump 36.4% /
+                63.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.0%
+            </td>
+        
             <td><abbr title="7264/9128">79.6%</abbr></td>
-            <td>66.43%</td>
-            <td>0.001%</td>
+            <td>Biden needs 66.43% [0.001%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:40:57.265000Z</td>
+            <td class="timestamp">2020-11-04 18:40:57 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>463,710</td>
             <td>1,411,402</td>
-            <td>1,700</td>
-    <td>42.5%</td><td>57.5%</td>
+            <td>  1,700</td>
+    
+            <td>
+                Trump 42.5% /
+                57.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 70.8%
+            </td>
+        
             <td><abbr title="7263/9128">79.6%</abbr></td>
-            <td>66.43%</td>
-            <td>0.011%</td>
+            <td>Biden needs 66.43% [0.011%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:23:27.249000Z</td>
+            <td class="timestamp">2020-11-04 18:23:27 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>463,965</td>
             <td>1,413,102</td>
-            <td>4,754</td>
-    <td>22.0%</td><td>78.0%</td>
+            <td>  4,754</td>
+    
+            <td>
+                Trump 22.0% /
+                78.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 74.9%
+            </td>
+        
             <td><abbr title="7261/9128">79.5%</abbr></td>
-            <td>66.42%</td>
-            <td>-0.039%</td>
+            <td>Biden needs 66.42% [-0.039%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T18:15:15.698000Z</td>
+            <td class="timestamp">2020-11-04 18:15:15 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>466,625</td>
             <td>1,417,856</td>
-            <td>4,780</td>
-    <td>20.7%</td><td>79.3%</td>
+            <td>  4,780</td>
+    
+            <td>
+                Trump 20.7% /
+                79.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.9%
+            </td>
+        
             <td><abbr title="7255/9128">79.5%</abbr></td>
-            <td>66.46%</td>
-            <td>-0.043%</td>
+            <td>Biden needs 66.46% [-0.043%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:44:28.196000Z</td>
+            <td class="timestamp">2020-11-04 17:44:28 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>469,423</td>
             <td>1,422,636</td>
-            <td>10,854</td>
-    <td>35.4%</td><td>64.6%</td>
+            <td> 10,854</td>
+    
+            <td>
+                Trump 35.4% /
+                64.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 75.9%
+            </td>
+        
             <td><abbr title="7246/9128">79.4%</abbr></td>
-            <td>66.50%</td>
-            <td>0.014%</td>
+            <td>Biden needs 66.50% [0.014%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:41:18.740000Z</td>
+            <td class="timestamp">2020-11-04 17:41:18 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>472,593</td>
             <td>1,433,490</td>
-            <td>155</td>
-    <td>40.3%</td><td>59.7%</td>
+            <td>    155</td>
+    
+            <td>
+                Trump 40.3% /
+                59.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 75.0%
+            </td>
+        
             <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>66.48%</td>
-            <td>0.001%</td>
+            <td>Biden needs 66.48% [0.001%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:24:40.785000Z</td>
+            <td class="timestamp">2020-11-04 17:24:40 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>472,623</td>
             <td>1,433,645</td>
-            <td>219</td>
-    <td>50.2%</td><td>49.8%</td>
+            <td>    219</td>
+    
+            <td>
+                Trump 50.2% /
+                49.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.6%
+            </td>
+        
             <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>66.48%</td>
-            <td>0.003%</td>
+            <td>Biden needs 66.48% [0.003%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:16:47.676000Z</td>
+            <td class="timestamp">2020-11-04 17:16:47 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>472,622</td>
             <td>1,433,864</td>
-            <td>35,680</td>
-    <td>22.4%</td><td>77.6%</td>
+            <td> 35,680</td>
+    
+            <td>
+                Trump 22.4% /
+                77.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 68.6%
+            </td>
+        
             <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>66.48%</td>
-            <td>-0.271%</td>
+            <td>Biden needs 66.48% [-0.271%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T17:04:21.985000Z</td>
+            <td class="timestamp">2020-11-04 17:04:21 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>492,350</td>
             <td>1,469,544</td>
-            <td>15,217</td>
-    <td>27.8%</td><td>72.2%</td>
+            <td> 15,217</td>
+    
+            <td>
+                Trump 27.8% /
+                72.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.7%
+            </td>
+        
             <td><abbr title="7193/9128">78.8%</abbr></td>
-            <td>66.75%</td>
-            <td>-0.056%</td>
+            <td>Biden needs 66.75% [-0.056%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:52:58.575000Z</td>
+            <td class="timestamp">2020-11-04 16:52:58 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>499,120</td>
             <td>1,484,761</td>
-            <td>30</td>
-    <td>48.3%</td><td>51.7%</td>
+            <td>     30</td>
+    
+            <td>
+                Trump 48.3% /
+                51.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.3%
+            </td>
+        
             <td><abbr title="7181/9128">78.7%</abbr></td>
-            <td>66.81%</td>
-            <td>0.000%</td>
+            <td>Biden needs 66.81% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:45:02.187000Z</td>
+            <td class="timestamp">2020-11-04 16:45:02 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>499,121</td>
             <td>1,484,791</td>
-            <td>13,349</td>
-    <td>28.4%</td><td>71.6%</td>
+            <td> 13,349</td>
+    
+            <td>
+                Trump 28.4% /
+                71.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.4%
+            </td>
+        
             <td><abbr title="7181/9128">78.7%</abbr></td>
-            <td>66.81%</td>
-            <td>-0.043%</td>
+            <td>Biden needs 66.81% [-0.043%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:41:26.635000Z</td>
+            <td class="timestamp">2020-11-04 16:41:26 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>504,890</td>
             <td>1,498,140</td>
-            <td>20,482</td>
-    <td>31.1%</td><td>68.9%</td>
+            <td> 20,482</td>
+    
+            <td>
+                Trump 31.1% /
+                68.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 73.9%
+            </td>
+        
             <td><abbr title="7169/9128">78.5%</abbr></td>
-            <td>66.85%</td>
-            <td>-0.028%</td>
+            <td>Biden needs 66.85% [-0.028%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:32:53.805000Z</td>
+            <td class="timestamp">2020-11-04 16:32:53 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>512,636</td>
             <td>1,518,622</td>
-            <td>6,321</td>
-    <td>47.7%</td><td>52.3%</td>
+            <td>  6,321</td>
+    
+            <td>
+                Trump 47.7% /
+                52.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 76.3%
+            </td>
+        
             <td><abbr title="7151/9128">78.3%</abbr></td>
-            <td>66.88%</td>
-            <td>0.060%</td>
+            <td>Biden needs 66.88% [0.060%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:25:01.960000Z</td>
+            <td class="timestamp">2020-11-04 16:25:01 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>512,933</td>
             <td>1,524,943</td>
-            <td>33,898</td>
-    <td>18.7%</td><td>81.3%</td>
+            <td> 33,898</td>
+    
+            <td>
+                Trump 18.7% /
+                81.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 57.5%
+            </td>
+        
             <td><abbr title="7140/9128">78.2%</abbr></td>
-            <td>66.82%</td>
-            <td>-0.316%</td>
+            <td>Biden needs 66.82% [-0.316%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:12:53.458000Z</td>
+            <td class="timestamp">2020-11-04 16:12:53 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>534,180</td>
             <td>1,558,841</td>
-            <td>15,030</td>
-    <td>28.7%</td><td>71.3%</td>
+            <td> 15,030</td>
+    
+            <td>
+                Trump 28.7% /
+                71.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.4%
+            </td>
+        
             <td><abbr title="7115/9128">77.9%</abbr></td>
-            <td>67.13%</td>
-            <td>-0.040%</td>
+            <td>Biden needs 67.13% [-0.040%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:03:50.679000Z</td>
+            <td class="timestamp">2020-11-04 16:03:50 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>540,587</td>
             <td>1,573,871</td>
-            <td>556</td>
-    <td>49.4%</td><td>50.6%</td>
+            <td>    556</td>
+    
+            <td>
+                Trump 49.4% /
+                50.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.6%
+            </td>
+        
             <td><abbr title="7102/9128">77.8%</abbr></td>
-            <td>67.17%</td>
-            <td>0.006%</td>
+            <td>Biden needs 67.17% [0.006%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T16:01:30.816000Z</td>
+            <td class="timestamp">2020-11-04 16:01:30 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>540,594</td>
             <td>1,574,427</td>
-            <td>4,467</td>
-    <td>39.9%</td><td>60.1%</td>
+            <td>  4,467</td>
+    
+            <td>
+                Trump 39.9% /
+                60.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.8%
+            </td>
+        
             <td><abbr title="7102/9128">77.8%</abbr></td>
-            <td>67.17%</td>
-            <td>0.020%</td>
+            <td>Biden needs 67.17% [0.020%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T15:52:05.608000Z</td>
+            <td class="timestamp">2020-11-04 15:52:05 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>541,492</td>
             <td>1,578,894</td>
-            <td>2,761</td>
-    <td>26.8%</td><td>73.2%</td>
+            <td>  2,761</td>
+    
+            <td>
+                Trump 26.8% /
+                73.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.4%
+            </td>
+        
             <td><abbr title="7097/9128">77.7%</abbr></td>
-            <td>67.15%</td>
-            <td>-0.011%</td>
+            <td>Biden needs 67.15% [-0.011%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T15:41:34.720000Z</td>
+            <td class="timestamp">2020-11-04 15:41:34 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>542,774</td>
             <td>1,581,655</td>
-            <td>82,554</td>
-    <td>45.6%</td><td>54.4%</td>
+            <td> 82,554</td>
+    
+            <td>
+                Trump 45.6% /
+                54.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 87.0%
+            </td>
+        
             <td><abbr title="7097/9128">77.7%</abbr></td>
-            <td>67.16%</td>
-            <td>0.634%</td>
+            <td>Biden needs 67.16% [0.634%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T15:25:43.020000Z</td>
+            <td class="timestamp">2020-11-04 15:25:43 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>550,001</td>
             <td>1,664,209</td>
-            <td>44,605</td>
-    <td>7.8%</td><td>92.2%</td>
+            <td> 44,605</td>
+    
+            <td>
+                Trump  7.8% /
+                92.2% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 82.1%
+            </td>
+        
             <td><abbr title="7035/9128">77.1%</abbr></td>
-            <td>66.52%</td>
-            <td>-0.670%</td>
+            <td>Biden needs 66.52% [-0.670%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T15:17:08.834000Z</td>
+            <td class="timestamp">2020-11-04 15:17:08 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>587,656</td>
             <td>1,708,814</td>
-            <td>4,275</td>
-    <td>30.0%</td><td>70.0%</td>
+            <td>  4,275</td>
+    
+            <td>
+                Trump 30.0% /
+                70.0% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="6943/9128">76.1%</abbr></td>
-            <td>67.19%</td>
-            <td>-0.007%</td>
+            <td>Biden needs 67.19% [-0.007%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T14:56:08.718000Z</td>
+            <td class="timestamp">2020-11-04 14:56:08 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>589,367</td>
             <td>1,713,089</td>
-            <td>88</td>
-    <td>41.5%</td><td>58.5%</td>
+            <td>     88</td>
+    
+            <td>
+                Trump 41.5% /
+                58.5% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="6938/9128">76.0%</abbr></td>
-            <td>67.20%</td>
-            <td>0.000%</td>
+            <td>Biden needs 67.20% [0.000%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T14:32:18.760000Z</td>
+            <td class="timestamp">2020-11-04 14:32:18 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>589,382</td>
             <td>1,713,177</td>
-            <td>39,561</td>
-    <td>16.3%</td><td>83.7%</td>
+            <td> 39,561</td>
+    
+            <td>
+                Trump 16.3% /
+                83.7% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="6938/9128">76.0%</abbr></td>
-            <td>67.20%</td>
-            <td>-0.373%</td>
+            <td>Biden needs 67.20% [-0.373%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T14:23:44.006000Z</td>
+            <td class="timestamp">2020-11-04 14:23:44 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>616,079</td>
             <td>1,752,738</td>
-            <td>4,580</td>
-    <td>19.9%</td><td>80.1%</td>
+            <td>  4,580</td>
+    
+            <td>
+                Trump 19.9% /
+                80.1% Biden
+            </td>
+        <td>N/A</td>
             <td><abbr title="6905/9128">75.6%</abbr></td>
-            <td>67.57%</td>
-            <td>-0.033%</td>
+            <td>Biden needs 67.57% [-0.033%]</td>
         </tr>
     
 
         <tr>
-            <td class="timestamp">2020-11-04T13:28:22.084000Z</td>
+            <td class="timestamp">2020-11-04 13:28:22 UTC</td>
             <td>Trump</td>
-            <td>Biden</td>
             <td>618,840</td>
             <td>1,757,318</td>
-            <td>0</td>
+            <td>      0</td>
     <td>N/A</td><td>N/A</td>
             <td><abbr title="6905/9128">75.6%</abbr></td>
-            <td>67.61%</td>
-            <td>67.608%</td>
+            <td>Biden needs 67.61% [67.608%]</td>
         </tr>
     
 </table><hr>
 
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
         integrity="sha384-cuApTuVdn64P5ZOzyf+qTgNxGwhvW/ZmdAbNMcl7Q3TkMKJ7/bERQ1cFDmZy7QvZ"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/utc.js"
+        integrity="sha384-r1JLNIu5SkAfQejSOJPjndnEZkxex5ChJOTaiQeN91L012sA1pyw0A/543Xq97wb"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"
         integrity="sha384-ojZWhTxW4vjtUz9IjuxEgcPAQQkFj7jlcOnGFp8IyTUTQpFisDT5u8zFh2d0GrSM"
@@ -1990,9 +2800,15 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
         dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.extend(dayjs_plugin_utc)
+
         $(".timestamp").map(function (idx, tselem) {
-            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs(tselem.innerHTML).fromNow() + "</abbr>"
+            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML, 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
     </script>
 </body>
