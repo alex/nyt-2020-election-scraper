@@ -101,6 +101,7 @@ def string_summary(summary):
 
 def html_write_state_head(state: str):
     return f'''
+        <thead class="thead-light">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
