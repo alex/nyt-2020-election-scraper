@@ -203,7 +203,8 @@ for state_index in STATE_INDEXES:
                     agg_votes += prev_summary.new_votes
                     agg_c2_votes += round(prev_summary.trailing_candidate_partition * prev_summary.new_votes)
 
-            hurdle_mov_avg = float(agg_c2_votes) / agg_votes
+            if agg_votes:
+                hurdle_mov_avg = float(agg_c2_votes) / agg_votes
 
         summary = IterationSummary(
             timestamp,
