@@ -40,7 +40,7 @@ def fetch_all_results_jsons():
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes_remaining', 'precincts_reporting', 'hurdle']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
 )
 
 # List of results.json dicts, in chronological order
@@ -55,7 +55,7 @@ for state_index in STATE_INDEXES:
 
     last_iteration_info = IterationInfo(
         vote_diff=None,
-        votes_remaining=None,
+        votes=None,
         precincts_reporting=None,
         hurdle=0
     )
@@ -70,24 +70,25 @@ for state_index in STATE_INDEXES:
         candidate1_name = candidate1['last_name']
         candidate2_name = candidate2['last_name']
         vote_diff = candidate1['votes'] - candidate2['votes']
+        votes = state_blob['votes']
         votes_remaining = state_blob['tot_exp_vote'] - state_blob['votes']
         precincts_reporting = state_blob['precincts_reporting']
         precincts_total = state_blob['precincts_total']
-        counted_since = 0 if last_iteration_info.votes_remaining is None else (last_iteration_info.votes_remaining - votes_remaining)
+        new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
         delta = (datetime.datetime.utcnow() - timestamp)
         delta_str = humanize.naturaltime(delta)
         formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
         hurdle = (((votes_remaining + vote_diff) / 2)) / votes_remaining
 
-        if counted_since != 0:
-            repartition1 = ((counted_since + (last_iteration_info.vote_diff - vote_diff)) / 2.) / counted_since
+        if new_votes != 0:
+            repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
         else:
             repartition1 = 0.5
 
         # Info we’ll need for the next loop iteration
         iteration_info = IterationInfo(
             vote_diff=vote_diff,
-            votes_remaining=votes_remaining,
+            votes=votes,
             precincts_reporting=precincts_reporting,
             hurdle=hurdle,
         )
@@ -101,7 +102,7 @@ for state_index in STATE_INDEXES:
             f'{formatted_timestamp} ({delta_str})',
             f'{candidate1_name} leading by {vote_diff:,} votes',
             f'Remaining (est.): {votes_remaining:,}',
-            f'Change: {counted_since:,}',
+            f'Change: {new_votes:,}',
             f'{candidate1_name} {1-repartition1:.1%} / {repartition1:.1%} {candidate2_name}',
             f'Precincts: {precincts_reporting}/{precincts_total}',
             f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]'
