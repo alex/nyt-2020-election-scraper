@@ -5,7 +5,7 @@ import concurrent.futures
 import datetime
 from functools import partial
 import itertools
-import json
+import simdjson
 import subprocess
 from tabulate import tabulate
 
@@ -33,9 +33,10 @@ def fetch_all_results_jsons():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         blobs = executor.map(partial(git_show, name="results.json"), commits)
 
-    jsons = (json.loads(blob) for blob in blobs)
+    parsers = [simdjson.Parser() for blob in commits] # These can't be reused apparently
+    jsons = (parser.parse(blob) for parser, blob in zip(parsers, blobs))
 
-    return sorted(jsons, key=lambda j: j['meta']['timestamp']) # Really make sure we’re in order
+    return sorted(jsons, key=lambda j: j['meta']['timestamp']), parsers # Really make sure we’re in order
 
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
@@ -168,7 +169,7 @@ def html_summary(summary: IterationSummary):
 scrape_time = datetime.datetime.utcnow()
 
 # List of results.json dicts, in chronological order
-jsons = fetch_all_results_jsons()
+jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
 
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
