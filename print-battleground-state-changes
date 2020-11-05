@@ -78,7 +78,7 @@ def html_write_state_head(state: str):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="8">{state}</th>
+            <th class="text-center" colspan="9">{state}</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -88,6 +88,9 @@ def html_write_state_head(state: str):
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
                 Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+                Block Trend
             </th>
             <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">\
@@ -117,11 +120,21 @@ def html_summary(summary: IterationSummary):
     else:
         html += '<td>N/A</td>'
 
+    if (summary.hurdle_mov_avg):
+        html += f'''
+            <td>
+                {summary.trailing_candidate_name} is averaging {summary.hurdle_mov_avg:5.01%}
+            </td>
+        '''
+    else:
+        html += '<td>N/A</td>'
+
     html += f'''
             <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
         </tr>
     '''
+
     return html
 
 # List of results.json dicts, in chronological order
