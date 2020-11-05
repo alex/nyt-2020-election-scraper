@@ -56,7 +56,7 @@
         }
     }
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 23:08:57 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Thu Nov  5 23:14:02 2020 (UTC)</title>
 </head>
 
 <body>
@@ -66,6 +66,11 @@
         Consult state websites and officials for the most accurate and up-to-date figures.
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
+
+    <p class="text-right">
+      <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
+    </p>
+
 
     <table id='alaska' class='table table-bordered'>
 
@@ -4889,5 +4894,35 @@
         $(".timestamp").map(function (idx, tselem) {
             tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
+
+        const $shrinkButton = $('#shrink_button');
+
+        const shrinkTables = () => {
+            $shrinkButton.html('Expand Tables');
+            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+            localStorage.setItem(shrunkLocalStorageKey, 'true');
+        };
+
+        const expandTables = () => {
+            $shrinkButton.html('Shrink Tables');
+            $('.table').each(function() { $(this).find('tbody tr').show(); });
+            localStorage.removeItem(shrunkLocalStorageKey);
+        };
+
+        const isShrunk = () => localStorage.getItem(shrunkLocalStorageKey) === 'true';
+
+        const shrunkLocalStorageKey = 'shrunk';
+
+        $shrinkButton.on('click', function() {
+            if (isShrunk()) {
+                expandTables();
+            } else {
+                shrinkTables();
+            }
+        });
+
+        if (localStorage.getItem(shrunkLocalStorageKey)) {
+            shrinkTables();
+        }
     </script>
 </body>
