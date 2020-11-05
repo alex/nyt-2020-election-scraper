@@ -15,11 +15,11 @@
     }
 
     .has-tip:after{
-        content: "�";
+        content: "ℹ";
     }
 }
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 05:33:19 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Thu Nov  5 05:36:18 2020 (UTC)</title>
 </head>
 
 <body>
@@ -2825,7 +2825,7 @@
         dayjs.extend(dayjs_plugin_utc)
 
         $(".timestamp").map(function (idx, tselem) {
-            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML, 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
     </script>
 </body>
