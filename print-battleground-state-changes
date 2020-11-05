@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 import collections
-import concurrent.futures
 import datetime
-from functools import partial
+import git
 import itertools
 import simdjson
 import subprocess
@@ -22,16 +21,16 @@ STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
 
+def git_show(ref, name, repo_client):
+    commit_tree = repo_client.commit(ref).tree
 
-def git_show(ref, name):
-    return subprocess.check_output(['git', 'show', ref + ':' + name])
-
+    return commit_tree[name].data_stream.read()
 
 def fetch_all_results_jsons():
     commits = git_commits_for("results.json")
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        blobs = executor.map(partial(git_show, name="results.json"), commits)
+    repo = git.Repo('.', odbt=git.db.GitCmdObjectDB)
+    blobs = (git_show(ref, "results.json", repo) for ref in commits)
 
     parsers = [simdjson.Parser() for blob in commits] # These can't be reused apparently
     jsons = (parser.parse(blob) for parser, blob in zip(parsers, blobs))
