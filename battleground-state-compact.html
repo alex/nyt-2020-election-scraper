@@ -31,16 +31,17 @@
     .Trump{
         background-color: #ED98A9;
     }
+    #progress {position:fixed;top:0;left:0;height:2px;background:red;}
 }
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 20:27:20 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Thu Nov  5 20:51:01 2020 (UTC)</title>
 </head>
 
 <body>
     <p>All data below is sourced from an unofficial API powering the New York Times’ election app.</p>
     <p><strong>The estimated votes remaining values might be off</strong>. Consult state websites and officials for the most accurate and up-to-date figures.</p>
     <p><a href="https://github.com/alex/nyt-2020-election-scraper">Source code</a></p>
-
+    <div id="progress"></div>
     <table id='alaska' class='table table-bordered'>
 
         <thead class="thead-light">
@@ -159,23 +160,18 @@
     
 
         <tr>
-            <td class="timestamp">2020-11-05 20:05:59 UTC</td>
+            <td class="timestamp">2020-11-05 20:23:39 UTC</td>
             <td class="Trump">Trump</td>
             <td>12,835</td>
-            <td>29,363</td>
-            <td>     19</td>
-    
-            <td>
-                Trump 68.4% /
-                31.6% Biden
-            </td>
-        
+            <td>44,383</td>
+            <td>      0</td>
+    <td>N/A</td>
             <td>
                 Biden is averaging 73.3%
             </td>
         
             <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 71.86% [-3.366%]</td>
+            <td>Biden needs 64.46% [-7.396%]</td>
         </tr>
     
 </table><hr>
@@ -297,15 +293,15 @@
     
 
         <tr>
-            <td class="timestamp">2020-11-05 20:01:34 UTC</td>
+            <td class="timestamp">2020-11-05 20:23:39 UTC</td>
             <td class="Trump">Trump</td>
-            <td>108,592</td>
-            <td>498,452</td>
-            <td>  3,862</td>
+            <td>108,602</td>
+            <td>498,418</td>
+            <td>     34</td>
     
             <td>
-                Trump 47.7% /
-                52.3% Biden
+                Trump 64.7% /
+                35.3% Biden
             </td>
         
             <td>
@@ -313,7 +309,7 @@
             </td>
         
             <td><abbr title="8159/9128">89.4%</abbr></td>
-            <td>Biden needs 60.89% [0.066%]</td>
+            <td>Biden needs 60.89% [0.002%]</td>
         </tr>
     
 </table><hr>
@@ -334,15 +330,25 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        let reload_time = 60*1000
+        let current_countdown = reload_time;
+        let animation_time = 1000/30
+        function clock() {
+            current_countdown -= animation_time;
+            if (current_countdown <= 0) location.reload();
+            let pct = current_countdown / reload_time
+            $('#progress').width(window.innerWidth * pct)
+        }
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-
+        
         dayjs.extend(dayjs_plugin_relativeTime)
         dayjs.extend(dayjs_plugin_utc)
 
         $(".timestamp").map(function (idx, tselem) {
             tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
+        window.setInterval(()=>{clock()}, animation_time);
     </script>
 </body>
