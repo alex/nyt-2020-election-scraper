@@ -5,7 +5,6 @@ import concurrent.futures
 import datetime
 from functools import partial
 import json
-import pprint
 import subprocess
 import humanize
 from tabulate import tabulate
@@ -48,6 +47,9 @@ jsons = fetch_all_results_jsons()
 
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
+
+# Print the time at the top of the main script logic so it's closer to when the pull of data happened
+print(datetime.datetime.utcnow().strftime("%c (UTC)"))
 
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
