@@ -81,14 +81,18 @@ def html_write_state_head(state: str):
             <th class="text-center" colspan="8">{state}</th>
         </tr>
         <tr>
-            <th>Timestamp</th>
-            <th>In The Lead</th>
-            <th>Vote Differential</th>
-            <th>Votes Remaining (est.)</th>
-            <th>Change</th>
-            <th>Block Breakdown</th>
-            <th>Precincts Reporting</th>
-            <th>Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">\
+                Hurdle
+            </th>
         </tr>
         </thead>
     '''
@@ -213,7 +217,7 @@ for state_index in STATE_INDEXES:
 # print the summaries
 
 html_template = ''
-with open("battleground-state-changes.html.tmpl", "r") as f:
+with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
     html_template = f.read()
 
 html_chunks = []
@@ -227,6 +231,6 @@ for (state, timestamped_results) in summarized.items():
         html_chunks.append(html_summary(summary))
     html_chunks.append("</table><hr>")
 
-with open("battleground-state-changes.html","w") as f:
+with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time)
     f.write(html)
