@@ -71,6 +71,7 @@ def string_summary(summary):
 
 def html_write_state_head(state: str):
     return f'''
+        <thead class="thead-light">
         <tr>
             <th class="text-center" colspan="11">{state}</th>
         </tr>
@@ -87,6 +88,7 @@ def html_write_state_head(state: str):
             <th>Trailing Candidate Hurdle</th>
             <th>Hurdle Change</th>
         </tr>
+        </thead>
     '''
 
 def html_summary(summary: IterationSummary):
@@ -116,7 +118,8 @@ jsons = fetch_all_results_jsons()
 summarized = {}
 
 # Print the time at the top of the main script logic so it's closer to when the pull of data happened
-print(datetime.datetime.utcnow().strftime("%c (UTC)"))
+scrape_time = datetime.datetime.utcnow().strftime("%c (UTC)")
+print(scrape_time)
 
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
@@ -194,12 +197,12 @@ for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
-    html_chunks.append("<table class='table'>")
+    html_chunks.append("<table class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
-    html_chunks.append("</table>")
+    html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w") as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks))
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time)
     f.write(html)
