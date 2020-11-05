@@ -111,7 +111,7 @@ def html_write_state_head(state: str):
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
-            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted?">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
                 Block Breakdown
