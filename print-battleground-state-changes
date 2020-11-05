@@ -97,6 +97,25 @@ for state_index in STATE_INDEXES:
         if last_iteration_info == iteration_info:
             continue
 
+        # Compute aggregate of last 5 hurdle, if available
+        hurdle_batches = None
+        moving_window = 5
+        if len(summarized[state_name]) > moving_window - 1:
+            moving_window_iters = summarized[state_name][0:moving_window]
+            agg_votes = 0
+            agg_c2_votes = 0
+            for update in moving_window_iters:
+                changeline = update[3]
+                ccs = changeline.split()
+                if len(ccs) < 4:
+                    continue
+                votes = int(ccs[1].replace(",", ""))
+                cand2_votes = float(ccs[5].replace(",", ".").replace("%", "")) * 0.01 * votes
+                agg_votes += votes
+                agg_c2_votes += round(cand2_votes)
+
+            hurdle_batches = float(agg_c2_votes) / agg_votes
+
         # Generate the string we’ll output and store it
         summarized[state_name].insert(0, [
             f'{formatted_timestamp} ({delta_str})',
@@ -104,7 +123,8 @@ for state_index in STATE_INDEXES:
             f'Remaining (est.): {votes_remaining:,}',
             f'Change: {new_votes:7,} ({f"{candidate1_name} {1-repartition1:5.01%} / {repartition1:5.01%} {candidate2_name}" if new_votes else "n/a"})',
             f'Precincts: {precincts_reporting}/{precincts_total}',
-            f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]'
+            f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]',
+            f'{candidate2_name} recent trend {f"{hurdle_batches:.2%}" if hurdle_batches else "n/a"}'
         ])
 
         # Save info for the next iteration
