@@ -1,6 +1,6 @@
 ----------------------  --------------------------------------------------------------------------------
-Last updated:           2020-11-05 17:07 UTC
-Latest batch received:  2020-11-05 17:02 UTC
+Last updated:           2020-11-05 17:10 UTC
+Latest batch received:  2020-11-05 17:09 UTC
 Prettier web version:   https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
 ----------------------  --------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ Georgia (16):
 ----------------  ---  ------------------------------  -------------------------  --------------------------------------------  --------------------  ----------------------------  -------------------------
 2020-11-05 16:46  ***  Trump leading by 14,765 votes   Remaining (est.): 50,147   Change:     219 (Trump 29.0% / 71.0% Biden)   Precincts: 2643/2655  Biden needs 64.72% [-0.027%]  Biden recent trend 74.55%
 2020-11-05 16:43  ***  Trump leading by 14,857 votes   Remaining (est.): 50,366   Change:       0 (n/a)                         Precincts: 2643/2655  Biden needs 64.75% [7.870%]   Biden recent trend 74.55%
-2020-11-05 16:37  ***  Trump leading by 14,857 votes   Remaining (est.): 107,985  Change:   6,130 (Trump 23.2% / 76.8% Biden)   Precincts: 2643/2655  Biden needs 56.88% [-1.706%]  Biden recent trend 56.94%
+2020-11-05 16:37  ---  Trump leading by 14,857 votes   Remaining (est.): 107,985  Change:   6,130 (Trump 23.2% / 76.8% Biden)   Precincts: 2643/2655  Biden needs 56.88% [-1.706%]  Biden recent trend 56.94%
 2020-11-05 16:26  ---  Trump leading by 18,146 votes   Remaining (est.): 105,678  Change:       0 (n/a)                         Precincts: 2643/2655  Biden needs 58.59% [2.237%]   Biden recent trend 56.94%
 2020-11-05 15:53  ---  Trump leading by 18,146 votes   Remaining (est.): 142,914  Change:       4 (Trump 75.0% / 25.0% Biden)   Precincts: 2643/2655  Biden needs 56.35% [0.001%]   Biden recent trend 71.52%
 2020-11-05 15:46  ---  Trump leading by 18,144 votes   Remaining (est.): 142,918  Change:   1,199 (Trump 31.6% / 68.4% Biden)   Precincts: 2643/2655  Biden needs 56.35% [-0.101%]  Biden recent trend 74.91%
@@ -107,10 +107,11 @@ North Carolina (15):
 ----------------  ---  -----------------------------  -------------------------  -------------------------------------------  --------------------  ----------------------------  ----------------------
 
 Nevada (6):
-----------------  ---  ----------------------------  -------------------------  ---------------------  --------------------  ----------------------------  ----------------------
-2020-11-04 16:35  ---  Biden leading by 7,647 votes  Remaining (est.): 202,446  Change:       0 (n/a)  Precincts: 1610/1993  Trump needs 51.89% [0.001%]   Trump recent trend n/a
-2020-11-04 13:28  ---  Biden leading by 7,647 votes  Remaining (est.): 202,563  Change:       0 (n/a)  Precincts: 1610/1993  Trump needs 51.89% [51.888%]  Trump recent trend n/a
-----------------  ---  ----------------------------  -------------------------  ---------------------  --------------------  ----------------------------  ----------------------
+----------------  ---  -----------------------------  -------------------------  -------------------------------------------  --------------------  ----------------------------  ----------------------
+2020-11-05 17:09  ***  Biden leading by 12,042 votes  Remaining (est.): 188,161  Change:  14,285 (Biden 65.4% / 34.6% Trump)  Precincts: 1729/1993  Trump needs 53.20% [1.311%]   Trump recent trend n/a
+2020-11-04 16:35  ---  Biden leading by 7,647 votes   Remaining (est.): 202,446  Change:       0 (n/a)                        Precincts: 1610/1993  Trump needs 51.89% [0.001%]   Trump recent trend n/a
+2020-11-04 13:28  ---  Biden leading by 7,647 votes   Remaining (est.): 202,563  Change:       0 (n/a)                        Precincts: 1610/1993  Trump needs 51.89% [51.888%]  Trump recent trend n/a
+----------------  ---  -----------------------------  -------------------------  -------------------------------------------  --------------------  ----------------------------  ----------------------
 
 Pennsylvania (20):
 ----------------  ---  ------------------------------  ---------------------------  --------------------------------------------  --------------------  ----------------------------  -------------------------
