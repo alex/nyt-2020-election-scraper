@@ -61,8 +61,11 @@ IterationSummary = collections.namedtuple(
 )
 
 def string_summary(summary):
+    thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
+
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
+        '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
         f'Remaining (est.): {summary.votes_remaining:,}',
         f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
