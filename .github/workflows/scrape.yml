@@ -27,9 +27,14 @@ jobs:
         timestamp=$(date -u)
         git commit -m "Latest data: ${timestamp}" || exit 0
         git push
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
     - name: Install Python requirements
       run: |-
-        pip3 install -r requirements.txt
+        python -m pip install -U pip
+        pip install -r requirements.txt
     - name: Generate battleground-state-changes.txt/html
       run: |-
         ./print-battleground-state-changes > tmp
