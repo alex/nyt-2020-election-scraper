@@ -29,7 +29,30 @@
     .Trump{
         background-color: #ED98A9;
     }
-}
+
+    @media (prefers-color-scheme: dark) {
+        body {
+            color: #ffffff;
+            background-color: #202020;
+        }
+        .table {
+            color: #dedad6;
+            background-color: #202020;
+        }
+        .table .thead-light th {
+            background-color: #495057;
+            color: #e9ecef;
+        }
+        .table .thead-light th, .table td {
+            border-color: #211d19;
+        }
+        .Biden {
+            background-color: #05456F;
+        }
+        .Trump {
+            background-color: #6E192A;
+        }
+    }
     </style>
     <title>Election 2020 | Last scrape: {% SCRAPE %}</title>
 </head>
