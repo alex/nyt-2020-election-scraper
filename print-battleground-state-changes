@@ -253,6 +253,7 @@ with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
     html_template = f.read()
 
 html_chunks = []
+html_compact_chunks = []
 
 batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
 print(tabulate([
@@ -260,18 +261,33 @@ print(tabulate([
     ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
     ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
 ]))
+
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
     state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+
     html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
+    html_compact_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
+
     html_chunks.append(html_write_state_head(state))
+    html_compact_chunks.append(html_write_state_head(state))
+    
+    first_line = True
     for summary in timestamped_results:
+        if first_line:
+            html_compact_chunks.append(html_summary(summary))
+            first_line = False
         html_chunks.append(html_summary(summary))
     html_chunks.append("</table><hr>")
+    html_compact_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
+    f.write(html)
+
+with open("battleground-state-compact.html","w", encoding='utf8') as f:
+    html = html_template.replace('{% TABLES %}', "\n".join(html_compact_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
     f.write(html)
