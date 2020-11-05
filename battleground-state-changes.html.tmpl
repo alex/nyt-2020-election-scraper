@@ -78,7 +78,7 @@
 
         $('#shrink_button').on('click', function() {
           var $this = $(this);
-          if ($this.html() === 'Shrink') {
+          if ($this.html() === 'Collapse') {
             $this.html('Expand');
             $('.table').each(function() { $(this).find('tbody tr:gt(1)').hide(); })
           } else {
