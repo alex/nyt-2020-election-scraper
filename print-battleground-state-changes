@@ -137,15 +137,14 @@ def html_summary(summary: IterationSummary):
 
     return html
 
+# Capture the time at the top of the main script logic so it's closer to when the pull of data happened
+scrape_time = datetime.datetime.utcnow().strftime("%c (UTC)")
+
 # List of results.json dicts, in chronological order
 jsons = fetch_all_results_jsons()
 
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
-
-# Print the time at the top of the main script logic so it's closer to when the pull of data happened
-scrape_time = datetime.datetime.utcnow().strftime("%c (UTC)")
-print(scrape_time)
 
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
@@ -235,6 +234,9 @@ with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
     html_template = f.read()
 
 html_chunks = []
+
+print(f"Last updated: {scrape_time}")
+print(f"Latest batch received: {jsons[0]['meta']['timestamp']}")
 for (state, timestamped_results) in summarized.items():
     print(f'\n{state}:')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
