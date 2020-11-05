@@ -77,7 +77,12 @@ for state_index in STATE_INDEXES:
         delta = (datetime.datetime.utcnow() - timestamp)
         delta_str = humanize.naturaltime(delta)
         formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M')
-        hurdle = (((votes_remaining - vote_diff) / 2) + vote_diff) / votes_remaining
+        hurdle = (((votes_remaining + vote_diff) / 2)) / votes_remaining
+
+        if counted_since != 0:
+            repartition1 = ((counted_since + (last_iteration_info.vote_diff - vote_diff)) / 2.) / counted_since
+        else:
+            repartition1 = 0.5
 
         # Info we’ll need for the next loop iteration
         iteration_info = IterationInfo(
@@ -97,6 +102,7 @@ for state_index in STATE_INDEXES:
             f'{candidate1_name} leading by {vote_diff:,} votes',
             f'Remaining (est.): {votes_remaining:,}',
             f'Change: {counted_since:,}',
+            f'{candidate1_name} {1-repartition1:.1%} / {repartition1:.1%} {candidate2_name}',
             f'Precincts: {precincts_reporting}/{precincts_total}',
             f'{candidate2_name} needs {hurdle:.2%} [{hurdle-last_iteration_info.hurdle:.3%}]'
         ])
