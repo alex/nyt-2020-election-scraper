@@ -89,7 +89,6 @@ def html_write_state_head(state: str):
             <th>Precincts Reporting</th>
             <th>Trailing Candidate Hurdle</th>
             <th>Hurdle Change</th>
-            <th>Hurdle Moving Average</th>
         </tr>
         </thead>
     '''
@@ -110,9 +109,6 @@ def html_summary(summary: IterationSummary):
             <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.hurdle:.2%}</td>
             <td>{summary.hurdle_change:.3%}</td>
-    '''
-    html += (f'<td>{summary.hurdle_mov_avg:.2%}</td>' if summary.hurdle_mov_avg else "<td>N/A</td>")
-    html += f'''
         </tr>
     '''
     return html
