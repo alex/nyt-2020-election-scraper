@@ -63,30 +63,28 @@ IterationSummary = collections.namedtuple(
     ]
 )
 
-def compute_hurdle_sma(summarized_state_data):
+def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
     """
-    trend of last 5 (tweakable) non-zero vote counts for trailing candidate
+    trend gain of last 30k (or more) votes for trailing candidate
     """
     hurdle_moving_average = None
-    WINDOW_SIZE = 5
-    window_ct = 0
-    if len(summarized_state_data) > WINDOW_SIZE - 1:
-        agg_votes = 0
-        agg_c2_votes = 0
-        step = 0
-        while step < len(summarized_state_data) and window_ct < WINDOW_SIZE:
-            this_summary = summarized_state_data[step]
-            if this_summary.new_votes > 0:
-                agg_votes += this_summary.new_votes
-                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
-                window_ct += 1
+    MIN_AGG_VOTES = 30000
 
-            step += 1
+    agg_votes = newest_votes
+    agg_c2_votes = round(new_partition_pct * newest_votes)
+    step = 0
+    while step < len(summarized_state_data) and agg_votes < MIN_AGG_VOTES:
+        this_summary = summarized_state_data[step]
+        step += 1
+        if this_summary.new_votes > 0:
+            agg_votes += this_summary.new_votes
+            agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
 
-        if agg_votes:
-            hurdle_moving_average = float(agg_c2_votes) / agg_votes
+    if agg_votes:
+        hurdle_moving_average = float(agg_c2_votes) / agg_votes
 
     return hurdle_moving_average
+
 
 def string_summary(summary):
     thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
@@ -117,7 +115,7 @@ def html_write_state_head(state: str):
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
                 Block Breakdown
             </th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of each block trended? Computed using a 5 point moving average.">
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">
                 Block Trend
             </th>
             <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
@@ -225,7 +223,7 @@ for state_index in STATE_INDEXES:
             continue
 
         # Compute aggregate of last 5 hurdle, if available
-        hurdle_mov_avg = compute_hurdle_sma(summarized[state_name])
+        hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
 
         summary = IterationSummary(
             timestamp,
