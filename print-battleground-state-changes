@@ -211,8 +211,8 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
 
 def html_summary(state_slug: str, summary: IterationSummary):
     html = f'''
-        <tr>
-            <td id='{state_slug}-{summary.timestamp.isoformat()}' class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
+        <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
+            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
             <td>{summary.votes_remaining:,}</td>
