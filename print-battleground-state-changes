@@ -8,6 +8,7 @@ import itertools
 import os
 import simdjson
 import subprocess
+import json
 from tabulate import tabulate
 from typing import Tuple
 
@@ -293,7 +294,11 @@ def json_to_summary(
 
     return iteration_info, summary
 
+states_updated = []
+
 for _, rows in records.items():
+    latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+
     state_name = f"{rows[0].state_name} (EV: {rows[0].electoral_votes})"
     summarized[state_name] = []
 
@@ -321,6 +326,9 @@ for _, rows in records.items():
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
+
+    if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
+        states_updated.append(rows[0].state_name)
 
 # print the summaries
 
@@ -358,3 +366,8 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
     for state, results in summarized.items():
         for row in results:
             wr.writerow((state,) + row)
+
+with open("notification-updates.json", "w") as f:
+    f.write(json.dumps({
+        "states_updated": states_updated,
+    }))

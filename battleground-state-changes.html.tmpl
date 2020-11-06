@@ -223,11 +223,20 @@
             };
 
             const fetchLatestContent = async (sha) => {
-                const response = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
                     cache: 'no-cache',
                 });
-                const body = await response.text();
-                return new DOMParser().parseFromString(body, 'text/html');
+                const contentBody = await contentResponse.text();
+                const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
+
+                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                    cache: 'no-cache',
+                });
+                const updatesBody = await updatesResponse.json();
+                return {
+                    updates: updatesBody,
+                    dom: contentDom,
+                };
             };
 
             let currentCommit = await fetchLatestCommit();
@@ -241,23 +250,26 @@
                 console.log("latest commit", latestCommit);
 
                 if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let newContent = await fetchLatestContent(latestCommit['sha']);
+                    let latestContent = await fetchLatestContent(latestCommit['sha']);
 
-                    Array.from(document.getElementsByTagName("table")).forEach(table => {
-                        let newTable = newContent.getElementById(table.id);
-                        table.parentNode.replaceChild(newTable, table);
-                    });
+                    console.log("latest content", latestContent.updates);
+                    if (latestContent.updates.states_updated.length) {
+                        Array.from(document.getElementsByTagName("table")).forEach(table => {
+                            let newTable = latestContent.dom.getElementById(table.id);
+                            table.parentNode.replaceChild(newTable, table);
+                        });
 
-                    let newTimestamps = newContent.getElementById("timestamps");
-                    let currTimestamps = document.getElementById("timestamps");
-                    currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
+                        let newTimestamps = latestContent.dom.getElementById("timestamps");
+                        let currTimestamps = document.getElementById("timestamps");
+                        currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
 
-                    prettyTimestamps();
-                    refreshFeature(shrinkTablesFeature);
+                        prettyTimestamps();
+                        refreshFeature(shrinkTablesFeature);
 
-                    currentCommit = latestCommit;
-                    if (isFeatureEnabled(notificationFeature)) {
-                        new Notification("New ballots were counted!");
+                        currentCommit = latestCommit;
+                        if (isFeatureEnabled(notificationFeature)) {
+                            new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        }
                     }
                 }
             }, 5 * 60 * 1000);
