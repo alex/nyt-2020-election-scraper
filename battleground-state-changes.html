@@ -15,6 +15,10 @@
     body {
         margin: 1rem;
     }
+
+    .table th:hover {
+      background-color: #00c1f0;
+    }
     
     .table td, .table th {
         padding: .25rem .5rem;
@@ -26,14 +30,15 @@
     }
 
     .Biden{
-        background-color: #84C4EE
+        background-color: #84C4EE;
     }
+
     .Trump{
         background-color: #ED98A9;
     }
 }
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 22:23:00 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Fri Nov  6 00:39:53 2020 (UTC)</title>
 </head>
 
 <body>
@@ -46,10 +51,11 @@
 
     <table id='alaska' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(alaska_content)">
         <tr>
             <th class="text-center" colspan="9">Alaska (3)</th>
         </tr>
+        <tbody id=alaska_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -101,13 +107,15 @@
             <td>Biden needs 57.55% [57.545%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 <table id='arizona' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(arizona_content)">
         <tr>
             <th class="text-center" colspan="9">Arizona (11)</th>
         </tr>
+        <tbody id=arizona_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -481,13 +489,15 @@
             <td>Trump needs 62.48% [62.480%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 <table id='georgia' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(georgia_content)">
         <tr>
             <th class="text-center" colspan="9">Georgia (16)</th>
         </tr>
+        <tbody id=georgia_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2229,13 +2239,15 @@
             <td>Biden needs 68.18% [68.182%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 <table id='north-carolina' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(north-carolina_content)">
         <tr>
             <th class="text-center" colspan="9">North Carolina (15)</th>
         </tr>
+        <tbody id=north-carolina_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2345,13 +2357,15 @@
             <td>Biden needs 69.76% [69.757%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 <table id='nevada' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(nevada_content)">
         <tr>
             <th class="text-center" colspan="9">Nevada (6)</th>
         </tr>
+        <tbody id=nevada_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2536,13 +2550,15 @@
             <td>Trump needs 51.89% [51.888%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 <table id='pennsylvania' class='table table-bordered'>
 
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible(pennsylvania_content)">
         <tr>
             <th class="text-center" colspan="9">Pennsylvania (20)</th>
         </tr>
+        <tbody id=pennsylvania_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -4717,6 +4733,7 @@
             <td>Biden needs 68.66% [68.660%]</td>
         </tr>
     
+</tbody>
 </table><hr>
 
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
@@ -4745,5 +4762,14 @@
         $(".timestamp").map(function (idx, tselem) {
             tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
+    </script>
+    <script type="text/javascript">
+      function toggleVisible({id}) {
+        const el = document.getElementById(id);
+
+        if (el?.style?.display) {
+          el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+      }
     </script>
 </body>
