@@ -92,6 +92,60 @@
     }
     </style>
     <title>Election 2020 Results</title>
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
+            integrity="sha384-cuApTuVdn64P5ZOzyf+qTgNxGwhvW/ZmdAbNMcl7Q3TkMKJ7/bERQ1cFDmZy7QvZ"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/utc.js"
+            integrity="sha384-r1JLNIu5SkAfQejSOJPjndnEZkxex5ChJOTaiQeN91L012sA1pyw0A/543Xq97wb"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"
+            integrity="sha384-ojZWhTxW4vjtUz9IjuxEgcPAQQkFj7jlcOnGFp8IyTUTQpFisDT5u8zFh2d0GrSM"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.extend(dayjs_plugin_utc)
+
+        const prettyTime = timestamp => dayjs.utc(timestamp.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+
+        const handleNode = node => {
+            if (node.classList && node.classList.contains('timestamp')) {
+                let timestamp;
+                if (node.hasAttribute('data-timestamp')) {
+                    timestamp = node.getAttribute('data-timestamp');
+                } else {
+                    timestamp = node.innerHTML;
+                    node.setAttribute('data-timestamp', timestamp);
+                }
+                node.innerHTML = `<abbr class='pretty-timestamp' title='${timestamp}'>${prettyTime(timestamp)}</abbr>`;
+            }
+        };
+
+        new MutationObserver(mutations => {
+            for (let i = 0, len = mutations.length; i < len; i++) {
+                let added = mutations[i].addedNodes;
+                for (let j = 0, node; (node = added[j]); j++) {
+                    if (node.tagName === 'td') {
+                        handleNode(node);
+                    } else if (node.firstElementChild) {
+                        for (const child of node.getElementsByTagName('td')) {
+                            handleNode(child);
+                        }
+                    }
+                }
+            }
+        }).observe(document, {
+            childList: true,
+            subtree: true,
+        });
+
+        setInterval(() => {
+            $(".pretty-timestamp").map((_, tselem) => {
+                tselem.innerText = prettyTime(tselem.title);
+            });
+        }, 60 * 1000);
+    </script>
 </head>
 
 <body>
@@ -166,23 +220,6 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-
-        dayjs.extend(dayjs_plugin_relativeTime)
-        dayjs.extend(dayjs_plugin_utc)
-
-        const prettyTimestamps = () => {
-            $(".timestamp").map(function (idx, tselem) {
-                tselem.innerHTML = "<abbr class='pretty-timestamp' title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
-            })
-        };
-        prettyTimestamps();
-        
-        const updateTimestamps = () => {
-            $(".pretty-timestamp").map(function (idx, tselem) {
-                tselem.innerText = dayjs.utc(tselem.title.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
-            })
-        };
-        setInterval(updateTimestamps, 60 * 1000);
 
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
@@ -290,7 +327,6 @@
                         let currTimestamps = document.getElementById("timestamps");
                         currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
 
-                        prettyTimestamps();
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
