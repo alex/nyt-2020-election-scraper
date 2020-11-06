@@ -244,7 +244,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
     
     visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else 'Unknown'
     html += f'''
-            <td>{visible_hurdle}</td>
+            <td class="hurdle">{visible_hurdle}</td>
         </tr>
     '''
 
