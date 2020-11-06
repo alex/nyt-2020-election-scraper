@@ -106,7 +106,7 @@ def html_write_state_head(state: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">{state}: Total Votes: ({summary.leading_candidate_name}: {summary.leading_candidate_votes}, {summary.trailing_candidate_name}: {summary.trailing_candidate_votes})</th>
+            <th class="text-center" colspan="9">{state}: Total Votes: ({summary.leading_candidate_name}: {summary.leading_candidate_votes:,}, {summary.trailing_candidate_name}: {summary.trailing_candidate_votes:,})</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
