@@ -24,6 +24,7 @@ STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
 CACHE_VERSION = 1
+RECENCY_SUMMARY_THRESHOLD_MINS = datetime.timedelta(minutes = 60)
 
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
@@ -152,6 +153,28 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
 
     return hurdle_moving_average
+
+def get_recent_updates(state_records):
+    recent_updates = []
+    now = datetime.datetime.utcnow()
+    for state, val in state_records.items():
+        for row in val:
+            if now - row.timestamp < RECENCY_SUMMARY_THRESHOLD_MINS:
+                recent_updates.append((state, row))
+    return recent_updates
+
+def recent_updates_to_str(recent_updates):
+    # Guard clause: No recent updates, avoid bothering any processing/formatting.
+    if not recent_updates:
+        return 'No updates in the past hour.'
+
+    state_counts = collections.defaultdict(int)
+    for state, update in recent_updates:
+        state_counts[state] += 1
+    state_counts_str = " ".join(
+        ['{} new data point(s) for {}.'.format(v, k) for k, v in state_counts.items()])
+
+    return f'Updates in the past hour: {state_counts_str}'.strip()
 
 
 def string_summary(summary):
@@ -371,8 +394,13 @@ for (state, timestamped_results) in summarized.items():
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))
+    html = html_template \
+        .replace('{% TABLES %}', "\n".join(html_chunks)) \
+        .replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')) \
+        .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))
     f.write(html)
+
+print(recent_updates_to_str(get_recent_updates(summarized)))
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
     wr = csv.writer(csvfile)
