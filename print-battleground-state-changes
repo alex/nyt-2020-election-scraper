@@ -436,8 +436,10 @@ with open('battleground-state-changes.xml', 'w') as rssfile:
 </rss>
 ''')
 
+# this file is deprecated and should not be used! it will be removed soontm
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
+        "_comment": "this file is deprecated and should not be used",
         "results_hash": RESULTS_HASH,
         "states_updated": states_updated,
     }))
