@@ -341,15 +341,15 @@
         })();
     </script>
 
-    <script type="text/javascript">
+     <script type="text/javascript">
         $(document).ready(function(){
-            $('.table').click(function(){
-                if ($(this).hasClass('collapsed')) {
-                    $(this).removeClass('collapsed');
-                    $(this).find('tbody tr').each(function() { $(this).show(); });
+            $('.flag-bg').click(function(){
+                if ($(this).parents('.table').hasClass('collapsed')) {
+                    $(this).parents('.table').removeClass('collapsed');
+                    $(this).parents('.table').find('tbody tr').each(function() { $(this).show(); });
                 } else {
-                    $(this).addClass('collapsed');
-                    $(this).find('tbody tr').each(function() { $(this).hide(); });
+                    $(this).parents('.table').addClass('collapsed');
+                    $(this).parents('.table').find('tbody tr').each(function() { $(this).hide(); });
                 }
             });
         });
