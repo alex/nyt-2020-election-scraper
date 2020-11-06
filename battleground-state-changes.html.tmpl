@@ -157,9 +157,9 @@
         feature(shrinkTablesFeature, '#shrink_button', button => {
             button.html('Expand Tables');
             $('.table').each(function(){
-                var countOfNonHiddenBlock = 0
+                var countOfNonHiddenBlock = 0;
                 $(this).find('tbody tr').each(function() {
-                    var value = parseInt(($(this).find('td:nth(4)').text()))
+                    var value = parseInt(($(this).find('td:nth(4)').text()));
                     if (countOfNonHiddenBlock >= 3 || value === 0) {
                         $(this).hide();
                     } else {
