@@ -162,7 +162,7 @@ def string_summary(summary):
         f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
         f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
         f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}',
-        f'Suspense: {summary.suspense}'
+        f'Suspense: {summary.suspense:.2%}'
     ]
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
@@ -224,7 +224,7 @@ def html_summary(summary: IterationSummary):
     html += f'''
             <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
-            <td>{summary.suspense}</td>
+            <td>{summary.suspense:.2%}</td>
         </tr>
     '''
 
