@@ -260,8 +260,17 @@
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
 
+            function nextCheck(){
+                const ONE_MINUTE = 1 * 60 * 1000;
+                const FIVE_MINUTES = 5 * ONE_MINUTE;
+                const now = new Date();
+                const lastUpdate = new Date(currentCommit.commit.author.date);
+                // check at most every minute
+                return Math.max(ONE_MINUTE, FIVE_MINUTES - (now - lastUpdate));
+            }
+
             // live updates
-            setInterval(async function() {
+            async function getUpdates() {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
                 let latestCommit = await fetchLatestCommit();
@@ -285,12 +294,14 @@
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (Notifcation.permission === "granted") {
+                        if (Notification.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
                 }
-            }, 5 * 60 * 1000);
+                setTimeout(getUpdates, nextCheck());
+            }
+            setTimeout(getUpdates, nextCheck());
         })();
     </script>
 </body>
