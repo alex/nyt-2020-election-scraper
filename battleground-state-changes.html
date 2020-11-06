@@ -27,9 +27,15 @@
         padding: .25rem .5rem;
     }
 
-    .table th.text-center {
+    .table th.text-left {
+        font-weight: normal;
         position: sticky;
         top: -1px;
+    }
+
+    .table th span.statename {
+        font-weight: bold;
+        font-size: 14pt;
     }
 
      .table th.has-tip {
@@ -84,7 +90,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:51:20 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:37:26 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:58:41 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:37:26 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
@@ -96,9 +102,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    Alaska (EV: 3)
+                    <span class="statename">Alaska (EV: 3)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.
@@ -160,9 +166,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    Arizona (EV: 11)
+                    <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
                 Total Votes: Biden leads with 1,528,319 votes, Trump trails with 1,482,062 votes.
@@ -746,9 +752,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    Georgia (EV: 16)
+                    <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 2,447,223 votes, Biden trails with 2,445,321 votes.
@@ -2722,9 +2728,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    North Carolina (EV: 15)
+                    <span class="statename">North Carolina (EV: 15)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.
@@ -2844,9 +2850,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    Nevada (EV: 6)
+                    <span class="statename">Nevada (EV: 6)</span>
                 </span>
                 <br>
                 Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.
@@ -3041,9 +3047,9 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    Pennsylvania (EV: 20)
+                    <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 3,277,918 votes, Biden trails with 3,235,776 votes.
