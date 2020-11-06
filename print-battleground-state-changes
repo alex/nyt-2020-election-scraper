@@ -3,6 +3,7 @@
 import csv
 import collections
 import datetime
+import email.utils
 import git
 import hashlib
 import itertools
@@ -395,6 +396,33 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
     for state, results in summarized.items():
         for row in results:
             wr.writerow((state,) + row)
+
+with open('battleground-state-changes.xml', 'w') as rssfile:
+    rss_url = 'https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.xml'
+    rss_data = {state: results[:1] for state, results in summarized.items()}
+    rssfile.write(f'''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+ <channel>
+  <title>NYT 2020 Election Scraper RSS Feed</title>
+  <link>{rss_url}</link>
+  <description>Latest results from battlegound states.</description>
+  <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>''')    
+    for state, results in rss_data.items():
+        if not results:
+            continue
+        result = results[0]
+        state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+        rssfile.write(f'''
+  <item>
+   <description>{state}: {result.leading_candidate_name} +{result.vote_differential}</description>
+   <pubDate>{email.utils.formatdate(result.timestamp.timestamp())}</pubDate>
+   <guid isPermaLink="false">{state_slug}@{result.timestamp.timestamp()}</guid>
+  </item>''')
+
+    rssfile.write('''
+ </channel>
+</rss>
+''')
 
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
