@@ -70,6 +70,17 @@
         background-position: 100%;
     }
 
+    .btn-group-xs > .btn, .btn-xs {
+        padding: .25rem .4rem;
+        font-size: .875rem;
+        line-height: .5;
+        border-radius: .2rem;
+      }
+
+    .highlight {
+        background-color: #FFFFE0;
+    }
+
     .Biden{
         background-color: #84C4EE
     }
@@ -167,6 +178,7 @@
     </p>
 
     <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">{% SCRAPE_TIME %}</span> | Last batch: <span class="timestamp">{% BATCH_TIME %}</span></p>
+    <button type="button" id="latest_batch" class="btn btn-primary btn-xs">Latest</button>
     <div id="template-hash" style="display: none;">{% TEMPLATE_HASH %}</div>
 
     <p class="float-right">
@@ -364,6 +376,17 @@
             startLiveUpdates();
         }, button => {
             button.html('Enable Live Updates');
+        });
+    </script>
+
+    <script type="text/javascript">
+        $("#latest_batch").click(function(){
+            var latest_timestamp = document.querySelectorAll('p .timestamp')[1].getAttribute('data-timestamp');
+            var row_timestamp = document.querySelector('tbody td[data-timestamp="'+ latest_timestamp +'"]');
+
+            row_timestamp.scrollIntoView();
+            $(row_timestamp.parentNode).addClass('highlight');
+            setTimeout(function () { $(row_timestamp.parentNode).removeClass('highlight'); }, 3000);
         });
     </script>
 </body>
