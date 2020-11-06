@@ -407,16 +407,18 @@ with open('battleground-state-changes.xml', 'w') as rssfile:
   <link>{rss_url}</link>
   <description>Latest results from battlegound states.</description>
   <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>''')    
+
     for state, results in rss_data.items():
         if not results:
             continue
         result = results[0]
         state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+        timestamp = result.timestamp.timestamp()
         rssfile.write(f'''
   <item>
    <description>{state}: {result.leading_candidate_name} +{result.vote_differential}</description>
-   <pubDate>{email.utils.formatdate(result.timestamp.timestamp())}</pubDate>
-   <guid isPermaLink="false">{state_slug}@{result.timestamp.timestamp()}</guid>
+   <pubDate>{email.utils.formatdate(timestamp)}</pubDate>
+   <guid isPermaLink="false">{state_slug}@{timestamp}</guid>
   </item>''')
 
     rssfile.write('''
