@@ -196,6 +196,7 @@
             <p class="float-right">
             <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
             <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
+            <button type='button' id='order_button' class='btn btn-secondary'>Order Tables by Last Update</button>
             </p>
         </div>
     </div>
@@ -249,6 +250,40 @@
                 features[key].onDisable($(features[key].buttonId));
             }
         };
+    </script>
+
+    <script type="text/javascript">
+        const orderTablesRecent = () => {
+            // sort tables by date using id of its first row
+            return Array.from(document.getElementsByTagName("table")).slice().sort(function (a, b) {
+                // extract timestamp from first row's id
+                return new Date(b.tBodies[0].rows[0].id.slice(-26)) - new Date(a.tBodies[0].rows[0].id.slice(-26));
+            })
+        };
+
+        const orderTablesAZ = () => {
+            // sort tables alphabetically using its id
+            return Array.from(document.getElementsByTagName("table")).slice().sort(function (a, b) {
+                return a.id.localeCompare(b.id);
+            })
+        };
+
+        const replaceTables = (newTables) => {
+            const parents = Array.from(document.getElementsByClassName("table-responsive")).slice();
+            var i = 0;
+            for (i = 0; i < newTables.length; i++) {
+                parents[i].appendChild(newTables[i]);
+            };
+        };
+
+        const orderTablesFeature = 'order-tables-recent';
+        feature(orderTablesFeature, '#order_button', false, button => {
+            button.html('Order Tables A-Z');
+            replaceTables(orderTablesRecent());
+        }, button => {
+            button.html('Order Tables by Last Update');
+            replaceTables(orderTablesAZ());
+        });
     </script>
 
     <script type="text/javascript">
