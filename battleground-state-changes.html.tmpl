@@ -298,36 +298,36 @@
         // if the new page has notifications, show them
         // if the new page is an updated template, hard refresh (which should get us the new page since we just loaded it)
         // otherwise, replace the div id=body element
-        const updateCheck = async currentMetadata => {
+        const updateCheck = async (currentMetadata, forceNotify) => {
             const latestContent = await fetchLatestContent();
             const latestMetadata = latestContent.metadata;
             const latestDom = latestContent.dom;
             console.log("latest content", latestContent);
 
-            if (
-                currentMetadata &&
-                currentMetadata.results_hash !== latestMetadata.results_hash &&
-                latestMetadata.states_updated.length
-            ) {
-                if (Notification.permission === "granted") {
-                    const notification = new Notification(`New ballots were counted in: ${latestMetadata.states_updated.join(", ")}!`);
-                    notification.onclick = function (event) {
-                        // focus page
-                        window.parent.focus();
-                        // just in case, older browsers
-                        window.focus();
-                        // dismiss notification
-                        event.target.close();
-                    };
+            let shouldNotify = latestMetadata.states_updated.length && (
+                forceNotify ||
+                (currentMetadata && currentMetadata.results_hash !== latestMetadata.results_hash)
+            );
+
+            if (currentMetadata && currentMetadata.template_hash !== latestMetadata.template_hash) {
+                console.log("new template, forcing reload");
+                if (shouldNotify) {
+                    location.hash = "notify";
                 }
+                location.reload(true);
+                return;
             }
 
-            if (
-                currentMetadata &&
-                currentMetadata.template_hash !== latestMetadata.template_hash
-            ) {
-                console.log("new template, forcing reload");
-                location.reload(true);
+            if (shouldNotify && Notification.permission === "granted") {
+                const notification = new Notification(`New ballots were counted in: ${latestMetadata.states_updated.join(", ")}!`);
+                notification.onclick = function (event) {
+                    // focus page
+                    window.parent.focus();
+                    // just in case, older browsers
+                    window.focus();
+                    // dismiss notification
+                    event.target.close();
+                };
             }
 
             $('[data-toggle="tooltip"]').tooltip('hide')
@@ -349,7 +349,8 @@
         };
 
         // do a test update
-        updateCheck(undefined);
+        updateCheck(undefined, location.hash === '#notify');
+        location.hash = "";
 
         const startLiveUpdates = async () => {
             let currentMetadata = (await fetchLatestContent()).metadata;
@@ -363,7 +364,7 @@
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
                 try {
-                    currentMetadata = await updateCheck(currentMetadata);
+                    currentMetadata = await updateCheck(currentMetadata, false);
                 } catch (e) {
                     console.log("failed to check for updates", e);
                 }
