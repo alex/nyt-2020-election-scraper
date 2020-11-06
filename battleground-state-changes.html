@@ -168,8 +168,8 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 07:20:42 UTC</span> | Last batch: <span class="timestamp">2020-11-06 06:41:37 UTC</span></p>
-    <div id="template-hash" style="display: none;">b4148d6d7077ac32de805152b6d3be6c5f1e136f2d0ba59b46c82a08abbad250</div>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 07:22:47 UTC</span> | Last batch: <span class="timestamp">2020-11-06 06:41:37 UTC</span></p>
+    <div id="template-hash" style="display: none;">a03a0c9fdf5c27fcd02fe674a37eced0530de671dbe8d5ab0a6f0c454931612c</div>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -180,8 +180,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Alaska (EV: 3)</span>
                 </span>
                 <br>
@@ -236,8 +236,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
@@ -827,8 +827,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
@@ -2798,8 +2798,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">North Carolina (EV: 15)</span>
                 </span>
                 <br>
@@ -2909,8 +2909,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Nevada (EV: 6)</span>
                 </span>
                 <br>
@@ -3091,8 +3091,8 @@
 
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
@@ -5770,7 +5770,9 @@
         };
 
         // do an initial update
-        updateCheck({}, false);
+        if (!isDeveloperEnvironment()) {
+            updateCheck({}, false);
+        }
 
         const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();
