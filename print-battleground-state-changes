@@ -18,14 +18,7 @@ NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
 
-STATE_INDEXES = [
-    AK_INDEX,
-    AZ_INDEX,
-    GA_INDEX,
-    NC_INDEX,
-    NV_INDEX,
-    PA_INDEX,
-]
+STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
@@ -169,13 +162,9 @@ def string_summary(summary):
         f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
-
 def html_write_state_head(state: str, summary: IterationSummary):
-    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
-    id = state_slug + "_content"
-
     return f'''
-        <thead class="thead-light" onclick="toggleVisible({id})">
+        <thead class="thead-light">
         <tr>
             <th class="text-center has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
@@ -185,7 +174,6 @@ def html_write_state_head(state: str, summary: IterationSummary):
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
             </th>
         </tr>
-        <tbody id={id} style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -364,7 +352,6 @@ for (state, timestamped_results) in summarized.items():
     html_chunks.append(html_write_state_head(state, timestamped_results[0]))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
-    html_chunks.append("</tbody>")
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
