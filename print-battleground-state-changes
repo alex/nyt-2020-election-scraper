@@ -277,12 +277,12 @@ def json_to_summary(
     precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
+    bumped = candidate1_name != last_iteration_info.leading_candidate_name
+
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
-        last_vote_diff = last_iteration_info.vote_diff
-        if candidate1_name != last_iteration_info.leading_candidate_name:
-            last_vote_diff *= -1
+        last_vote_diff = (-1 if bumped else 1) * last_iteration_info.vote_diff
         repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
 
     # Info we’ll need for the next loop iteration
@@ -311,7 +311,7 @@ def json_to_summary(
         precincts_reporting,
         precincts_total,
         hurdle,
-        hurdle-last_iteration_info.hurdle,
+        hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
         hurdle_mov_avg
     )
 
