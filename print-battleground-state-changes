@@ -296,7 +296,7 @@ def json_to_summary(
 
 states_updated = []
 
-for _, rows in records.items():
+for rows in records.values():
     latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
 
     state_name = f"{rows[0].state_name} (EV: {rows[0].electoral_votes})"
