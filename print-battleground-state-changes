@@ -387,7 +387,18 @@ for (state, timestamped_results) in sorted(summarized.items()):
     html_chunks.append("</table></div><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)
+    page_metadata = json.dumps({
+        "template_hash": TEMPLATE_HASH,
+        "results_hash": RESULTS_HASH,
+        "states_updated": states_updated,
+    })
+
+    html = html_template\
+        .replace('{% TABLES %}', "\n".join(html_chunks))\
+        .replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC'))\
+        .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))\
+        .replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)\
+        .replace('{% PAGE_METADATA %}', page_metadata)
     f.write(html)
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
@@ -425,8 +436,10 @@ with open('battleground-state-changes.xml', 'w') as rssfile:
 </rss>
 ''')
 
+# this file is deprecated and should not be used! it will be removed soontm
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
+        "_comment": "this file is deprecated and should not be used",
         "results_hash": RESULTS_HASH,
         "states_updated": states_updated,
     }))
