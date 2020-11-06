@@ -264,7 +264,7 @@ def json_to_summary(
     votes_c = {}
     votes_c[candidate1_name] = candidate1['votes']
     votes_c[candidate2_name] = candidate2['votes']
-    if votes_c[candidate1_name] > votes_c[candidate1_name]:
+    if votes_c[candidate1_name] > votes_c[candidate2_name]:
         vote_diff = votes_c[candidate1_name] - votes_c[candidate2_name]
     else:
         vote_diff = votes_c[candidate2_name] - votes_c[candidate1_name]
