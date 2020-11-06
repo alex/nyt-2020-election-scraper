@@ -1,11 +1,18 @@
-**IMPORTANT: Please make sure you have checked the following list of DOs and DONTs before submitting a pull request.**
+<!--
+To help with the large amounts of pull requests, we would appreciate your
+reviews of other pull requests, especially simple package updates. Just leave a
+comment describing what you have tested in the relevant package/service.
+Reviewing helps to reduce the average time-to-merge for everyone.
+Thanks a lot if you do!
+List of open PRs: https://github.com/alex/nyt-2020-election-scraper/pulls
+-->
 
-*DO*
+###### Motivation
 
-- If this PR resolves a currently open issue, **refer** to that issue in the description of your PR. For example, if it closes issue #35, say "Resolves issue #35". GitHub will automatically hyperlink the issue and associate the PR to it.
+###### Changes
 
-- If this PR introduces a major UI change, include a screenshot showing the specific change in behavior. You can drag and drop a screenshot directly onto the PR text to have it attached by GitHub.
+<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-*DO NOT*
-
-- Do not manually change any automatically generated files. In particular, do not change the `*.html`, `*.json` or `*.csv` files. For the majority of functionality you will want to edit the Python script. Be sure that you do not commit any locally changed files when you submit your PR. 
+- [ ] Ensured that relevant issues are linked, if this PR resolves any outstanding.
+- [ ] Ensured that screenshot is appended for all UI changes, with highlights of specific behavioral change.
+- [ ] Ensured that changes to auto-generated files have not been committed; in particular, `*.html`, `*.csv` and `*.json` files.
