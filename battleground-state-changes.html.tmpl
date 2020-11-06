@@ -331,9 +331,15 @@
 
             $('[data-toggle="tooltip"]').tooltip('hide')
 
-            let newBody = latestDom.getElementById('body');
-            let curBody = document.getElementById('body');
-            curBody.parentNode.replaceChild(newBody, curBody);
+            const elementsToUpdate = [
+                ...Array.from(document.getElementsByTagName("table")),
+                document.getElementById("timestamps"),
+            ];
+
+            elementsToUpdate.forEach(oldElement => {
+                let newElement = latestContent.dom.getElementById(oldElement.id);
+                oldElement.parentNode.replaceChild(newElement, oldElement);
+            });
 
             loadTooltips();
             refreshFeature(shrinkTablesFeature);
