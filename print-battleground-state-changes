@@ -103,7 +103,7 @@ InputRecord = collections.namedtuple(
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name']
 )
 
 IterationSummary = collections.namedtuple(
@@ -127,7 +127,7 @@ IterationSummary = collections.namedtuple(
     ]
 )
 
-def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
+def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct, trailing_candidate_name):
     """
     trend gain of last 30k (or more) votes for trailing candidate
     """
@@ -141,13 +141,19 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         this_summary = summarized_state_data[step]
         step += 1
         if this_summary.new_votes > 0:
+            if this_summary.trailing_candidate_name == trailing_candidate_name:
+                trailing_candidate_partition = this_summary.trailing_candidate_partition
+            else:
+                # Broken for 3 way race
+                trailing_candidate_partition = this_summary.leading_candidate_partition
+
             if this_summary.new_votes + agg_votes > MIN_AGG_VOTES:
                 subset_pct = (MIN_AGG_VOTES - agg_votes) / float(this_summary.new_votes)
                 agg_votes += round(this_summary.new_votes * subset_pct)
-                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes * subset_pct)
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes * subset_pct)
             else:
                 agg_votes += this_summary.new_votes
-                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes)
 
     if agg_votes:
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
@@ -274,7 +280,10 @@ def json_to_summary(
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
-        repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
+        last_vote_diff = last_iteration_info.vote_diff
+        if candidate1_name != last_iteration_info.leading_candidate_name:
+            last_vote_diff *= -1
+        repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
 
     # Info we’ll need for the next loop iteration
     iteration_info = IterationInfo(
@@ -282,10 +291,11 @@ def json_to_summary(
         votes=votes,
         precincts_reporting=precincts_reporting,
         hurdle=hurdle,
+        leading_candidate_name=candidate1_name
     )
 
     # Compute aggregate of last 5 hurdle, if available
-    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0, candidate2_name)
 
     summary = IterationSummary(
         batch_time,
@@ -319,7 +329,8 @@ for rows in records.values():
         vote_diff=None,
         votes=None,
         precincts_reporting=None,
-        hurdle=0
+        hurdle=0,
+        leading_candidate_name=None
     )
 
     for row in rows:
