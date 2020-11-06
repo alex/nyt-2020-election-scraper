@@ -237,8 +237,12 @@
                 if (currentCommit['sha'] !== latestCommit['sha']) {
                     let newContent = await fetchLatestContent(latestCommit['sha']);
 
+                    let updatedStates = [];
                     Array.from(document.getElementsByTagName("table")).forEach(table => {
                         let newTable = newContent.getElementById(table.id);
+                        if (newTable.rows.length > table.rows.length) {
+                            updatedStates.push(table.id);
+                        }
                         table.parentNode.replaceChild(newTable, table);
                     });
 
@@ -250,8 +254,11 @@
                     refreshFeature(shrinkTablesFeature);
 
                     currentCommit = latestCommit;
-                    if (isFeatureEnabled(notificationFeature)) {
-                        new Notification("New ballots were counted!");
+                    if (isFeatureEnabled(notificationFeature) && updatedStates) {
+                        updatedStates = updatedStates.map(state => state[0].toUpperCase() + state.substring(1));
+                        let lastUpdatedState = updatedStates.pop();
+                        updatedStates = [updatedStates.join(", "), lastUpdatedState].join(updatedStates ? " and " : "");
+                        new Notification("New " + updatedStates + " ballots were counted!");
                     }
                 }
             }, 5 * 60 * 1000);
