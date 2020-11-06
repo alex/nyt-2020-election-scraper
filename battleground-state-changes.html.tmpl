@@ -310,7 +310,15 @@
                     latestContent.updates.states_updated.length
                 ) {
                     if (Notification.permission === "granted") {
-                        new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        const notification = new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        notification.onclick = function (event) {
+                            // focus page
+                            window.parent.focus(); 
+                            // just in case, older browsers
+                            window.focus(); 
+                            // dismiss notification
+                            event.target.close(); 
+                        };
                     }
                 }
 
