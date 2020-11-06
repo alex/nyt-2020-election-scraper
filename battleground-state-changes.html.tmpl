@@ -75,6 +75,10 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
+    <p>
+        <input type='checkbox' id='autoreload_checkbox' /> <label for='autoreload_checkbox'>Autoreload (5 minutes)</label>
+    </p>
+
     <p class="text-right">
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
@@ -137,6 +141,27 @@
 
         if (localStorage.getItem(shrunkLocalStorageKey)) {
             shrinkTables();
+        }
+
+        const autoreloadKey = 'autoreload';
+        const isAutoreloading = () => localStorage.getItem(autoreloadKey) === 'true';
+
+        const setReloadTimer = () => setTimeout(function () {
+            if (isAutoreloading()) {
+                location.reload();
+            }
+        }, 5 * 60 * 3000 /* 5 mins */);
+
+        $('#autoreload_checkbox').change(function () {
+            localStorage.setItem(autoreloadKey, $(this).is(':checked'));
+            if (isAutoreloading()) {
+                setReloadTimer();
+            }
+        })
+
+        if (isAutoreloading()) {
+            $('#autoreload_checkbox').prop('checked', true);
+            setReloadTimer();
         }
     </script>
 </body>
