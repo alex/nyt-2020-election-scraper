@@ -111,7 +111,9 @@ def html_write_state_head(state: str):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">{state}
+            <th class="text-center" colspan="9">
+
+                {state}
                 <a class="turnout" href="https://docs.google.com/spreadsheets/d/1h_2pR1pq8s_I5buZ5agXS9q1vLziECztN2uWeR6Czo0/edit#gid=2030096602" target="_blank">
                 Turnout Est: {turnouts[state]}
                 </a>

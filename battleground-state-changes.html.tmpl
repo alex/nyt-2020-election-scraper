@@ -30,11 +30,17 @@
         background-color: #ED98A9;
     }
     .turnout {
-        font-size:12px;
-        display: inline-block;
-        position:absolute;
-        right:30px;line-height: 25px;
-        color:#495057;
+        font-size: 12px;
+        line-height: 25px;
+        color: #495057;
+        display: inline;
+        position: absolute;
+        right: 25px;
+    }
+    @media only screen and (max-width: 1026px) {
+        .turnout {
+            display: none;
+        }
     }
 
     @media (prefers-color-scheme: dark) {
