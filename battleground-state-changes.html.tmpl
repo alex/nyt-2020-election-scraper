@@ -158,13 +158,15 @@
             button.html('Expand Tables');
             $('.table').each(function(){
                 var countOfNonHiddenBlock = 0;
+                var lastCount = -1;
                 $(this).find('tbody tr').each(function() {
                     var value = parseInt(($(this).find('td:nth(4)').text()));
-                    if (countOfNonHiddenBlock >= 3 || value === 0) {
+                    if (countOfNonHiddenBlock >= 3 || (value === 0 && lastCount === 0)) {
                         $(this).hide();
                     } else {
                         countOfNonHiddenBlock++;
                     }
+                    lastCount = value;
                 });
             });
         }, button => {
