@@ -164,10 +164,10 @@ def string_summary(summary):
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         '***' if summary.timestamp > thirty_ago else '---',
-        f'{summary.leading_candidate_name} up by {summary.vote_differential:,} votes',
-        f'Remaining (est.): {summary.votes_remaining:,}',
+        f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
+        f'Left (est.): {summary.votes_remaining:,}',
         f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
-        f'Pcts: {summary.precincts_reporting}/{summary.precincts_total}',
+        f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
