@@ -181,7 +181,8 @@ def string_summary(summary):
         f'Left (est.): {summary.votes_remaining:,}',
         f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
-        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
+        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} '
+        f'[{summary.hurdle_change:.3%}]' if summary.hurdle_mov_avg else '',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
@@ -240,7 +241,10 @@ def html_summary(state_slug: str, summary: IterationSummary):
         html += '<td>N/A</td>'
 
     html += f'''
-            <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
+            <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} '''
+    if summary.hurdle_mov_avg:
+        html += f'[{summary.hurdle_change:.3%}]'
+    html += f'''</td>
         </tr>
     '''
 
