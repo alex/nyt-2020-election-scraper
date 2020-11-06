@@ -1,6 +1,6 @@
 <!--
 To help with the large amounts of pull requests, we would appreciate your
-reviews of other pull requests, especially simple package updates. Just leave a
+reviews of other pull requests, especially simple changes. Just leave a
 review and comment describing what you have tested in the relevant PR.
 Reviewing helps to reduce the average time-to-merge for everyone.
 Thanks a lot if you do!
