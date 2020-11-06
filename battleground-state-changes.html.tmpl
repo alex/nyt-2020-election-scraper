@@ -239,7 +239,7 @@
     <script type="text/javascript">
         const loadTooltips = () => {
             $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
+                $('[data-toggle="tooltip"]').tooltip({ boundary: 'window' })
             })
         };
         loadTooltips();
