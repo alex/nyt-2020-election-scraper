@@ -15,6 +15,8 @@
     <meta property="og:image" content="https://avatars3.githubusercontent.com/u/772?s=400&u=7c00c7c8ac3691da556d7686e16ff08b797d4a38&v=4" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗳️</text></svg>">
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -29,8 +31,6 @@
 
     .table th.text-left {
         font-weight: normal;
-        position: sticky;
-        top: -1px;
     }
 
     .table th span.statename {
@@ -38,9 +38,16 @@
         font-size: 14pt;
     }
 
-     .table th.has-tip {
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: -1px;
+    }
+
+    thead tr:nth-child(2) th {
         position: sticky;
         top: calc(.25rem + 1.5rem + 2px);
+        border-right: none;
+        border-left: none;
     }
 
     .has-tip:after{
@@ -90,10 +97,9 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:26:48 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:16:43 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 04:12:24 UTC</span> | Last batch: <span class="timestamp">2020-11-06 04:10:39 UTC</span></p>
 
     <p class="float-right">
-      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
@@ -166,7 +172,7 @@
                     <img src="flags/arizona.svg" width="50px" /> <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 1,528,319 votes, Trump trails with 1,482,062 votes.
+                Total Votes: Biden leads with 1,529,109 votes, Trump trails with 1,482,442 votes.
             </th>
         </tr>
         <tr>
@@ -181,6 +187,27 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:37:12 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>46,667</td>
+            <td>314,747</td>
+            <td>  1,180</td>
+    
+            <td>
+                Biden 67.4% /
+                32.6% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 56.6%
+            </td>
+        
+            <td><abbr title="1417/1489">95.2%</abbr></td>
+            <td>Trump needs 57.41% [0.093%]</td>
+        </tr>
     
 
         <tr>
@@ -747,7 +774,7 @@
                     <img src="flags/georgia.svg" width="50px" /> <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 2,447,337 votes, Biden trails with 2,445,540 votes.
+                Total Votes: Trump leads with 2,448,016 votes, Biden trails with 2,446,211 votes.
             </th>
         </tr>
         <tr>
@@ -762,6 +789,48 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 04:10:39 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>1,805</td>
+            <td>9,159</td>
+            <td>  1,375</td>
+    
+            <td>
+                Trump 51.1% /
+                48.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.6%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 59.85% [1.429%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:29:41 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>1,775</td>
+            <td>10,534</td>
+            <td>     34</td>
+    
+            <td>
+                Trump 17.6% /
+                82.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.5%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 58.43% [-0.077%]</td>
+        </tr>
     
 
         <tr>
@@ -3048,7 +3117,7 @@
                     <img src="flags/pennsylvania.svg" width="50px" /> <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 3,278,696 votes, Biden trails with 3,237,391 votes.
+                Total Votes: Trump leads with 3,282,048 votes, Biden trails with 3,255,729 votes.
             </th>
         </tr>
         <tr>
@@ -3063,6 +3132,48 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:45:43 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>26,319</td>
+            <td>291,894</td>
+            <td> 13,909</td>
+    
+            <td>
+                Trump 13.1% /
+                86.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 78.5%
+            </td>
+        
+            <td><abbr title="8366/9128">91.7%</abbr></td>
+            <td>Biden needs 54.51% [-1.471%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:33:20 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>36,572</td>
+            <td>305,803</td>
+            <td>  8,046</td>
+    
+            <td>
+                Trump 20.6% /
+                79.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.4%
+            </td>
+        
+            <td><abbr title="8338/9128">91.3%</abbr></td>
+            <td>Biden needs 55.98% [-0.601%]</td>
+        </tr>
     
 
         <tr>
@@ -5650,7 +5761,19 @@
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
             button.html('Expand Tables');
-            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+            $('.table').each(function(){
+                var countOfNonHiddenBlock = 0;
+                var lastCount = -1;
+                $(this).find('tbody tr').each(function() {
+                    var value = parseInt(($(this).find('td:nth(4)').text()));
+                    if (countOfNonHiddenBlock >= 3 || (value === 0 && lastCount === 0)) {
+                        $(this).hide();
+                    } else {
+                        countOfNonHiddenBlock++;
+                    }
+                    lastCount = value;
+                });
+            });
         }, button => {
             button.html('Shrink Tables');
             $('.table').each(function() { $(this).find('tbody tr').show(); });
@@ -5661,13 +5784,6 @@
         const liveUpdatesFeature = 'live-updates';
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
-        }, button => {
-            button.html('Enable Live Updates');
-        });
-
-        const notificationFeature = 'notifications';
-        feature(notificationFeature, '#notification_button', button => {
-            button.html('Disable Notifications');
 
             if (!('Notification' in window)) {
                 return;
@@ -5677,7 +5793,7 @@
                 Notification.requestPermission();
             }
         }, button => {
-            button.html('Enable Notifications');
+            button.html('Enable Live Updates');
         });
 
         (async function() {
@@ -5743,7 +5859,7 @@
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (isFeatureEnabled(notificationFeature)) {
+                        if (Notifcation.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
