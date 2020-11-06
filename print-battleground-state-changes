@@ -186,16 +186,18 @@ def string_summary(summary):
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
     return f'''
+        <caption>
+            <h2 class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                <img src="flags/{state_slug}.svg" width="50px" />
+                <span class="statename">{state}</span>
+            </h2>
+            <span>
+                Total Votes:
+                <div class="box {summary.leading_candidate_name}"></div> {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes,
+                <div class="box {summary.trailing_candidate_name}"></div> {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
+            </span>
+        </caption>
         <thead class="thead-light">
-        <tr>
-            <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
-                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    <span class="statename">{state}</span>
-                </span>
-                <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
-            </td>
-        </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
