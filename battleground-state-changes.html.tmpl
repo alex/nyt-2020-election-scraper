@@ -5,10 +5,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="ANN Election Results" />
+    <meta name="twitter:title" content="ANN Election Data" />
     <meta name="twitter:description" content="Battleground state changes, updated every five minutes using NYT data." />
     <meta name="twitter:url" content="https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html" />
-    <meta property="og:title" content="ANN Election Results" />
+    <meta property="og:title" content="ANN Election Data" />
     <meta property="og:description" content="Battleground state changes, updated every five minutes using NYT data." />
     <meta property="og:image" content="https://avatars3.githubusercontent.com/u/772?s=400&u=7c00c7c8ac3691da556d7686e16ff08b797d4a38&v=4" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
@@ -25,18 +25,29 @@
         padding: .25rem .5rem;
     }
 
-    .table th.text-center {
+    .table th.text-left {
+        font-weight: normal;
+    }
+
+    .table th span.statename {
+        font-weight: bold;
+        font-size: 14pt;
+    }
+
+    thead tr:nth-child(1) th {
         position: sticky;
         top: -1px;
     }
 
-     .table th.has-tip {
+    thead tr:nth-child(2) th {
         position: sticky;
         top: calc(.25rem + 1.5rem + 2px);
+        border-right: none;
+        border-left: none;
     }
 
     .has-tip:after{
-        content: "ℹ";
+        content: "\2139\fe0f";
         margin-left: 5px;
     }
 
@@ -153,15 +164,34 @@
 
         const prettyTimestamps = () => {
             $(".timestamp").map(function (idx, tselem) {
-                tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+                tselem.innerHTML = "<abbr class='pretty-timestamp' title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
             })
         };
         prettyTimestamps();
+        
+        const updateTimestamps = () => {
+            $(".pretty-timestamp").map(function (idx, tselem) {
+                tselem.innerText = dayjs.utc(tselem.title.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+            })
+        };
+        setInterval(updateTimestamps, 60 * 1000);
 
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
             button.html('Expand Tables');
-            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+            $('.table').each(function(){
+                var countOfNonHiddenBlock = 0;
+                var lastCount = -1;
+                $(this).find('tbody tr').each(function() {
+                    var value = parseInt(($(this).find('td:nth(4)').text()));
+                    if (countOfNonHiddenBlock >= 3 || (value === 0 && lastCount === 0)) {
+                        $(this).hide();
+                    } else {
+                        countOfNonHiddenBlock++;
+                    }
+                    lastCount = value;
+                });
+            });
         }, button => {
             button.html('Shrink Tables');
             $('.table').each(function() { $(this).find('tbody tr').show(); });
@@ -210,11 +240,20 @@
             };
 
             const fetchLatestContent = async (sha) => {
-                const response = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
                     cache: 'no-cache',
                 });
-                const body = await response.text();
-                return new DOMParser().parseFromString(body, 'text/html');
+                const contentBody = await contentResponse.text();
+                const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
+
+                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                    cache: 'no-cache',
+                });
+                const updatesBody = await updatesResponse.json();
+                return {
+                    updates: updatesBody,
+                    dom: contentDom,
+                };
             };
 
             let currentCommit = await fetchLatestCommit();
@@ -228,23 +267,26 @@
                 console.log("latest commit", latestCommit);
 
                 if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let newContent = await fetchLatestContent(latestCommit['sha']);
+                    let latestContent = await fetchLatestContent(latestCommit['sha']);
 
-                    Array.from(document.getElementsByTagName("table")).forEach(table => {
-                        let newTable = newContent.getElementById(table.id);
-                        table.parentNode.replaceChild(newTable, table);
-                    });
+                    console.log("latest content", latestContent.updates);
+                    if (latestContent.updates.states_updated.length) {
+                        Array.from(document.getElementsByTagName("table")).forEach(table => {
+                            let newTable = latestContent.dom.getElementById(table.id);
+                            table.parentNode.replaceChild(newTable, table);
+                        });
 
-                    let newTimestamps = newContent.getElementById("timestamps");
-                    let currTimestamps = document.getElementById("timestamps");
-                    currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
+                        let newTimestamps = latestContent.dom.getElementById("timestamps");
+                        let currTimestamps = document.getElementById("timestamps");
+                        currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
 
-                    prettyTimestamps();
-                    refreshFeature(shrinkTablesFeature);
+                        prettyTimestamps();
+                        refreshFeature(shrinkTablesFeature);
 
-                    currentCommit = latestCommit;
-                    if (isFeatureEnabled(notificationFeature)) {
-                        new Notification("New ballots were counted!");
+                        currentCommit = latestCommit;
+                        if (isFeatureEnabled(notificationFeature)) {
+                            new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        }
                     }
                 }
             }, 5 * 60 * 1000);
