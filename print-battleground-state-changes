@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import collections
 import datetime
 import git
@@ -18,6 +19,9 @@ PA_INDEX = 38
 
 STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
+CACHE_DIR = '_cache'
+# Bump this with any changes to `fetch_all_records`
+CACHE_VERSION = 1
 
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
@@ -27,16 +31,71 @@ def git_show(ref, name, repo_client):
 
     return commit_tree[name].data_stream.read()
 
-def fetch_all_results_jsons():
+def fetch_all_records():
     commits = git_commits_for("results.json")
 
     repo = git.Repo('.', odbt=git.db.GitCmdObjectDB)
-    blobs = (git_show(ref, "results.json", repo) for ref in commits)
 
-    parsers = [simdjson.Parser() for blob in commits] # These can't be reused apparently
-    jsons = (parser.parse(blob) for parser, blob in zip(parsers, blobs))
+    out = []
 
-    return sorted(jsons, key=lambda j: j['meta']['timestamp']), parsers # Really make sure we’re in order
+    parser = simdjson.Parser()
+    for ref in commits:
+        cache_path = os.path.join(CACHE_DIR, ref[:2], ref[2:] + ".json")
+        if os.path.exists(cache_path):
+            with open(cache_path) as fh:
+                try:
+                    record = simdjson.load(fh)
+                except ValueError:
+                    continue
+                if record['version'] == CACHE_VERSION:
+                    for row in record['rows']:
+                        out.append(InputRecord(*row))
+                    continue
+        blob = git_show(ref, 'results.json', repo)
+        json = parser.parse(blob)
+        timestamp = json['meta']['timestamp']
+        rows = []
+        for index in STATE_INDEXES:
+            race = json['data']['races'][index]
+            record = InputRecord(
+                timestamp,
+                race['state_name'],
+                race['electoral_votes'],
+                race['candidates'].as_list(),
+                race['votes'],
+                sum(map(lambda n: n['tot_exp_vote'], race['counties'])),
+                race['precincts_total'],
+                race['precincts_reporting'],
+                )
+            rows.append(record)
+            out.append(record)
+        try:
+            os.makedirs(os.path.dirname(cache_path))
+        except FileExistsError:
+            pass
+        with open(cache_path, 'w') as fh:
+            simdjson.dump({"version": CACHE_VERSION, "rows": rows}, fh)
+
+    out.sort(key=lambda row: row.timestamp)
+    grouped = collections.defaultdict(list)
+    for row in out:
+        grouped[row.state_name].append(row)
+
+    return grouped
+
+InputRecord = collections.namedtuple(
+    'InputRecord',
+    [
+        'timestamp',
+        'state_name',
+        'electoral_votes',
+        'candidates',
+        'votes',
+        'expected_votes',
+        'precincts_total',
+        'precincts_reporting',
+    ],
+)
 
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
@@ -168,34 +227,33 @@ def html_summary(summary: IterationSummary):
 # Capture the time at the top of the main script logic so it's closer to when the pull of data happened
 scrape_time = datetime.datetime.utcnow()
 
-# List of results.json dicts, in chronological order
-#
-# Implementation note: `_pysimdjson_lifetime_hacks` is here because if the
-# `simdjson.Parser` object isn't around when you access one the values it
-# returns from `Parser.parse` it'll coredump.
-jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
+# Dict[str, List[InputRecords]]
+records = fetch_all_records()
 
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
 def json_to_summary(
     state_name: str,
-    state_blob,
+    row: InputRecord,
     last_iteration_info: IterationInfo,
     batch_time: datetime.datetime,
 ) -> Tuple[IterationInfo, IterationSummary]:
-    candidate1 = state_blob['candidates'][0] # Leading candidate
-    candidate2 = state_blob['candidates'][1] # Trailing candidate
+    timestamp = datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+
+    # Retrieve relevant data from the state’s JSON blob
+    candidate1 = row.candidates[0] # Leading candidate
+    candidate2 = row.candidates[1] # Trailing candidate
     candidate1_name = candidate1['last_name']
     candidate2_name = candidate2['last_name']
     candidate1_votes = candidate1['votes']
     candidate2_votes = candidate2['votes']
     vote_diff = candidate1_votes - candidate2_votes
-    votes = state_blob['votes']
-    expected_votes = sum(map(lambda n: n['tot_exp_vote'], state_blob['counties']))
+    votes = row.votes
+    expected_votes = row.expected_votes
     votes_remaining = expected_votes - votes
-    precincts_reporting = state_blob['precincts_reporting']
-    precincts_total = state_blob['precincts_total']
+    precincts_reporting = row.precincts_reporting
+    precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
     hurdle = ((((votes_remaining + vote_diff) / 2)) / votes_remaining) if votes_remaining > 0 else 0
@@ -234,9 +292,8 @@ def json_to_summary(
 
     return iteration_info, summary
 
-for state_index in STATE_INDEXES:
-    state_name = jsons[0]['data']['races'][state_index]['state_name']
-    state_name += f" ({jsons[0]['data']['races'][state_index]['electoral_votes']})"
+for _, rows in records.items():
+    state_name = f"{rows[0].state_name} ({rows[0].electoral_votes})"
     summarized[state_name] = []
 
     last_iteration_info = IterationInfo(
@@ -246,14 +303,12 @@ for state_index in STATE_INDEXES:
         hurdle=0
     )
 
-    for json in jsons:
-        state_blob = json['data']['races'][state_index]
-
+    for row in rows:
         iteration_info, summary = json_to_summary(
             state_name,
-            state_blob,
+            row,
             last_iteration_info,
-            batch_time=datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ'),
+            batch_time=datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ'),
         )
 
         # Avoid writing duplicate rows
