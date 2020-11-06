@@ -174,13 +174,13 @@ def string_summary(summary):
 
     lead_part = summary.leading_candidate_partition - 50
 
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else 'Unknown'
+    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else '¯\_(ツ)_/¯'
 
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
-        f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
+        f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else '¯\_(ツ)_/¯',
         f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
@@ -213,7 +213,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     '''
 
 def html_summary(state_slug: str, summary: IterationSummary):
-    shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
+    shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else '¯\_(ツ)_/¯'
     html = f'''
         <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
@@ -242,7 +242,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
     else:
         html += '<td>N/A</td>'
     
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else 'Unknown'
+    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else '¯\_(ツ)_/¯'
     html += f'''
             <td class="hurdle">{visible_hurdle}</td>
         </tr>
