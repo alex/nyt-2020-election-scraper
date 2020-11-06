@@ -168,8 +168,8 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 08:09:16 UTC</span> | Last batch: <span class="timestamp">2020-11-06 07:41:51 UTC</span></p>
-    <div id="template-hash" style="display: none;">5927651f53502692169cc46b7118f1a82630df89a132031619bba30261208acd</div>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 08:16:22 UTC</span> | Last batch: <span class="timestamp">2020-11-06 07:41:51 UTC</span></p>
+    <div id="template-hash" style="display: none;">6665d09af1baea596324f8795d0bab01025827cad512f049fdef9c9a7dc893c4</div>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -5750,7 +5750,7 @@
             return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         };
 
-        const updateCheck = async (currentCommit, notify) => {
+        const updateCheck = async (currentCommit, currentContent) => {
             let latestCommit = await fetchLatestCommit();
             console.log("latest commit", latestCommit);
 
@@ -5759,7 +5759,10 @@
                 let latestContent = await fetchLatestContent(latestCommit['sha']);
 
                 console.log("latest content", latestContent.updates);
-                if (notify && latestContent.updates.states_updated.length) {
+                if (currentContent &&
+                    currentContent.updates.results_hash !== latestContent.updates.results_hash &&
+                    latestContent.updates.states_updated.length
+                ) {
                     if (Notification.permission === "granted") {
                         new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                     }
@@ -5786,19 +5789,23 @@
                     loadTooltips();
                     refreshFeature(shrinkTablesFeature);
                 }
+
+                return {commit: latestCommit, content: latestContent};
             }
 
-            return latestCommit;
+            return {commit: latestCommit, content: currentContent};
         };
 
         // do an initial update
         if (!isDeveloperEnvironment()) {
-            updateCheck({}, false);
+            updateCheck({}, undefined);
         }
 
         const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
+            let currentContent = await fetchLatestContent(currentCommit['sha']);
+            console.log("current content", currentContent.updates);
 
             const nextCheck = () => {
                 const ONE_MINUTE = 1 * 60 * 1000;
@@ -5812,8 +5819,11 @@
             const runner = async () => {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
-                currentCommit = await updateCheck(currentCommit, true);
+                const results = await updateCheck(currentCommit, currentContent);
+                currentCommit = results.commit;
+                currentContent = results.content;
                 console.log("new current commit", currentCommit);
+                console.log("new current content", currentContent);
                 setTimeout(runner, nextCheck());
             };
 
