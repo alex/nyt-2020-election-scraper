@@ -327,7 +327,9 @@
         };
 
         // do an initial update
-        updateCheck({}, false);
+        if (!isDeveloperEnvironment()) {
+            updateCheck({}, false);
+        }
 
         const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();

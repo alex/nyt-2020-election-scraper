@@ -182,8 +182,8 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     return f'''
         <thead class="thead-light">
         <tr>
-            <td class="text-left has-tip flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
                 <br>
