@@ -84,7 +84,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:41:52 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:37:26 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:43:40 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:37:26 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
@@ -5617,10 +5617,17 @@
 
         const prettyTimestamps = () => {
             $(".timestamp").map(function (idx, tselem) {
-                tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+                tselem.innerHTML = "<abbr class='pretty-timestamp' title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
             })
         };
         prettyTimestamps();
+        
+        const updateTimestamps = () => {
+            $(".pretty-timestamp").map(function (idx, tselem) {
+                tselem.innerText = dayjs.utc(tselem.title.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+            })
+        };
+        setInterval(updateTimestamps, 60 * 1000);
 
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
