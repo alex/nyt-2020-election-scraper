@@ -219,7 +219,7 @@ def html_summary(summary: IterationSummary):
         html += '<td>N/A</td>'
 
     html += f'''
-            <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
+            <td><abbr title="{summary.precincts_reporting} out of {summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
         </tr>
     '''
