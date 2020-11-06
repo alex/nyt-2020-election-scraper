@@ -308,6 +308,8 @@
                 if (newHash && newHash !== currentHash && !isDeveloperEnvironment()) {
                     location.reload(true);
                 } else {
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+
                     const elementsToUpdate = [
                         ...Array.from(document.getElementsByTagName("table")),
                         document.getElementById("timestamps"),
