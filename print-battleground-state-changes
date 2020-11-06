@@ -333,6 +333,8 @@ for rows in records.values():
         precincts_reporting=None,
         hurdle=0,
         leading_candidate_name=None
+        candidate1_votes=0,
+        candidate2_votes=0
     )
 
     for row in rows:
