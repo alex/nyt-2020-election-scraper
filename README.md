@@ -10,7 +10,7 @@ Scrapes the NYT Votes Remaining Page JSON and commits it back to this repo. The 
 
 
 ## Inspired By
-Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
+Simon Willison: <https://simonwillison.net/2020/Oct/9/git-scraping/>
 
 
 
@@ -21,4 +21,4 @@ Contributions are welcome, but please make sure you read and fill out the [the p
 Please do not modify any of the static files (html, csv, txt, or xml). These files are dynamically generated.
 
 ## To Support The Creators
-We'd rather any money go to a good cause. Send any donations instead to https://voting.works!
+We'd rather any money go to a good cause. Send any donations instead to <https://voting.works>!
