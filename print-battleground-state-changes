@@ -205,7 +205,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     '''
