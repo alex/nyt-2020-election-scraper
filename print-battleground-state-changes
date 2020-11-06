@@ -355,7 +355,7 @@ with open("battleground-state-changes.html","w", encoding='utf8') as f:
 
 # write data to a json file
 with open("battleground-state-changes.json", "w", encoding='utf8') as f:
-    f.write(json.dump(data, summary))
+    f.write(json.dump(summary))
 
 # write data to a csv file
 with open('battleground-state-changes.csv', 'w') as csvfile:
