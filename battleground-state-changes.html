@@ -29,8 +29,6 @@
 
     .table th.text-left {
         font-weight: normal;
-        position: sticky;
-        top: -1px;
     }
 
     .table th span.statename {
@@ -38,9 +36,16 @@
         font-size: 14pt;
     }
 
-     .table th.has-tip {
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: -1px;
+    }
+
+    thead tr:nth-child(2) th {
         position: sticky;
         top: calc(.25rem + 1.5rem + 2px);
+        border-right: none;
+        border-left: none;
     }
 
     .has-tip:after{
@@ -90,7 +95,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:35:39 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:33:20 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:42:45 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:37:12 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
@@ -166,7 +171,7 @@
                     <img src="flags/arizona.svg" width="50px" /> <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 1,528,319 votes, Trump trails with 1,482,062 votes.
+                Total Votes: Biden leads with 1,529,109 votes, Trump trails with 1,482,442 votes.
             </th>
         </tr>
         <tr>
@@ -181,6 +186,27 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:37:12 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>46,667</td>
+            <td>314,747</td>
+            <td>  1,180</td>
+    
+            <td>
+                Biden 67.4% /
+                32.6% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 56.6%
+            </td>
+        
+            <td><abbr title="1417/1489">95.2%</abbr></td>
+            <td>Trump needs 57.41% [0.093%]</td>
+        </tr>
     
 
         <tr>
