@@ -215,7 +215,7 @@
                 return;
             }
 
-            if (Notification.permission !== "denied") {
+            if (Notification.permission !== "granted") {
                 Notification.requestPermission();
             }
         }, button => {
