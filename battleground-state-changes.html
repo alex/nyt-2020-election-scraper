@@ -15,10 +15,6 @@
     body {
         margin: 1rem;
     }
-
-    .table th:hover {
-      background-color: #00c1f0;
-    }
     
     .table td, .table th {
         padding: .25rem .5rem;
@@ -40,9 +36,8 @@
     }
 
     .Biden{
-        background-color: #84C4EE;
+        background-color: #84C4EE
     }
-
     .Trump{
         background-color: #ED98A9;
     }
@@ -71,8 +66,7 @@
         }
     }
     </style>
-  
-    <title>Election 2020 | Last scrape: Fri Nov  6 01:05:18 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Fri Nov  6 01:47:50 2020 (UTC)</title>
 </head>
 
 <body>
@@ -84,17 +78,18 @@
     </p>
 
     <p class="text-right">
+      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
+      <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
 
 
     <table id='alaska' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(alaska_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Alaska (3): Total Votes: (Trump: 108,231, Biden: 56,849)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Alaska (EV: 3) Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.</th>
         </tr>
-        <tbody id=alaska_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -146,15 +141,13 @@
             <td>Biden needs 57.55% [57.545%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 <table id='arizona' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(arizona_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Arizona (11): Total Votes: (Biden: 1,494,263, Trump: 1,437,716)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Arizona (EV: 11) Total Votes: Biden leads with 1,496,619 votes, Trump trails with 1,439,786 votes.</th>
         </tr>
-        <tbody id=arizona_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -172,6 +165,64 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>56,833</td>
+            <td>391,241</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Trump is averaging 51.8%
+            </td>
+        
+            <td><abbr title="1386/1489">93.1%</abbr></td>
+            <td>Trump needs 57.26% [-0.293%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>56,833</td>
+            <td>376,072</td>
+            <td>  1,957</td>
+    
+            <td>
+                Biden 24.2% /
+                75.8% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 51.8%
+            </td>
+        
+            <td><abbr title="1386/1489">93.1%</abbr></td>
+            <td>Trump needs 57.56% [-0.095%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:15:19 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>57,844</td>
+            <td>378,029</td>
+            <td>  2,485</td>
+    
+            <td>
+                Biden 76.1% /
+                23.9% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 50.2%
+            </td>
+        
+            <td><abbr title="1383/1489">92.9%</abbr></td>
+            <td>Trump needs 57.65% [0.220%]</td>
+        </tr>
     
 
         <tr>
@@ -649,15 +700,13 @@
             <td>Trump needs 62.48% [62.480%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 <table id='georgia' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(georgia_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Georgia (16): Total Votes: (Trump: 2,446,850, Biden: 2,443,364)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Georgia (EV: 16) Total Votes: Trump leads with 2,446,850 votes, Biden trails with 2,443,364 votes.</th>
         </tr>
-        <tbody id=georgia_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -675,6 +724,102 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>13,273</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 63.13% [1.880%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:35:23 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>15,491</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 61.25% [-0.001%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>15,490</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 61.25% [2.994%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:27:54 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>21,106</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 58.26% [-0.007%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:47 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>21,087</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 58.27% [-1.175%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:00 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>18,462</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 59.44% [1.815%]</td>
+        </tr>
     
 
         <tr>
@@ -2483,15 +2628,13 @@
             <td>Biden needs 68.18% [68.182%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 <table id='north-carolina' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(north-carolina_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">North Carolina (15): Total Votes: (Trump: 2,732,120, Biden: 2,655,383)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">North Carolina (EV: 15) Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.</th>
         </tr>
-        <tbody id=north-carolina_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2601,15 +2744,13 @@
             <td>Biden needs 69.76% [69.757%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 <table id='nevada' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(nevada_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Nevada (6): Total Votes: (Biden: 604,251, Trump: 592,813)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Nevada (EV: 6) Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.</th>
         </tr>
-        <tbody id=nevada_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2794,15 +2935,13 @@
             <td>Trump needs 51.89% [51.888%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 <table id='pennsylvania' class='table table-bordered'>
 
-        <thead class="thead-light" onclick="toggleVisible(pennsylvania_content)">
+        <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Pennsylvania (20): Total Votes: (Trump: 3,264,187, Biden: 3,200,462)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Pennsylvania (EV: 20) Total Votes: Trump leads with 3,270,273 votes, Biden trails with 3,217,052 votes.</th>
         </tr>
-        <tbody id=pennsylvania_content style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -2820,6 +2959,85 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>53,221</td>
+            <td>342,939</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 77.6%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 57.76% [0.112%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>53,221</td>
+            <td>347,939</td>
+            <td>  9,975</td>
+    
+            <td>
+                Trump 24.6% /
+                75.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.6%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 57.65% [-0.494%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:00 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>58,286</td>
+            <td>357,914</td>
+            <td>  4,130</td>
+    
+            <td>
+                Trump 20.2% /
+                79.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.0%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 58.14% [-0.248%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:22:40 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>60,751</td>
+            <td>362,044</td>
+            <td>  8,867</td>
+    
+            <td>
+                Trump 33.2% /
+                66.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.4%
+            </td>
+        
+            <td><abbr title="8293/9128">90.9%</abbr></td>
+            <td>Biden needs 58.39% [-0.200%]</td>
+        </tr>
     
 
         <tr>
@@ -5166,7 +5384,6 @@
             <td>Biden needs 68.66% [68.660%]</td>
         </tr>
     
-</tbody>
 </table><hr>
 
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
@@ -5185,6 +5402,42 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        const features = {};
+        const isFeatureEnabled = key => localStorage.getItem(key) === 'true';
+
+        const feature = (key, buttonId, onEnable, onDisable) => {
+            const button = $(buttonId);
+            button.on('click', function() {
+                if (isFeatureEnabled(key)) {
+                    localStorage.removeItem(key);
+                    onDisable(button);
+                } else {
+                    localStorage.setItem(key, 'true');
+                    onEnable(button);
+                }
+            });
+
+            if (isFeatureEnabled(key)) {
+                onEnable(button);
+            }
+
+            features[key] = {
+                buttonId,
+                onEnable,
+                onDisable
+            };
+        };
+
+        const refreshFeature = key => {
+            if (isFeatureEnabled(key)) {
+                features[key].onEnable($(features[key].buttonId));
+            } else {
+                features[key].onDisable($(features[key].buttonId));
+            }
+        };
+    </script>
+
+    <script type="text/javascript">
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
@@ -5192,47 +5445,98 @@
         dayjs.extend(dayjs_plugin_relativeTime)
         dayjs.extend(dayjs_plugin_utc)
 
-        $(".timestamp").map(function (idx, tselem) {
-            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
-        })
+        const prettyTimestamps = () => {
+            $(".timestamp").map(function (idx, tselem) {
+                tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+            })
+        };
+        prettyTimestamps();
 
-        const $shrinkButton = $('#shrink_button');
-
-        const shrinkTables = () => {
-            $shrinkButton.html('Expand Tables');
+        const shrinkTablesFeature = 'shrunk';
+        feature(shrinkTablesFeature, '#shrink_button', button => {
+            button.html('Expand Tables');
             $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
-            localStorage.setItem(shrunkLocalStorageKey, 'true');
-        };
-
-        const expandTables = () => {
-            $shrinkButton.html('Shrink Tables');
+        }, button => {
+            button.html('Shrink Tables');
             $('.table').each(function() { $(this).find('tbody tr').show(); });
-            localStorage.removeItem(shrunkLocalStorageKey);
-        };
+        });
+    </script>
 
-        const isShrunk = () => localStorage.getItem(shrunkLocalStorageKey) === 'true';
-
-        const shrunkLocalStorageKey = 'shrunk';
-
-        $shrinkButton.on('click', function() {
-            if (isShrunk()) {
-                expandTables();
-            } else {
-                shrinkTables();
-            }
+    <script type="text/javascript">
+        const liveUpdatesFeature = 'live-updates';
+        feature(liveUpdatesFeature, '#live_update_button', button => {
+            button.html('Disable Live Updates');
+        }, button => {
+            button.html('Enable Live Updates');
         });
 
-        if (localStorage.getItem(shrunkLocalStorageKey)) {
-            shrinkTables();
-        }
-    </script>
-    <script type="text/javascript">
-      function toggleVisible({id}) {
-        const el = document.getElementById(id);
+        const notificationFeature = 'notifications';
+        feature(notificationFeature, '#notification_button', button => {
+            button.html('Disable Notifications');
 
-        if (el?.style?.display) {
-          el.style.display = el.style.display === 'block' ? 'none' : 'block';
-        }
-      }
+            if (!('Notification' in window)) {
+                return;
+            }
+
+            if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }, button => {
+            button.html('Enable Notifications');
+        });
+
+        (async function() {
+            const fetchLatestCommit = async () => {
+                const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
+                    cache: 'no-cache',
+                    headers: {
+                        accept: 'application/vnd.github.v3+json',
+                    },
+                });
+                const body = await response.json();
+                for (var i = 0; i < body.length; i++) {
+                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
+                        body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
+                        return body[i];
+                    }
+                }
+                return body[0]; // ???
+            };
+
+            const fetchLatestContent = async (sha) => {
+                const response = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                    cache: 'no-cache',
+                });
+                const body = await response.text();
+                return new DOMParser().parseFromString(body, 'text/html');
+            };
+
+            let currentCommit = await fetchLatestCommit();
+            console.log("current commit", currentCommit);
+
+            // live updates
+            setInterval(async function() {
+                if (!isFeatureEnabled(liveUpdatesFeature)) return;
+
+                let latestCommit = await fetchLatestCommit();
+                console.log("latest commit", latestCommit);
+
+                if (currentCommit['sha'] !== latestCommit['sha']) {
+                    let newContent = await fetchLatestContent(latestCommit['sha']);
+
+                    Array.from(document.getElementsByTagName("table")).forEach(table => {
+                        let newTable = newContent.getElementById(table.id);
+                        table.parentNode.replaceChild(newTable, table);
+                    });
+                    prettyTimestamps();
+                    refreshFeature(shrinkTablesFeature);
+
+                    currentCommit = latestCommit;
+                    if (isFeatureEnabled(notificationFeature)) {
+                        new Notification("New ballots were counted!");
+                    }
+                }
+            }, 5 * 60 * 1000);
+        })();
     </script>
 </body>
