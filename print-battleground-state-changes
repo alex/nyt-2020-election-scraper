@@ -289,6 +289,8 @@ def json_to_summary(
     iteration_info = IterationInfo(
         vote_diff=vote_diff,
         votes=votes,
+        candidate1_votes=candidate1_votes,
+        candidate2_votes=candidate2_votes,
         precincts_reporting=precincts_reporting,
         hurdle=hurdle,
         leading_candidate_name=candidate1_name
