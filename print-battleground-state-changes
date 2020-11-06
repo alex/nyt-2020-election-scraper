@@ -122,7 +122,8 @@ IterationSummary = collections.namedtuple(
         'precincts_total',
         'hurdle',
         'hurdle_change',
-        'hurdle_mov_avg'
+        'hurdle_mov_avg',
+        'hurdle_success',
     ]
 )
 
@@ -229,7 +230,7 @@ def html_summary(summary: IterationSummary):
 
     html += f'''
             <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
-            <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
+            <td>{summary.hurdle_success} {summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
         </tr>
     '''
 
@@ -282,6 +283,7 @@ def json_to_summary(
 
     # Compute aggregate of last 5 hurdle, if available
     hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+    hurdle_success = "" if not hurdle_mov_avg else ("✅" if hurdle_mov_avg > hurdle else "❌")
 
     summary = IterationSummary(
         batch_time,
@@ -298,7 +300,8 @@ def json_to_summary(
         precincts_total,
         hurdle,
         hurdle-last_iteration_info.hurdle,
-        hurdle_mov_avg
+        hurdle_mov_avg,
+        hurdle_success
     )
 
     return iteration_info, summary
