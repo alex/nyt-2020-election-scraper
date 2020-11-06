@@ -56,9 +56,15 @@
         position: sticky;
         /* Padding, first line, second line, padding */
         top: calc(.25rem + 1.2rem + 1.2rem + .25rem);
-        border-right: none;
-        border-left: none;
-        border-top: none;
+        border-right-width: 0;
+        border-left-width: 0;
+        border-top-width: 0;
+    }
+    thead tr:nth-child(2) th:first-child {
+        border-left-width: 1px;
+    }
+    thead tr:nth-child(2) th:last-child {
+        border-right-width: 1px;
     }
 
     .has-tip {
@@ -184,9 +190,9 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 19:39:00 UTC</span> | Last batch: <span class="timestamp">2020-11-06 19:25:09 UTC</span></p>
-            <div id="template-hash" style="display: none;">e920bca1e2103f827c7066c562928824fcf09e8c51376576d7deeaee79d02e85</div>
-            <div id="page-metadata" style="display: none;">{"template_hash": "e920bca1e2103f827c7066c562928824fcf09e8c51376576d7deeaee79d02e85", "results_hash": "f0a64540d639e9df06024474494bddb4a42e9c5ee17fa719d8922ebcdfa976a2", "states_updated": []}</div>
+            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 19:47:10 UTC</span> | Last batch: <span class="timestamp">2020-11-06 19:46:07 UTC</span></p>
+            <div id="template-hash" style="display: none;">7818b6dc9a5a8182d49776c161fec6efa29d4460f4d1401e408f32abffe8251e</div>
+            <div id="page-metadata" style="display: none;">{"template_hash": "7818b6dc9a5a8182d49776c161fec6efa29d4460f4d1401e408f32abffe8251e", "results_hash": "5ffff068a2e75faaedd134eaabe52f2b1635290942a34fef3dfa1eeace9c8d50", "states_updated": ["Georgia"]}</div>
         </div>
         <div class="col-sm">
             <p class="float-right">
@@ -958,7 +964,7 @@
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 2,450,200 votes, Trump trails with 2,448,647 votes.
+                Total Votes: Biden leads with 2,450,373 votes, Trump trails with 2,448,775 votes.
             </td>
         </tr>
         <tr>
@@ -972,6 +978,26 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='georgia-2020-11-06T19:46:07.235000'>
+            <td class="timestamp">2020-11-06 19:46:07 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>1,598</td>
+            <td>4,178</td>
+            <td>    302</td>
+    
+            <td>
+                Biden 57.5% /
+                42.5% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.4%
+            </td>
+        
+            <td>Trump needs 68.50% [1.791%]</td>
+        </tr>
     
 
         <tr id='georgia-2020-11-06T19:22:14.276000'>
