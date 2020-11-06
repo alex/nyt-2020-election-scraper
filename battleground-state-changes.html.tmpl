@@ -54,9 +54,15 @@
         position: sticky;
         /* Padding, first line, second line, padding */
         top: calc(.25rem + 1.2rem + 1.2rem + .25rem);
-        border-right: none;
-        border-left: none;
-        border-top: none;
+        border-right-width: 0;
+        border-left-width: 0;
+        border-top-width: 0;
+    }
+    thead tr:nth-child(2) th:first-child {
+        border-left-width: 1px;
+    }
+    thead tr:nth-child(2) th:last-child {
+        border-right-width: 1px;
     }
 
     .has-tip {
