@@ -374,12 +374,9 @@ for (state, timestamped_results) in summarized.items():
 
 links = '<p>Links to graphs</p>\n<ul><li><a href="figures/Alaska.html">Alaska</a></li><li><a href="figures/Arizona.html">Arizona</a></li><li><a href="figures/Georgia.html">Georgia</a></li><li><a href="figures/Nevada.html">Nevada</a></li><li><a href="figures/North Carolina.html">North Carolina</a></li><li><a href="figures/Pennsylvania.html">Pennsylvania</a></li></ul>'
 
-with open("battleground-state-changes.html", "w", encoding="utf8") as f:
-    html = (
-        html_template.replace("{% TABLES %}", "\n".join(html_chunks))
-        .replace("{% SCRAPE %}", scrape_time.strftime("%c (UTC)"))
-        .replace("{% LINKS %}", links)
-    )
+with open("battleground-state-changes.html","w", encoding='utf8') as f:
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))
+
     f.write(html)
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
