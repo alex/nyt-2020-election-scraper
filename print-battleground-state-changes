@@ -5,7 +5,6 @@ import collections
 import datetime
 import git
 import itertools
-import json
 import os
 import simdjson
 import subprocess
@@ -353,11 +352,6 @@ with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
     f.write(html)
 
-# write data to a json file
-with open("battleground-state-changes.json", "w", encoding='utf8') as f:
-    f.write(json.dump(data, summary))
-
-# write data to a csv file
 with open('battleground-state-changes.csv', 'w') as csvfile:
     wr = csv.writer(csvfile)
     wr.writerow(('state',) + IterationSummary._fields)
