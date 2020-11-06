@@ -253,7 +253,7 @@
                     let latestContent = await fetchLatestContent(latestCommit['sha']);
 
                     console.log("latest content", latestContent.updates);
-                    if (latestContent.updates.length) {
+                    if (latestContent.updates.states_updated.length) {
                         Array.from(document.getElementsByTagName("table")).forEach(table => {
                             let newTable = latestContent.dom.getElementById(table.id);
                             table.parentNode.replaceChild(newTable, table);
@@ -268,7 +268,7 @@
 
                         currentCommit = latestCommit;
                         if (isFeatureEnabled(notificationFeature)) {
-                            new Notification(`New ballots were counted in: {latestContent.updates.join(", ")}!`);
+                            new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
                 }
