@@ -261,9 +261,13 @@ def json_to_summary(
     candidate2 = row.candidates[1] # Trailing candidate
     candidate1_name = candidate1['last_name']
     candidate2_name = candidate2['last_name']
-    candidate1_votes = candidate1['votes']
-    candidate2_votes = candidate2['votes']
-    vote_diff = candidate1_votes - candidate2_votes
+    votes_c = {}
+    votes_c[candidate1_name] = candidate1['votes']
+    votes_c[candidate2_name] = candidate2['votes']
+    if votes_c[candidate1_name] > votes_c[candidate1_name]:
+        vote_diff = votes_c[candidate1_name] - votes_c[candidate2_name]
+    else:
+        vote_diff = votes_c[candidate2_name] - votes_c[candidate1_name]
     votes = row.votes
     expected_votes = row.expected_votes
     votes_remaining = expected_votes - votes
@@ -271,7 +275,7 @@ def json_to_summary(
     precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
-    hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
+    hurdle = (vote_diff + (votes_remaining * (votes_c[candidate1_name] + votes_c[candidate2_name])) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
         repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
@@ -291,8 +295,8 @@ def json_to_summary(
         batch_time,
         candidate1_name,
         candidate2_name,
-        candidate1_votes,
-        candidate2_votes,
+        votes_c[candidate1_name],
+        votes_c[candidate2_name],
         vote_diff,
         votes_remaining,
         new_votes,
