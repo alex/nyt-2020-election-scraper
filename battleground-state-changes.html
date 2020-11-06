@@ -190,9 +190,9 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 20:26:52 UTC</span> | Last batch: <span class="timestamp">2020-11-06 20:25:45 UTC</span></p>
-            <div id="template-hash" style="display: none;">7818b6dc9a5a8182d49776c161fec6efa29d4460f4d1401e408f32abffe8251e</div>
-            <div id="page-metadata" style="display: none;">{"template_hash": "7818b6dc9a5a8182d49776c161fec6efa29d4460f4d1401e408f32abffe8251e", "results_hash": "d4b2a79b0b22d1684ee74c9f86a7f64c2e0e1900a2221d5ce8fd6e5c56f0b3cd", "states_updated": ["Georgia"]}</div>
+            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 20:31:33 UTC</span> | Last batch: <span class="timestamp">2020-11-06 20:30:39 UTC</span></p>
+            <div id="template-hash" style="display: none;">26fa44331f751c1e49c4fda918d14783e5394e6329186d16f97cc7ea6c9448ed</div>
+            <div id="page-metadata" style="display: none;">{"template_hash": "26fa44331f751c1e49c4fda918d14783e5394e6329186d16f97cc7ea6c9448ed", "results_hash": "fdb567d7f34455593b18e0db398245eb544ed175641e2524adc602e67ab26358", "states_updated": ["Arizona", "Pennsylvania"]}</div>
         </div>
         <div class="col-sm">
             <p class="float-right">
@@ -268,7 +268,7 @@
                     <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 1,562,200 votes, Trump trails with 1,521,246 votes.
+                Total Votes: Biden leads with 1,564,883 votes, Trump trails with 1,525,114 votes.
             </td>
         </tr>
         <tr>
@@ -282,6 +282,26 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='arizona-2020-11-06T20:30:39.158000'>
+            <td class="timestamp">2020-11-06 20:30:39 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>39,769</td>
+            <td>227,871</td>
+            <td>  6,666</td>
+    
+            <td>
+                Biden 41.1% /
+                58.9% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 57.9%
+            </td>
+        
+            <td>Trump needs 58.00% [-0.005%]</td>
+        </tr>
     
 
         <tr id='arizona-2020-11-06T19:53:53.320000'>
@@ -3938,7 +3958,7 @@
                     <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 3,311,820 votes, Trump trails with 3,298,111 votes.
+                Total Votes: Biden leads with 3,311,821 votes, Trump trails with 3,298,114 votes.
             </td>
         </tr>
         <tr>
@@ -3952,6 +3972,26 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='pennsylvania-2020-11-06T20:30:39.158000'>
+            <td class="timestamp">2020-11-06 20:30:39 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>13,707</td>
+            <td>119,878</td>
+            <td>      4</td>
+    
+            <td>
+                Biden 25.0% /
+                75.0% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 30.4%
+            </td>
+        
+            <td>Trump needs 55.08% [-0.001%]</td>
+        </tr>
     
 
         <tr id='pennsylvania-2020-11-06T20:17:51.562000'>
@@ -6903,11 +6943,15 @@
         const features = {};
         const isFeatureEnabled = key => localStorage.getItem(key) === 'true';
 
-        const feature = (key, buttonId, onEnable, onDisable) => {
+        const feature = (key, buttonId, defaultValue, onEnable, onDisable) => {
+            if (localStorage.getItem(key) == null) {
+                localStorage.setItem(key, defaultValue);
+            }
+
             const button = $(buttonId);
             button.on('click', function() {
                 if (isFeatureEnabled(key)) {
-                    localStorage.removeItem(key);
+                    localStorage.setItem(key, 'false');
                     onDisable(button);
                 } else {
                     localStorage.setItem(key, 'true');
@@ -6944,7 +6988,7 @@
         loadTooltips();
 
         const shrinkTablesFeature = 'shrunk';
-        feature(shrinkTablesFeature, '#shrink_button', button => {
+        feature(shrinkTablesFeature, '#shrink_button', true, button => {
             button.html('Expand Tables');
             $('.table').each(function(){
                 var countOfNonHiddenBlock = 0;
@@ -7073,7 +7117,7 @@
         };
 
         const liveUpdatesFeature = 'live-updates';
-        feature(liveUpdatesFeature, '#live_update_button', button => {
+        feature(liveUpdatesFeature, '#live_update_button', false, button => {
             button.html('Disable Live Updates');
 
             if ('Notification' in window && Notification.permission !== 'granted') {
