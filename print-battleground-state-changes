@@ -17,6 +17,14 @@ PA_INDEX = 38
 
 STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
+turnouts = {
+    "Alaska (3)": "2,300,000",
+    "Arizona (11)": "3,400,000",
+    "Georgia (16)": "5,025,000",
+    "North Carolina (15)": "5,750,000",
+    "Nevada (6)": "1,370,000",
+    "Pennsylvania (20)": "7,000,000"
+}
 
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
@@ -103,7 +111,11 @@ def html_write_state_head(state: str):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">{state}</th>
+            <th class="text-center" colspan="9">{state}
+                <a class="turnout" href="https://docs.google.com/spreadsheets/d/1h_2pR1pq8s_I5buZ5agXS9q1vLziECztN2uWeR6Czo0/edit#gid=2030096602" target="_blank">
+                Turnout Est: {turnouts[state]}
+                </a>
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
