@@ -187,16 +187,17 @@ def string_summary(summary):
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
-        <tr>
+        <tr class="state-summary">
             <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
                 <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
+                <button type="button" class="btn btn-outline-secondary btn-sm pull-right" onclick="toggleState('{state_slug}')">Hide</button>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
             </td>
         </tr>
-        <tr>
+        <tr class="state-table-header">
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
