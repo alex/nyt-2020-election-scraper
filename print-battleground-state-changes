@@ -182,7 +182,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     return f'''
         <thead class="thead-light">
         <tr>
-            <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
+            <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="10">
                 <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
@@ -199,7 +199,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
-        </tr>
+            <th class="has-tip" data-toggle="tooltip" title="Expected winner based on block trend and hurdle">Expected winner</th>        </tr>
         </thead>
     '''
 
@@ -233,10 +233,15 @@ def html_summary(summary: IterationSummary):
         html += '<td>N/A</td>'
 
     html += f'''
-            <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
-        </tr>
+        <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
     '''
 
+    if (summary.hurdle_mov_avg and summary.hurdle_mov_avg > summary.hurdle):
+        html += f'<td class="{summary.trailing_candidate_name}">{summary.trailing_candidate_name}</td>'
+    else:
+        html += f'<td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>'
+
+    html += '</tr>'
     return html
 
 # Capture the time at the top of the main script logic so it's closer to when the pull of data happened
