@@ -171,8 +171,8 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 16:16:41 UTC</span> | Last batch: <span class="timestamp">2020-11-06 16:15:24 UTC</span></p>
-            <div id="template-hash" style="display: none;">8e0cb838992b3b46101f7e0692fe7fd813b0b0e5314673adf52c3392066830d6</div>
+            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 16:19:41 UTC</span> | Last batch: <span class="timestamp">2020-11-06 16:15:24 UTC</span></p>
+            <div id="template-hash" style="display: none;">72dc06432d8d3063d094d05bdbcd1b2f4aa65708a21b1db34620a9fdfcb62c9b</div>
         </div>
         <div class="col-sm">
             <p class="float-right">
@@ -6203,7 +6203,15 @@
                     latestContent.updates.states_updated.length
                 ) {
                     if (Notification.permission === "granted") {
-                        new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        const notification = new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                        notification.onclick = function (event) {
+                            // focus page
+                            window.parent.focus(); 
+                            // just in case, older browsers
+                            window.focus(); 
+                            // dismiss notification
+                            event.target.close(); 
+                        };
                     }
                 }
 
