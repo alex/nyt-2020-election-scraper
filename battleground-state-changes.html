@@ -90,7 +90,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:31:22 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:29:41 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:34:16 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:33:20 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
@@ -3069,7 +3069,7 @@
                     <img src="flags/pennsylvania.svg" width="50px" /> <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 3,278,696 votes, Biden trails with 3,237,391 votes.
+                Total Votes: Trump leads with 3,280,308 votes, Biden trails with 3,243,736 votes.
             </th>
         </tr>
         <tr>
@@ -3084,6 +3084,27 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 03:33:20 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>36,572</td>
+            <td>305,803</td>
+            <td>  8,046</td>
+    
+            <td>
+                Trump 20.6% /
+                79.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.4%
+            </td>
+        
+            <td><abbr title="8338/9128">91.3%</abbr></td>
+            <td>Biden needs 55.98% [-0.601%]</td>
+        </tr>
     
 
         <tr>
@@ -5671,7 +5692,19 @@
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
             button.html('Expand Tables');
-            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+            $('.table').each(function(){
+                var countOfNonHiddenBlock = 0;
+                var lastCount = -1;
+                $(this).find('tbody tr').each(function() {
+                    var value = parseInt(($(this).find('td:nth(4)').text()));
+                    if (countOfNonHiddenBlock >= 3 || (value === 0 && lastCount === 0)) {
+                        $(this).hide();
+                    } else {
+                        countOfNonHiddenBlock++;
+                    }
+                    lastCount = value;
+                });
+            });
         }, button => {
             button.html('Shrink Tables');
             $('.table').each(function() { $(this).find('tbody tr').show(); });
