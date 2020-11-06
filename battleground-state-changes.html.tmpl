@@ -123,6 +123,7 @@
         dayjs.extend(dayjs_plugin_timezone)
 
         const prettyTime = timestamp => dayjs.utc(timestamp.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+        const localTime = timestamp => dayjs.utc(timestamp.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').local().format('DD MMM YYYY h:mm:ss A z');
 
         const handleNode = node => {
             if (node.classList && node.classList.contains('timestamp')) {
@@ -130,10 +131,10 @@
                 if (node.hasAttribute('data-timestamp')) {
                     timestamp = node.getAttribute('data-timestamp');
                 } else {
-                    timestamp = dayjs.utc(node.innerHTML.replace(" UTC", ""), 'YYYY-MM-DDTHH:MM:SS').local().format('DD MMM YYYY h:mm:ss A z');
+                    timestamp = node.innerHTML;
                     node.setAttribute('data-timestamp', timestamp);
                 }
-                node.innerHTML = `<abbr class='pretty-timestamp' title='${timestamp}'>${prettyTime(timestamp)}</abbr>`;
+                node.innerHTML = `<abbr class='pretty-timestamp' title='${localTime(timestamp)}'>${prettyTime(timestamp)}</abbr>`;
             }
         };
 
@@ -157,7 +158,7 @@
 
         setInterval(() => {
             $(".pretty-timestamp").map((_, tselem) => {
-                tselem.innerText = prettyTime(tselem.title);
+                tselem.innerText = prettyTime(tselem.parentElement.getAttribute("data-timestamp"));
             });
         }, 60 * 1000);
     </script>
