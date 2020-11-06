@@ -198,9 +198,9 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 23:52:26 UTC</span> | Last batch: <span class="timestamp">2020-11-06 23:49:59 UTC</span></p>
+            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 23:59:00 UTC</span> | Last batch: <span class="timestamp">2020-11-06 23:58:16 UTC</span></p>
             <div id="template-hash" style="display: none;">0d8c7797cdbd30055ee27ccb47706f50943a53ad9c37d5c20f5d0c58e4908d1c</div>
-            <div id="page-metadata" style="display: none;">{"template_hash": "0d8c7797cdbd30055ee27ccb47706f50943a53ad9c37d5c20f5d0c58e4908d1c", "results_hash": "c4feaf5302f924dd0ae27c8fef8d07254ed4fb8bd58de3fd5daa21f6aa53ac76", "states_updated": []}</div>
+            <div id="page-metadata" style="display: none;">{"template_hash": "0d8c7797cdbd30055ee27ccb47706f50943a53ad9c37d5c20f5d0c58e4908d1c", "results_hash": "43f69adefb09c5ca6ae74d3da549b7ff760a2e46cc3eb072510ada64597e8f95", "states_updated": ["Georgia"]}</div>
         </div>
         <div class="col-sm">
             <p class="float-right">
@@ -224,14 +224,14 @@
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     
@@ -280,14 +280,14 @@
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     
@@ -1127,20 +1127,40 @@
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 2,455,980 votes, Trump trails with 2,451,705 votes.
+                Total Votes: Biden leads with 2,456,005 votes, Trump trails with 2,451,732 votes.
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='georgia-2020-11-06T23:58:16.465000'>
+            <td class="timestamp">2020-11-06 23:58:16 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>4,273</td>
+            <td>Unknown</td>
+            <td>     53</td>
+    
+            <td>
+                Biden 48.1% /
+                51.9% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.7%
+            </td>
+        
+            <td class="hurdle">Unknown</td>
+        </tr>
     
 
         <tr id='georgia-2020-11-06T23:47:09.126000'>
@@ -4072,14 +4092,14 @@
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     
@@ -4459,14 +4479,14 @@
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     
@@ -4630,14 +4650,14 @@
             </td>
         </tr>
         <tr>
-            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
     
