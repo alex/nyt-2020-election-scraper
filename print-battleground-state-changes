@@ -10,24 +10,18 @@ from tabulate import tabulate
 
 AK_INDEX = 0
 AZ_INDEX = 3
-FL_INDEX = 9
 GA_INDEX = 10
-MI_INDEX = 22
 NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
-WI_INDEX = 48
 
 STATE_INDEXES = [
     AK_INDEX,
     AZ_INDEX,
-    FL_INDEX,
     GA_INDEX,
-    MI_INDEX,
     NC_INDEX,
     NV_INDEX,
     PA_INDEX,
-    WI_INDEX,
 ]
 
 
@@ -113,11 +107,15 @@ def string_summary(summary):
     ]
 
 def html_write_state_head(state: str):
+    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    id = state_slug + "_content"
+
     return f'''
-        <thead class="thead-light">
+        <thead class="thead-light" onclick="toggleVisible({id})">
         <tr>
             <th class="text-center" colspan="9">{state}</th>
         </tr>
+        <tbody id={id} style="display: block; width: 100%;">
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
@@ -283,6 +281,7 @@ for (state, timestamped_results) in summarized.items():
     html_chunks.append(html_write_state_head(state))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
+    html_chunks.append("</tbody>")
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
