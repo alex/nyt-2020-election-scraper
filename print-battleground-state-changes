@@ -112,6 +112,7 @@ IterationSummary = collections.namedtuple(
         'leading_candidate_votes',
         'trailing_candidate_votes',
         'vote_differential',
+        'differential_change',
         'votes_remaining',
         'new_votes',
         'leading_candidate_partition',
@@ -171,8 +172,9 @@ def html_write_state_head(state: str, summary: IterationSummary):
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="By how many votes did the differential change with this update?">Net Change</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Votes Reported</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
                 Block Breakdown
             </th>
@@ -193,6 +195,7 @@ def html_summary(summary: IterationSummary):
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
+            <td>{summary.differential_change:,}</td>
             <td>{summary.votes_remaining:,}</td>
             <td>{summary.new_votes:7,}</td>
     '''
@@ -249,6 +252,7 @@ def json_to_summary(
     candidate1_votes = candidate1['votes']
     candidate2_votes = candidate2['votes']
     vote_diff = candidate1_votes - candidate2_votes
+    diff_change = 0 if last_iteration_info.vote_diff is None else vote_diff - last_iteration_info.vote_diff
     votes = row.votes
     expected_votes = row.expected_votes
     votes_remaining = expected_votes - votes
@@ -279,6 +283,7 @@ def json_to_summary(
         candidate1_votes,
         candidate2_votes,
         vote_diff,
+        diff_change,
         votes_remaining,
         new_votes,
         1-repartition1 if new_votes else 0,
