@@ -29,25 +29,35 @@
         padding: .25rem .5rem;
     }
 
-    .table th.text-left {
+    thead td {
+      background-color: #e9ecef;
+      line-height: 1.2rem;
+    }
+
+    thead .text-left {
         font-weight: normal;
     }
 
-    .table th span.statename {
+    thead span.statename {
         font-weight: bold;
-        font-size: 14pt;
+        /* If changing these, update "thead tr:nth-child(2) th" too */
+        font-size: 1.2rem;
+        line-height: 1.2rem;
     }
 
-    thead tr:nth-child(1) th {
+    thead tr:nth-child(1) td {
         position: sticky;
         top: -1px;
+        border-bottom: none;
     }
 
     thead tr:nth-child(2) th {
         position: sticky;
-        top: calc(.25rem + 1.5rem + 2px);
+        /* Padding, first line, second line, padding */
+        top: calc(.25rem + 1.2rem + 1.2rem + .25rem);
         border-right: none;
         border-left: none;
+        border-top: none;
     }
 
     .has-tip:after{
@@ -58,7 +68,7 @@
     .flag-bg {
         background-position: fixed;
         background-repeat: no-repeat;
-        background-size: 100px;
+        background-size: auto 100%;
         background-position: 100%;
     }
 
@@ -78,7 +88,7 @@
             color: #dedad6;
             background-color: #202020;
         }
-        .table .thead-light th {
+        .table .thead-light th, .table .thead-light td {
             background-color: #495057;
             color: #e9ecef;
         }
@@ -94,6 +104,60 @@
     }
     </style>
     <title>Election 2020 Results</title>
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
+            integrity="sha384-cuApTuVdn64P5ZOzyf+qTgNxGwhvW/ZmdAbNMcl7Q3TkMKJ7/bERQ1cFDmZy7QvZ"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/utc.js"
+            integrity="sha384-r1JLNIu5SkAfQejSOJPjndnEZkxex5ChJOTaiQeN91L012sA1pyw0A/543Xq97wb"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"
+            integrity="sha384-ojZWhTxW4vjtUz9IjuxEgcPAQQkFj7jlcOnGFp8IyTUTQpFisDT5u8zFh2d0GrSM"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.extend(dayjs_plugin_utc)
+
+        const prettyTime = timestamp => dayjs.utc(timestamp.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+
+        const handleNode = node => {
+            if (node.classList && node.classList.contains('timestamp')) {
+                let timestamp;
+                if (node.hasAttribute('data-timestamp')) {
+                    timestamp = node.getAttribute('data-timestamp');
+                } else {
+                    timestamp = node.innerHTML;
+                    node.setAttribute('data-timestamp', timestamp);
+                }
+                node.innerHTML = `<abbr class='pretty-timestamp' title='${timestamp}'>${prettyTime(timestamp)}</abbr>`;
+            }
+        };
+
+        new MutationObserver(mutations => {
+            for (let i = 0, len = mutations.length; i < len; i++) {
+                let added = mutations[i].addedNodes;
+                for (let j = 0, node; (node = added[j]); j++) {
+                    if (node.tagName === 'td' || node.tagName === 'span') {
+                        handleNode(node);
+                    } else if (node.firstElementChild) {
+                        for (const child of node.querySelectorAll('td,span')) {
+                            handleNode(child);
+                        }
+                    }
+                }
+            }
+        }).observe(document, {
+            childList: true,
+            subtree: true,
+        });
+
+        setInterval(() => {
+            $(".pretty-timestamp").map((_, tselem) => {
+                tselem.innerText = prettyTime(tselem.title);
+            });
+        }, 60 * 1000);
+    </script>
 </head>
 
 <body>
@@ -104,7 +168,8 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 04:54:01 UTC</span> | Last batch: <span class="timestamp">2020-11-06 04:51:40 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 13:16:29 UTC</span> | Last batch: <span class="timestamp">2020-11-06 13:15:23 UTC</span></p>
+    <div id="template-hash" style="display: none;">6665d09af1baea596324f8795d0bab01025827cad512f049fdef9c9a7dc893c4</div>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -115,13 +180,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Alaska (EV: 3)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -130,8 +195,7 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
@@ -153,8 +217,7 @@
                 Biden is averaging 29.6%
             </td>
         
-            <td><abbr title="360/441">81.6%</abbr></td>
-            <td>Biden needs 63.24% [5.699%]</td>
+            <td>Biden needs 61.22% [5.837%]</td>
         </tr>
     
 
@@ -165,8 +228,7 @@
             <td>233,531</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="201/441">45.6%</abbr></td>
-            <td>Biden needs 57.55% [57.545%]</td>
+            <td>Biden needs 55.39% [55.387%]</td>
         </tr>
     
 </table><hr>
@@ -174,13 +236,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 1,529,109 votes, Trump trails with 1,482,442 votes.
-            </th>
+                Total Votes: Biden leads with 1,532,062 votes, Trump trails with 1,485,010 votes.
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -189,11 +251,30 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 05:33:02 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>47,052</td>
+            <td>309,034</td>
+            <td>  5,713</td>
+    
+            <td>
+                Biden 53.4% /
+                46.6% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 54.1%
+            </td>
+        
+            <td>Trump needs 56.90% [0.198%]</td>
+        </tr>
     
 
         <tr>
@@ -209,11 +290,10 @@
             </td>
         
             <td>
-                Trump is averaging 56.6%
+                Trump is averaging 56.1%
             </td>
         
-            <td><abbr title="1417/1489">95.2%</abbr></td>
-            <td>Trump needs 57.41% [0.093%]</td>
+            <td>Trump needs 56.71% [0.093%]</td>
         </tr>
     
 
@@ -233,8 +313,7 @@
                 Trump is averaging 57.0%
             </td>
         
-            <td><abbr title="1415/1489">95.0%</abbr></td>
-            <td>Trump needs 57.32% [0.058%]</td>
+            <td>Trump needs 56.61% [0.053%]</td>
         </tr>
     
 
@@ -246,11 +325,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Trump is averaging 51.8%
+                Trump is averaging 51.7%
             </td>
         
-            <td><abbr title="1386/1489">93.1%</abbr></td>
-            <td>Trump needs 57.26% [-0.293%]</td>
+            <td>Trump needs 56.56% [-0.293%]</td>
         </tr>
     
 
@@ -267,11 +345,10 @@
             </td>
         
             <td>
-                Trump is averaging 51.8%
+                Trump is averaging 51.7%
             </td>
         
-            <td><abbr title="1386/1489">93.1%</abbr></td>
-            <td>Trump needs 57.56% [-0.095%]</td>
+            <td>Trump needs 56.85% [-0.094%]</td>
         </tr>
     
 
@@ -291,8 +368,7 @@
                 Trump is averaging 50.2%
             </td>
         
-            <td><abbr title="1383/1489">92.9%</abbr></td>
-            <td>Trump needs 57.65% [0.220%]</td>
+            <td>Trump needs 56.95% [0.221%]</td>
         </tr>
     
 
@@ -309,11 +385,10 @@
             </td>
         
             <td>
-                Trump is averaging 53.5%
+                Trump is averaging 52.8%
             </td>
         
-            <td><abbr title="1380/1489">92.7%</abbr></td>
-            <td>Trump needs 57.43% [0.339%]</td>
+            <td>Trump needs 56.73% [0.332%]</td>
         </tr>
     
 
@@ -330,11 +405,10 @@
             </td>
         
             <td>
-                Trump is averaging 66.1%
+                Trump is averaging 66.2%
             </td>
         
-            <td><abbr title="1366/1489">91.7%</abbr></td>
-            <td>Trump needs 57.09% [-0.014%]</td>
+            <td>Trump needs 56.40% [-0.013%]</td>
         </tr>
     
 
@@ -351,11 +425,10 @@
             </td>
         
             <td>
-                Trump is averaging 61.1%
+                Trump is averaging 66.1%
             </td>
         
-            <td><abbr title="1362/1489">91.5%</abbr></td>
-            <td>Trump needs 57.11% [-0.190%]</td>
+            <td>Trump needs 56.41% [-0.192%]</td>
         </tr>
     
 
@@ -372,11 +445,10 @@
             </td>
         
             <td>
-                Trump is averaging 60.4%
+                Trump is averaging 63.7%
             </td>
         
-            <td><abbr title="1361/1489">91.4%</abbr></td>
-            <td>Trump needs 57.29% [-0.329%]</td>
+            <td>Trump needs 56.60% [-0.329%]</td>
         </tr>
     
 
@@ -393,11 +465,10 @@
             </td>
         
             <td>
-                Trump is averaging 59.0%
+                Trump is averaging 59.4%
             </td>
         
-            <td><abbr title="1359/1489">91.3%</abbr></td>
-            <td>Trump needs 57.62% [-0.098%]</td>
+            <td>Trump needs 56.93% [-0.098%]</td>
         </tr>
     
 
@@ -409,11 +480,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Trump is averaging 58.5%
+                Trump is averaging 58.4%
             </td>
         
-            <td><abbr title="1352/1489">90.8%</abbr></td>
-            <td>Trump needs 57.72% [0.172%]</td>
+            <td>Trump needs 57.03% [0.172%]</td>
         </tr>
     
 
@@ -430,11 +500,10 @@
             </td>
         
             <td>
-                Trump is averaging 58.5%
+                Trump is averaging 58.4%
             </td>
         
-            <td><abbr title="1352/1489">90.8%</abbr></td>
-            <td>Trump needs 57.55% [-0.005%]</td>
+            <td>Trump needs 56.86% [-0.005%]</td>
         </tr>
     
 
@@ -451,11 +520,10 @@
             </td>
         
             <td>
-                Trump is averaging 58.5%
+                Trump is averaging 58.3%
             </td>
         
-            <td><abbr title="1352/1489">90.8%</abbr></td>
-            <td>Trump needs 57.56% [-0.009%]</td>
+            <td>Trump needs 56.86% [-0.009%]</td>
         </tr>
     
 
@@ -472,11 +540,10 @@
             </td>
         
             <td>
-                Trump is averaging 58.5%
+                Trump is averaging 58.2%
             </td>
         
-            <td><abbr title="1351/1489">90.7%</abbr></td>
-            <td>Trump needs 57.56% [-0.027%]</td>
+            <td>Trump needs 56.87% [-0.027%]</td>
         </tr>
     
 
@@ -493,11 +560,10 @@
             </td>
         
             <td>
-                Trump is averaging 58.3%
+                Trump is averaging 57.8%
             </td>
         
-            <td><abbr title="1350/1489">90.7%</abbr></td>
-            <td>Trump needs 57.59% [0.053%]</td>
+            <td>Trump needs 56.90% [0.053%]</td>
         </tr>
     
 
@@ -512,8 +578,7 @@
                 Trump is averaging 58.7%
             </td>
         
-            <td><abbr title="1349/1489">90.6%</abbr></td>
-            <td>Trump needs 57.54% [0.000%]</td>
+            <td>Trump needs 56.84% [0.000%]</td>
         </tr>
     
 
@@ -533,8 +598,7 @@
                 Trump is averaging 58.7%
             </td>
         
-            <td><abbr title="1325/1489">89.0%</abbr></td>
-            <td>Trump needs 57.54% [-0.139%]</td>
+            <td>Trump needs 56.84% [-0.141%]</td>
         </tr>
     
 
@@ -549,8 +613,7 @@
                 Trump is averaging 59.0%
             </td>
         
-            <td><abbr title="1325/1489">89.0%</abbr></td>
-            <td>Trump needs 57.68% [0.096%]</td>
+            <td>Trump needs 56.99% [0.096%]</td>
         </tr>
     
 
@@ -565,8 +628,7 @@
                 Trump is averaging 59.0%
             </td>
         
-            <td><abbr title="1325/1489">89.0%</abbr></td>
-            <td>Trump needs 57.58% [-0.462%]</td>
+            <td>Trump needs 56.89% [-0.462%]</td>
         </tr>
     
 
@@ -586,8 +648,7 @@
                 Trump is averaging 59.0%
             </td>
         
-            <td><abbr title="1325/1489">89.0%</abbr></td>
-            <td>Trump needs 58.04% [-0.131%]</td>
+            <td>Trump needs 57.35% [-0.135%]</td>
         </tr>
     
 
@@ -604,11 +665,10 @@
             </td>
         
             <td>
-                Trump is averaging 64.2%
+                Trump is averaging 62.5%
             </td>
         
-            <td><abbr title="1296/1489">87.0%</abbr></td>
-            <td>Trump needs 58.18% [0.063%]</td>
+            <td>Trump needs 57.49% [0.062%]</td>
         </tr>
     
 
@@ -620,11 +680,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Trump is averaging 64.7%
+                Trump is averaging 64.9%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 58.11% [3.635%]</td>
+            <td>Trump needs 57.42% [3.635%]</td>
         </tr>
     
 
@@ -636,11 +695,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Trump is averaging 64.7%
+                Trump is averaging 64.9%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 54.48% [-4.394%]</td>
+            <td>Trump needs 53.79% [-4.394%]</td>
         </tr>
     
 
@@ -652,11 +710,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Trump is averaging 64.7%
+                Trump is averaging 64.9%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 58.87% [-3.065%]</td>
+            <td>Trump needs 58.18% [-3.065%]</td>
         </tr>
     
 
@@ -673,11 +730,10 @@
             </td>
         
             <td>
-                Trump is averaging 64.7%
+                Trump is averaging 64.9%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 61.94% [-0.040%]</td>
+            <td>Trump needs 61.25% [-0.040%]</td>
         </tr>
     
 
@@ -694,11 +750,10 @@
             </td>
         
             <td>
-                Trump is averaging 64.6%
+                Trump is averaging 64.5%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 61.98% [0.002%]</td>
+            <td>Trump needs 61.29% [0.001%]</td>
         </tr>
     
 
@@ -715,11 +770,10 @@
             </td>
         
             <td>
-                Trump is averaging 64.6%
+                Trump is averaging 64.5%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 61.97% [0.008%]</td>
+            <td>Trump needs 61.29% [0.008%]</td>
         </tr>
     
 
@@ -734,8 +788,7 @@
                 Trump is averaging 64.6%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 61.97% [0.178%]</td>
+            <td>Trump needs 61.28% [0.178%]</td>
         </tr>
     
 
@@ -755,8 +808,7 @@
                 Trump is averaging 64.6%
             </td>
         
-            <td><abbr title="1294/1489">86.9%</abbr></td>
-            <td>Trump needs 61.79% [-0.691%]</td>
+            <td>Trump needs 61.10% [-0.700%]</td>
         </tr>
     
 
@@ -767,8 +819,7 @@
             <td>523,515</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="1243/1489">83.5%</abbr></td>
-            <td>Trump needs 62.48% [62.480%]</td>
+            <td>Trump needs 61.80% [61.801%]</td>
         </tr>
     
 </table><hr>
@@ -776,13 +827,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 2,448,016 votes, Biden trails with 2,446,211 votes.
-            </th>
+                Total Votes: Biden leads with 2,449,582 votes, Trump trails with 2,448,485 votes.
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -791,11 +842,150 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 13:15:23 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>1,097</td>
+            <td>5,267</td>
+            <td>      1</td>
+    
+            <td>
+                Biden 100.0% /
+                 0.0% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.3%
+            </td>
+        
+            <td>Trump needs 59.79% [0.011%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 11:10:54 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>1,096</td>
+            <td>5,268</td>
+            <td>    241</td>
+    
+            <td>
+                Biden 87.1% /
+                12.9% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.3%
+            </td>
+        
+            <td>Trump needs 59.78% [2.080%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 09:50:07 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>917</td>
+            <td>5,509</td>
+            <td>  1,843</td>
+    
+            <td>
+                Biden 87.4% /
+                12.6% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.4%
+            </td>
+        
+            <td>Trump needs 57.70% [5.174%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 08:40:27 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>463</td>
+            <td>7,352</td>
+            <td>    306</td>
+    
+            <td>
+                Trump 17.0% /
+                83.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.9%
+            </td>
+        
+            <td>Biden needs 52.52% [-1.193%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 07:41:51 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>665</td>
+            <td>7,658</td>
+            <td>    816</td>
+    
+            <td>
+                Trump 13.1% /
+                86.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.9%
+            </td>
+        
+            <td>Biden needs 53.71% [-3.134%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 06:41:37 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>1,267</td>
+            <td>8,474</td>
+            <td>    541</td>
+    
+            <td>
+                Trump  9.1% /
+                90.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.6%
+            </td>
+        
+            <td>Biden needs 56.85% [-2.003%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 05:41:02 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>1,709</td>
+            <td>9,015</td>
+            <td>    144</td>
+    
+            <td>
+                Trump 16.7% /
+                83.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.3%
+            </td>
+        
+            <td>Biden needs 58.85% [-0.375%]</td>
+        </tr>
     
 
         <tr>
@@ -811,11 +1001,10 @@
             </td>
         
             <td>
-                Biden is averaging 67.6%
+                Biden is averaging 67.2%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 59.85% [1.429%]</td>
+            <td>Biden needs 59.23% [1.428%]</td>
         </tr>
     
 
@@ -832,11 +1021,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.5%
+                Biden is averaging 68.3%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.43% [-0.077%]</td>
+            <td>Biden needs 57.80% [-0.077%]</td>
         </tr>
     
 
@@ -853,11 +1041,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.5%
+                Biden is averaging 68.3%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.50% [-0.219%]</td>
+            <td>Biden needs 57.88% [-0.219%]</td>
         </tr>
     
 
@@ -874,11 +1061,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.5%
+                Biden is averaging 68.1%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.72% [-1.739%]</td>
+            <td>Biden needs 58.09% [-1.739%]</td>
         </tr>
     
 
@@ -895,11 +1081,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.1%
+                Biden is averaging 67.2%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 60.46% [-2.672%]</td>
+            <td>Biden needs 59.83% [-2.672%]</td>
         </tr>
     
 
@@ -911,11 +1096,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 63.13% [1.880%]</td>
+            <td>Biden needs 62.51% [1.880%]</td>
         </tr>
     
 
@@ -927,11 +1111,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 61.25% [-0.001%]</td>
+            <td>Biden needs 60.63% [-0.001%]</td>
         </tr>
     
 
@@ -943,11 +1126,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 61.25% [2.994%]</td>
+            <td>Biden needs 60.63% [2.994%]</td>
         </tr>
     
 
@@ -959,11 +1141,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.26% [-0.007%]</td>
+            <td>Biden needs 57.63% [-0.007%]</td>
         </tr>
     
 
@@ -975,11 +1156,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.27% [-1.175%]</td>
+            <td>Biden needs 57.64% [-1.175%]</td>
         </tr>
     
 
@@ -991,11 +1171,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 59.44% [1.815%]</td>
+            <td>Biden needs 58.81% [1.815%]</td>
         </tr>
     
 
@@ -1012,11 +1191,10 @@
             </td>
         
             <td>
-                Biden is averaging 65.2%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 57.63% [0.550%]</td>
+            <td>Biden needs 57.00% [0.550%]</td>
         </tr>
     
 
@@ -1033,11 +1211,10 @@
             </td>
         
             <td>
-                Biden is averaging 67.3%
+                Biden is averaging 67.1%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 57.08% [-3.874%]</td>
+            <td>Biden needs 56.45% [-3.875%]</td>
         </tr>
     
 
@@ -1054,11 +1231,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.7%
+                Biden is averaging 68.8%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 60.95% [-0.038%]</td>
+            <td>Biden needs 60.32% [-0.038%]</td>
         </tr>
     
 
@@ -1075,11 +1251,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.8%
+                Biden is averaging 68.9%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 60.99% [0.004%]</td>
+            <td>Biden needs 60.36% [0.004%]</td>
         </tr>
     
 
@@ -1096,11 +1271,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.8%
+                Biden is averaging 68.9%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 60.98% [0.072%]</td>
+            <td>Biden needs 60.36% [0.072%]</td>
         </tr>
     
 
@@ -1117,11 +1291,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.9%
+                Biden is averaging 69.1%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 60.91% [-1.874%]</td>
+            <td>Biden needs 60.29% [-1.875%]</td>
         </tr>
     
 
@@ -1138,11 +1311,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.1%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 62.79% [0.003%]</td>
+            <td>Biden needs 62.16% [0.003%]</td>
         </tr>
     
 
@@ -1159,11 +1331,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.1%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 62.78% [0.008%]</td>
+            <td>Biden needs 62.16% [0.008%]</td>
         </tr>
     
 
@@ -1180,11 +1351,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 62.77% [0.002%]</td>
+            <td>Biden needs 62.15% [0.002%]</td>
         </tr>
     
 
@@ -1196,11 +1366,10 @@
             <td>      3</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 62.77% [-0.002%]</td>
+            <td>Biden needs 62.15% [-0.002%]</td>
         </tr>
     
 
@@ -1212,11 +1381,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 62.78% [-2.159%]</td>
+            <td>Biden needs 62.15% [-2.159%]</td>
         </tr>
     
 
@@ -1233,11 +1401,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 69.4%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.93% [1.149%]</td>
+            <td>Biden needs 64.31% [1.149%]</td>
         </tr>
     
 
@@ -1254,11 +1421,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 69.5%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 63.79% [-0.674%]</td>
+            <td>Biden needs 63.16% [-0.674%]</td>
         </tr>
     
 
@@ -1270,11 +1436,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.46% [-9.274%]</td>
+            <td>Biden needs 63.83% [-9.274%]</td>
         </tr>
     
 
@@ -1286,11 +1451,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 73.73% [-1.308%]</td>
+            <td>Biden needs 73.11% [-1.308%]</td>
         </tr>
     
 
@@ -1302,11 +1466,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 75.04% [3.185%]</td>
+            <td>Biden needs 74.42% [3.185%]</td>
         </tr>
     
 
@@ -1323,11 +1486,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 71.86% [-3.366%]</td>
+            <td>Biden needs 71.23% [-3.366%]</td>
         </tr>
     
 
@@ -1339,11 +1501,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 75.22% [10.635%]</td>
+            <td>Biden needs 74.60% [10.635%]</td>
         </tr>
     
 
@@ -1360,11 +1521,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.59% [0.004%]</td>
+            <td>Biden needs 63.96% [0.005%]</td>
         </tr>
     
 
@@ -1381,11 +1541,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.58% [-0.251%]</td>
+            <td>Biden needs 63.96% [-0.251%]</td>
         </tr>
     
 
@@ -1402,11 +1561,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.2%
+                Biden is averaging 72.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.83% [0.001%]</td>
+            <td>Biden needs 64.21% [0.001%]</td>
         </tr>
     
 
@@ -1423,11 +1581,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.2%
+                Biden is averaging 72.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.83% [-0.040%]</td>
+            <td>Biden needs 64.21% [-0.040%]</td>
         </tr>
     
 
@@ -1444,11 +1601,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.3%
+                Biden is averaging 72.9%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.87% [0.008%]</td>
+            <td>Biden needs 64.25% [0.008%]</td>
         </tr>
     
 
@@ -1465,11 +1621,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.4%
+                Biden is averaging 73.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.86% [0.001%]</td>
+            <td>Biden needs 64.24% [0.001%]</td>
         </tr>
     
 
@@ -1486,11 +1641,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.4%
+                Biden is averaging 73.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.86% [-0.350%]</td>
+            <td>Biden needs 64.24% [-0.350%]</td>
         </tr>
     
 
@@ -1507,11 +1661,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.1%
+                Biden is averaging 72.8%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 65.21% [0.491%]</td>
+            <td>Biden needs 64.59% [0.491%]</td>
         </tr>
     
 
@@ -1528,11 +1681,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.2%
+                Biden is averaging 75.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.72% [-0.027%]</td>
+            <td>Biden needs 64.10% [-0.027%]</td>
         </tr>
     
 
@@ -1544,11 +1696,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 76.2%
+                Biden is averaging 75.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 64.75% [7.870%]</td>
+            <td>Biden needs 64.12% [7.870%]</td>
         </tr>
     
 
@@ -1565,11 +1716,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.2%
+                Biden is averaging 75.6%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 56.88% [-1.706%]</td>
+            <td>Biden needs 56.25% [-1.707%]</td>
         </tr>
     
 
@@ -1581,11 +1731,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 76.7%
+                Biden is averaging 76.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.59% [2.237%]</td>
+            <td>Biden needs 57.96% [2.237%]</td>
         </tr>
     
 
@@ -1602,11 +1751,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.7%
+                Biden is averaging 76.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 56.35% [0.001%]</td>
+            <td>Biden needs 55.72% [0.001%]</td>
         </tr>
     
 
@@ -1623,11 +1771,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.7%
+                Biden is averaging 76.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 56.35% [-0.101%]</td>
+            <td>Biden needs 55.72% [-0.100%]</td>
         </tr>
     
 
@@ -1639,11 +1786,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 77.0%
+                Biden is averaging 76.5%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 56.45% [0.607%]</td>
+            <td>Biden needs 55.82% [0.607%]</td>
         </tr>
     
 
@@ -1660,11 +1806,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.0%
+                Biden is averaging 76.5%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 55.84% [0.008%]</td>
+            <td>Biden needs 55.22% [0.008%]</td>
         </tr>
     
 
@@ -1681,11 +1826,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.2%
+                Biden is averaging 76.8%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 55.83% [0.001%]</td>
+            <td>Biden needs 55.21% [0.001%]</td>
         </tr>
     
 
@@ -1702,11 +1846,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.2%
+                Biden is averaging 76.8%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 55.83% [0.064%]</td>
+            <td>Biden needs 55.21% [0.064%]</td>
         </tr>
     
 
@@ -1723,11 +1866,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.4%
+                Biden is averaging 78.2%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 55.77% [-1.032%]</td>
+            <td>Biden needs 55.14% [-1.032%]</td>
         </tr>
     
 
@@ -1744,11 +1886,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.0%
+                Biden is averaging 77.7%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 56.80% [-1.089%]</td>
+            <td>Biden needs 56.18% [-1.090%]</td>
         </tr>
     
 
@@ -1765,11 +1906,10 @@
             </td>
         
             <td>
-                Biden is averaging 75.4%
+                Biden is averaging 75.5%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 57.89% [-0.598%]</td>
+            <td>Biden needs 57.27% [-0.598%]</td>
         </tr>
     
 
@@ -1781,11 +1921,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2643/2655">99.5%</abbr></td>
-            <td>Biden needs 58.49% [0.000%]</td>
+            <td>Biden needs 57.86% [0.000%]</td>
         </tr>
     
 
@@ -1797,11 +1936,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2605/2655">98.1%</abbr></td>
-            <td>Biden needs 58.49% [0.000%]</td>
+            <td>Biden needs 57.86% [0.000%]</td>
         </tr>
     
 
@@ -1813,11 +1951,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2575/2655">97.0%</abbr></td>
-            <td>Biden needs 58.49% [0.000%]</td>
+            <td>Biden needs 57.86% [0.000%]</td>
         </tr>
     
 
@@ -1829,11 +1966,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2572/2655">96.9%</abbr></td>
-            <td>Biden needs 58.49% [0.000%]</td>
+            <td>Biden needs 57.86% [0.000%]</td>
         </tr>
     
 
@@ -1845,11 +1981,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2557/2655">96.3%</abbr></td>
-            <td>Biden needs 58.49% [0.000%]</td>
+            <td>Biden needs 57.86% [0.000%]</td>
         </tr>
     
 
@@ -1866,11 +2001,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.7%
+                Biden is averaging 74.0%
             </td>
         
-            <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>Biden needs 58.49% [-0.268%]</td>
+            <td>Biden needs 57.86% [-0.268%]</td>
         </tr>
     
 
@@ -1887,11 +2021,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.2%
+                Biden is averaging 70.9%
             </td>
         
-            <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>Biden needs 58.75% [-0.724%]</td>
+            <td>Biden needs 58.13% [-0.724%]</td>
         </tr>
     
 
@@ -1908,11 +2041,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.1%
+                Biden is averaging 68.0%
             </td>
         
-            <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>Biden needs 59.48% [-0.079%]</td>
+            <td>Biden needs 58.86% [-0.079%]</td>
         </tr>
     
 
@@ -1929,11 +2061,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.1%
+                Biden is averaging 72.5%
             </td>
         
-            <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>Biden needs 59.56% [-0.584%]</td>
+            <td>Biden needs 58.93% [-0.584%]</td>
         </tr>
     
 
@@ -1950,11 +2081,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.4%
+                Biden is averaging 66.7%
             </td>
         
-            <td><abbr title="2555/2655">96.2%</abbr></td>
-            <td>Biden needs 60.14% [-0.165%]</td>
+            <td>Biden needs 59.52% [-0.165%]</td>
         </tr>
     
 
@@ -1971,11 +2101,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.0%
+                Biden is averaging 66.5%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 60.31% [1.749%]</td>
+            <td>Biden needs 59.68% [1.749%]</td>
         </tr>
     
 
@@ -1987,11 +2116,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 70.3%
+                Biden is averaging 67.1%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 58.56% [0.974%]</td>
+            <td>Biden needs 57.93% [0.974%]</td>
         </tr>
     
 
@@ -2008,11 +2136,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.3%
+                Biden is averaging 67.1%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 57.58% [-0.001%]</td>
+            <td>Biden needs 56.96% [-0.001%]</td>
         </tr>
     
 
@@ -2029,11 +2156,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.3%
+                Biden is averaging 67.1%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 57.58% [-0.717%]</td>
+            <td>Biden needs 56.96% [-0.720%]</td>
         </tr>
     
 
@@ -2050,11 +2176,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.0%
+                Biden is averaging 69.6%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 58.30% [0.017%]</td>
+            <td>Biden needs 57.68% [0.017%]</td>
         </tr>
     
 
@@ -2066,11 +2191,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 70.2%
+                Biden is averaging 69.9%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 58.28% [-0.142%]</td>
+            <td>Biden needs 57.66% [-0.142%]</td>
         </tr>
     
 
@@ -2087,11 +2211,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.2%
+                Biden is averaging 69.9%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 58.43% [-0.004%]</td>
+            <td>Biden needs 57.81% [-0.004%]</td>
         </tr>
     
 
@@ -2108,11 +2231,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.4%
+                Biden is averaging 70.2%
             </td>
         
-            <td><abbr title="2554/2655">96.2%</abbr></td>
-            <td>Biden needs 58.43% [-0.230%]</td>
+            <td>Biden needs 57.81% [-0.230%]</td>
         </tr>
     
 
@@ -2129,11 +2251,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.5%
+                Biden is averaging 69.3%
             </td>
         
-            <td><abbr title="2553/2655">96.2%</abbr></td>
-            <td>Biden needs 58.66% [0.328%]</td>
+            <td>Biden needs 58.04% [0.328%]</td>
         </tr>
     
 
@@ -2150,11 +2271,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.5%
+                Biden is averaging 74.4%
             </td>
         
-            <td><abbr title="2553/2655">96.2%</abbr></td>
-            <td>Biden needs 58.33% [-1.143%]</td>
+            <td>Biden needs 57.71% [-1.143%]</td>
         </tr>
     
 
@@ -2171,11 +2291,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.3%
+                Biden is averaging 66.5%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 59.47% [-1.793%]</td>
+            <td>Biden needs 58.86% [-1.793%]</td>
         </tr>
     
 
@@ -2187,11 +2306,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 66.3%
+                Biden is averaging 66.4%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 61.27% [-0.301%]</td>
+            <td>Biden needs 60.65% [-0.301%]</td>
         </tr>
     
 
@@ -2203,11 +2321,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 66.3%
+                Biden is averaging 66.4%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 61.57% [-4.703%]</td>
+            <td>Biden needs 60.95% [-4.703%]</td>
         </tr>
     
 
@@ -2224,11 +2341,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.3%
+                Biden is averaging 66.4%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 66.27% [0.011%]</td>
+            <td>Biden needs 65.65% [0.011%]</td>
         </tr>
     
 
@@ -2245,11 +2361,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.3%
+                Biden is averaging 66.4%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 66.26% [-0.223%]</td>
+            <td>Biden needs 65.64% [-0.223%]</td>
         </tr>
     
 
@@ -2266,11 +2381,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.9%
+                Biden is averaging 64.0%
             </td>
         
-            <td><abbr title="2540/2655">95.7%</abbr></td>
-            <td>Biden needs 66.48% [0.211%]</td>
+            <td>Biden needs 65.87% [0.210%]</td>
         </tr>
     
 
@@ -2287,11 +2401,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.5%
+                Biden is averaging 67.8%
             </td>
         
-            <td><abbr title="2515/2655">94.7%</abbr></td>
-            <td>Biden needs 66.27% [-0.084%]</td>
+            <td>Biden needs 65.66% [-0.084%]</td>
         </tr>
     
 
@@ -2308,11 +2421,10 @@
             </td>
         
             <td>
-                Biden is averaging 65.9%
+                Biden is averaging 66.7%
             </td>
         
-            <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>Biden needs 66.36% [0.000%]</td>
+            <td>Biden needs 65.74% [0.000%]</td>
         </tr>
     
 
@@ -2329,11 +2441,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.0%
+                Biden is averaging 66.7%
             </td>
         
-            <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>Biden needs 66.36% [0.118%]</td>
+            <td>Biden needs 65.74% [0.118%]</td>
         </tr>
     
 
@@ -2353,8 +2464,7 @@
                 Biden is averaging 66.8%
             </td>
         
-            <td><abbr title="2514/2655">94.7%</abbr></td>
-            <td>Biden needs 66.24% [0.212%]</td>
+            <td>Biden needs 65.62% [0.212%]</td>
         </tr>
     
 
@@ -2371,11 +2481,10 @@
             </td>
         
             <td>
-                Biden is averaging 67.3%
+                Biden is averaging 68.0%
             </td>
         
-            <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>Biden needs 66.03% [-0.929%]</td>
+            <td>Biden needs 65.41% [-0.929%]</td>
         </tr>
     
 
@@ -2392,11 +2501,10 @@
             </td>
         
             <td>
-                Biden is averaging 65.9%
+                Biden is averaging 65.6%
             </td>
         
-            <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>Biden needs 66.96% [0.062%]</td>
+            <td>Biden needs 66.34% [0.062%]</td>
         </tr>
     
 
@@ -2413,11 +2521,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.4%
+                Biden is averaging 66.3%
             </td>
         
-            <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>Biden needs 66.89% [-0.045%]</td>
+            <td>Biden needs 66.28% [-0.045%]</td>
         </tr>
     
 
@@ -2434,11 +2541,10 @@
             </td>
         
             <td>
-                Biden is averaging 65.1%
+                Biden is averaging 65.8%
             </td>
         
-            <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>Biden needs 66.94% [0.030%]</td>
+            <td>Biden needs 66.32% [0.030%]</td>
         </tr>
     
 
@@ -2455,11 +2561,10 @@
             </td>
         
             <td>
-                Biden is averaging 65.3%
+                Biden is averaging 65.8%
             </td>
         
-            <td><abbr title="2513/2655">94.7%</abbr></td>
-            <td>Biden needs 66.91% [0.606%]</td>
+            <td>Biden needs 66.29% [0.606%]</td>
         </tr>
     
 
@@ -2476,11 +2581,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.6%
+                Biden is averaging 75.5%
             </td>
         
-            <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>Biden needs 66.30% [0.002%]</td>
+            <td>Biden needs 65.69% [0.002%]</td>
         </tr>
     
 
@@ -2492,11 +2596,10 @@
             <td>      1</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 78.6%
+                Biden is averaging 75.5%
             </td>
         
-            <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>Biden needs 66.30% [-0.000%]</td>
+            <td>Biden needs 65.68% [-0.000%]</td>
         </tr>
     
 
@@ -2513,11 +2616,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.6%
+                Biden is averaging 75.5%
             </td>
         
-            <td><abbr title="2510/2655">94.5%</abbr></td>
-            <td>Biden needs 66.30% [0.105%]</td>
+            <td>Biden needs 65.68% [0.104%]</td>
         </tr>
     
 
@@ -2534,11 +2636,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.0%
+                Biden is averaging 79.8%
             </td>
         
-            <td><abbr title="2508/2655">94.5%</abbr></td>
-            <td>Biden needs 66.20% [-0.379%]</td>
+            <td>Biden needs 65.58% [-0.379%]</td>
         </tr>
     
 
@@ -2558,8 +2659,7 @@
                 Biden is averaging 80.7%
             </td>
         
-            <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>Biden needs 66.58% [0.104%]</td>
+            <td>Biden needs 65.96% [0.104%]</td>
         </tr>
     
 
@@ -2576,11 +2676,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.5%
+                Biden is averaging 81.9%
             </td>
         
-            <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>Biden needs 66.47% [0.005%]</td>
+            <td>Biden needs 65.85% [0.005%]</td>
         </tr>
     
 
@@ -2597,11 +2696,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.6%
+                Biden is averaging 82.0%
             </td>
         
-            <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>Biden needs 66.47% [0.014%]</td>
+            <td>Biden needs 65.85% [0.014%]</td>
         </tr>
     
 
@@ -2618,11 +2716,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.8%
+                Biden is averaging 82.2%
             </td>
         
-            <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>Biden needs 66.45% [0.055%]</td>
+            <td>Biden needs 65.84% [0.055%]</td>
         </tr>
     
 
@@ -2639,11 +2736,10 @@
             </td>
         
             <td>
-                Biden is averaging 82.5%
+                Biden is averaging 82.8%
             </td>
         
-            <td><abbr title="2506/2655">94.4%</abbr></td>
-            <td>Biden needs 66.40% [-0.290%]</td>
+            <td>Biden needs 65.78% [-0.291%]</td>
         </tr>
     
 
@@ -2663,8 +2759,7 @@
                 Biden is averaging 81.8%
             </td>
         
-            <td><abbr title="2504/2655">94.3%</abbr></td>
-            <td>Biden needs 66.69% [-0.144%]</td>
+            <td>Biden needs 66.07% [-0.144%]</td>
         </tr>
     
 
@@ -2684,8 +2779,7 @@
                 Biden is averaging 81.8%
             </td>
         
-            <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>Biden needs 66.83% [0.111%]</td>
+            <td>Biden needs 66.21% [0.110%]</td>
         </tr>
     
 
@@ -2705,8 +2799,7 @@
                 Biden is averaging 84.5%
             </td>
         
-            <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>Biden needs 66.72% [0.017%]</td>
+            <td>Biden needs 66.10% [0.017%]</td>
         </tr>
     
 
@@ -2726,8 +2819,7 @@
                 Biden is averaging 84.9%
             </td>
         
-            <td><abbr title="2503/2655">94.3%</abbr></td>
-            <td>Biden needs 66.70% [-1.386%]</td>
+            <td>Biden needs 66.09% [-1.385%]</td>
         </tr>
     
 
@@ -2747,8 +2839,7 @@
                 Biden is averaging 74.8%
             </td>
         
-            <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>Biden needs 68.09% [-0.104%]</td>
+            <td>Biden needs 67.47% [-0.104%]</td>
         </tr>
     
 
@@ -2768,8 +2859,7 @@
                 Biden is averaging 62.1%
             </td>
         
-            <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>Biden needs 68.19% [0.017%]</td>
+            <td>Biden needs 67.58% [0.017%]</td>
         </tr>
     
 
@@ -2789,8 +2879,7 @@
                 Biden is averaging 84.6%
             </td>
         
-            <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>Biden needs 68.18% [-0.005%]</td>
+            <td>Biden needs 67.56% [-0.005%]</td>
         </tr>
     
 
@@ -2801,8 +2890,7 @@
             <td>285,344</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="2493/2655">93.9%</abbr></td>
-            <td>Biden needs 68.18% [68.182%]</td>
+            <td>Biden needs 67.56% [67.563%]</td>
         </tr>
     
 </table><hr>
@@ -2810,13 +2898,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">North Carolina (EV: 15)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2825,8 +2913,7 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
@@ -2848,8 +2935,7 @@
                 Biden is averaging 50.0%
             </td>
         
-            <td><abbr title="2425/2662">91.1%</abbr></td>
-            <td>Biden needs 70.13% [0.233%]</td>
+            <td>Biden needs 69.45% [0.213%]</td>
         </tr>
     
 
@@ -2869,8 +2955,7 @@
                 Biden is averaging 50.0%
             </td>
         
-            <td><abbr title="2424/2662">91.1%</abbr></td>
-            <td>Biden needs 69.90% [0.203%]</td>
+            <td>Biden needs 69.24% [0.185%]</td>
         </tr>
     
 
@@ -2885,8 +2970,7 @@
                 Biden is averaging 50.0%
             </td>
         
-            <td><abbr title="2423/2662">91.0%</abbr></td>
-            <td>Biden needs 69.69% [-0.087%]</td>
+            <td>Biden needs 69.05% [-0.087%]</td>
         </tr>
     
 
@@ -2906,8 +2990,7 @@
                 Biden is averaging 50.0%
             </td>
         
-            <td><abbr title="2423/2662">91.0%</abbr></td>
-            <td>Biden needs 69.78% [0.022%]</td>
+            <td>Biden needs 69.14% [0.020%]</td>
         </tr>
     
 
@@ -2918,8 +3001,7 @@
             <td>194,204</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="2423/2662">91.0%</abbr></td>
-            <td>Biden needs 69.76% [69.757%]</td>
+            <td>Biden needs 69.12% [69.117%]</td>
         </tr>
     
 </table><hr>
@@ -2927,13 +3009,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Nevada (EV: 6)</span>
                 </span>
                 <br>
                 Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2942,8 +3024,7 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
@@ -2965,8 +3046,7 @@
                 Trump is averaging 43.6%
             </td>
         
-            <td><abbr title="1764/1993">88.5%</abbr></td>
-            <td>Trump needs 53.90% [0.592%]</td>
+            <td>Trump needs 52.86% [0.591%]</td>
         </tr>
     
 
@@ -2986,8 +3066,7 @@
                 Trump is averaging 43.6%
             </td>
         
-            <td><abbr title="1619/1993">81.2%</abbr></td>
-            <td>Trump needs 53.30% [-0.083%]</td>
+            <td>Trump needs 52.27% [-0.069%]</td>
         </tr>
     
 
@@ -3007,8 +3086,7 @@
                 Trump is averaging 42.7%
             </td>
         
-            <td><abbr title="1614/1993">81.0%</abbr></td>
-            <td>Trump needs 53.39% [0.311%]</td>
+            <td>Trump needs 52.34% [0.284%]</td>
         </tr>
     
 
@@ -3028,8 +3106,7 @@
                 Trump is averaging 38.3%
             </td>
         
-            <td><abbr title="1614/1993">81.0%</abbr></td>
-            <td>Trump needs 53.08% [-0.073%]</td>
+            <td>Trump needs 52.06% [-0.076%]</td>
         </tr>
     
 
@@ -3049,8 +3126,7 @@
                 Trump is averaging 36.4%
             </td>
         
-            <td><abbr title="1610/1993">80.8%</abbr></td>
-            <td>Trump needs 53.15% [-0.050%]</td>
+            <td>Trump needs 52.13% [-0.051%]</td>
         </tr>
     
 
@@ -3065,8 +3141,7 @@
                 Trump is averaging 34.6%
             </td>
         
-            <td><abbr title="1610/1993">80.8%</abbr></td>
-            <td>Trump needs 53.20% [0.000%]</td>
+            <td>Trump needs 52.18% [0.000%]</td>
         </tr>
     
 
@@ -3086,8 +3161,7 @@
                 Trump is averaging 34.6%
             </td>
         
-            <td><abbr title="1729/1993">86.8%</abbr></td>
-            <td>Trump needs 53.20% [1.311%]</td>
+            <td>Trump needs 52.18% [1.303%]</td>
         </tr>
     
 
@@ -3098,8 +3172,7 @@
             <td>202,446</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="1610/1993">80.8%</abbr></td>
-            <td>Trump needs 51.89% [0.001%]</td>
+            <td>Trump needs 50.88% [0.001%]</td>
         </tr>
     
 
@@ -3110,8 +3183,7 @@
             <td>202,563</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="1610/1993">80.8%</abbr></td>
-            <td>Trump needs 51.89% [51.888%]</td>
+            <td>Trump needs 50.88% [50.879%]</td>
         </tr>
     
 </table><hr>
@@ -3119,13 +3191,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
-                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+            <td class="text-left flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
+                <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 3,283,390 votes, Biden trails with 3,259,437 votes.
-            </th>
+                Total Votes: Trump leads with 3,285,957 votes, Biden trails with 3,267,908 votes.
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -3134,11 +3206,120 @@
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 13:15:23 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>18,049</td>
+            <td>176,455</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 80.0%
+            </td>
+        
+            <td>Biden needs 54.47% [0.760%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 12:55:44 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>18,049</td>
+            <td>207,247</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 80.0%
+            </td>
+        
+            <td>Biden needs 53.71% [1.027%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 12:48:04 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>18,049</td>
+            <td>271,216</td>
+            <td>     27</td>
+    
+            <td>
+                Trump 53.7% /
+                46.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 80.0%
+            </td>
+        
+            <td>Biden needs 52.69% [0.054%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 12:23:27 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>18,047</td>
+            <td>275,628</td>
+            <td>   -280</td>
+    
+            <td>
+                Trump 82.5% /
+                17.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 80.7%
+            </td>
+        
+            <td>Biden needs 52.63% [-0.036%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 06:30:57 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>18,229</td>
+            <td>275,348</td>
+            <td>  5,878</td>
+    
+            <td>
+                Trump 13.0% /
+                87.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 80.0%
+            </td>
+        
+            <td>Biden needs 52.67% [-0.704%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 05:05:06 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>22,576</td>
+            <td>281,226</td>
+            <td>  5,549</td>
+    
+            <td>
+                Trump 37.6% /
+                62.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 78.6%
+            </td>
+        
+            <td>Biden needs 53.37% [-0.162%]</td>
+        </tr>
     
 
         <tr>
@@ -3154,11 +3335,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.9%
+                Biden is averaging 80.7%
             </td>
         
-            <td><abbr title="8372/9128">91.7%</abbr></td>
-            <td>Biden needs 54.18% [-0.074%]</td>
+            <td>Biden needs 53.53% [-0.074%]</td>
         </tr>
     
 
@@ -3175,11 +3355,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.1%
+                Biden is averaging 80.7%
             </td>
         
-            <td><abbr title="8371/9128">91.7%</abbr></td>
-            <td>Biden needs 54.25% [-0.258%]</td>
+            <td>Biden needs 53.61% [-0.258%]</td>
         </tr>
     
 
@@ -3196,11 +3375,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.5%
+                Biden is averaging 80.5%
             </td>
         
-            <td><abbr title="8366/9128">91.7%</abbr></td>
-            <td>Biden needs 54.51% [-1.471%]</td>
+            <td>Biden needs 53.87% [-1.471%]</td>
         </tr>
     
 
@@ -3217,11 +3395,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.4%
+                Biden is averaging 73.7%
             </td>
         
-            <td><abbr title="8338/9128">91.3%</abbr></td>
-            <td>Biden needs 55.98% [-0.601%]</td>
+            <td>Biden needs 55.34% [-0.601%]</td>
         </tr>
     
 
@@ -3238,11 +3415,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.7%
+                Biden is averaging 70.6%
             </td>
         
-            <td><abbr title="8328/9128">91.2%</abbr></td>
-            <td>Biden needs 56.58% [-0.082%]</td>
+            <td>Biden needs 55.94% [-0.082%]</td>
         </tr>
     
 
@@ -3259,11 +3435,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.0%
+                Biden is averaging 71.3%
             </td>
         
-            <td><abbr title="8326/9128">91.2%</abbr></td>
-            <td>Biden needs 56.66% [-0.708%]</td>
+            <td>Biden needs 56.02% [-0.708%]</td>
         </tr>
     
 
@@ -3280,11 +3455,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.6%
+                Biden is averaging 72.3%
             </td>
         
-            <td><abbr title="8316/9128">91.1%</abbr></td>
-            <td>Biden needs 57.37% [-0.182%]</td>
+            <td>Biden needs 56.73% [-0.182%]</td>
         </tr>
     
 
@@ -3301,11 +3475,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.4%
+                Biden is averaging 71.5%
             </td>
         
-            <td><abbr title="8309/9128">91.0%</abbr></td>
-            <td>Biden needs 57.55% [-0.207%]</td>
+            <td>Biden needs 56.91% [-0.207%]</td>
         </tr>
     
 
@@ -3317,11 +3490,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 77.6%
+                Biden is averaging 75.3%
             </td>
         
-            <td><abbr title="8298/9128">90.9%</abbr></td>
-            <td>Biden needs 57.76% [0.112%]</td>
+            <td>Biden needs 57.12% [0.112%]</td>
         </tr>
     
 
@@ -3338,11 +3510,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.6%
+                Biden is averaging 75.3%
             </td>
         
-            <td><abbr title="8298/9128">90.9%</abbr></td>
-            <td>Biden needs 57.65% [-0.494%]</td>
+            <td>Biden needs 57.01% [-0.494%]</td>
         </tr>
     
 
@@ -3359,11 +3530,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.0%
+                Biden is averaging 77.4%
             </td>
         
-            <td><abbr title="8298/9128">90.9%</abbr></td>
-            <td>Biden needs 58.14% [-0.248%]</td>
+            <td>Biden needs 57.50% [-0.248%]</td>
         </tr>
     
 
@@ -3380,11 +3550,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.4%
+                Biden is averaging 77.0%
             </td>
         
-            <td><abbr title="8293/9128">90.9%</abbr></td>
-            <td>Biden needs 58.39% [-0.200%]</td>
+            <td>Biden needs 57.75% [-0.201%]</td>
         </tr>
     
 
@@ -3401,11 +3570,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.1%
+                Biden is averaging 77.8%
             </td>
         
-            <td><abbr title="8287/9128">90.8%</abbr></td>
-            <td>Biden needs 58.59% [-0.051%]</td>
+            <td>Biden needs 57.95% [-0.051%]</td>
         </tr>
     
 
@@ -3422,11 +3590,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.0%
+                Biden is averaging 77.4%
             </td>
         
-            <td><abbr title="8286/9128">90.8%</abbr></td>
-            <td>Biden needs 58.64% [0.017%]</td>
+            <td>Biden needs 58.00% [0.013%]</td>
         </tr>
     
 
@@ -3443,11 +3610,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.2%
+                Biden is averaging 77.7%
             </td>
         
-            <td><abbr title="8284/9128">90.8%</abbr></td>
-            <td>Biden needs 58.62% [-0.938%]</td>
+            <td>Biden needs 57.99% [-0.938%]</td>
         </tr>
     
 
@@ -3464,11 +3630,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.0%
+                Biden is averaging 68.9%
             </td>
         
-            <td><abbr title="8258/9128">90.5%</abbr></td>
-            <td>Biden needs 59.56% [0.011%]</td>
+            <td>Biden needs 58.92% [0.011%]</td>
         </tr>
     
 
@@ -3485,11 +3650,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.2%
+                Biden is averaging 69.1%
             </td>
         
-            <td><abbr title="8258/9128">90.5%</abbr></td>
-            <td>Biden needs 59.55% [-0.125%]</td>
+            <td>Biden needs 58.91% [-0.122%]</td>
         </tr>
     
 
@@ -3506,11 +3670,10 @@
             </td>
         
             <td>
-                Biden is averaging 67.9%
+                Biden is averaging 68.5%
             </td>
         
-            <td><abbr title="8254/9128">90.4%</abbr></td>
-            <td>Biden needs 59.68% [-0.258%]</td>
+            <td>Biden needs 59.04% [-0.258%]</td>
         </tr>
     
 
@@ -3527,11 +3690,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.2%
+                Biden is averaging 66.1%
             </td>
         
-            <td><abbr title="8230/9128">90.2%</abbr></td>
-            <td>Biden needs 59.94% [0.010%]</td>
+            <td>Biden needs 59.29% [0.007%]</td>
         </tr>
     
 
@@ -3551,8 +3713,7 @@
                 Biden is averaging 66.3%
             </td>
         
-            <td><abbr title="8229/9128">90.2%</abbr></td>
-            <td>Biden needs 59.92% [-0.534%]</td>
+            <td>Biden needs 59.29% [-0.534%]</td>
         </tr>
     
 
@@ -3569,11 +3730,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.5%
+                Biden is averaging 69.9%
             </td>
         
-            <td><abbr title="8196/9128">89.8%</abbr></td>
-            <td>Biden needs 60.46% [-0.027%]</td>
+            <td>Biden needs 59.82% [-0.027%]</td>
         </tr>
     
 
@@ -3590,11 +3750,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.7%
+                Biden is averaging 70.5%
             </td>
         
-            <td><abbr title="8195/9128">89.8%</abbr></td>
-            <td>Biden needs 60.49% [0.000%]</td>
+            <td>Biden needs 59.85% [0.000%]</td>
         </tr>
     
 
@@ -3611,11 +3770,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.7%
+                Biden is averaging 70.5%
             </td>
         
-            <td><abbr title="8195/9128">89.8%</abbr></td>
-            <td>Biden needs 60.49% [-0.247%]</td>
+            <td>Biden needs 59.85% [-0.246%]</td>
         </tr>
     
 
@@ -3632,11 +3790,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.7%
+                Biden is averaging 71.7%
             </td>
         
-            <td><abbr title="8186/9128">89.7%</abbr></td>
-            <td>Biden needs 60.73% [-0.014%]</td>
+            <td>Biden needs 60.09% [-0.014%]</td>
         </tr>
     
 
@@ -3653,11 +3810,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.7%
+                Biden is averaging 71.9%
             </td>
         
-            <td><abbr title="8177/9128">89.6%</abbr></td>
-            <td>Biden needs 60.75% [-0.032%]</td>
+            <td>Biden needs 60.11% [-0.032%]</td>
         </tr>
     
 
@@ -3674,11 +3830,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.9%
+                Biden is averaging 72.0%
             </td>
         
-            <td><abbr title="8175/9128">89.6%</abbr></td>
-            <td>Biden needs 60.78% [0.003%]</td>
+            <td>Biden needs 60.14% [0.003%]</td>
         </tr>
     
 
@@ -3693,8 +3848,7 @@
                 Biden is averaging 72.0%
             </td>
         
-            <td><abbr title="8175/9128">89.6%</abbr></td>
-            <td>Biden needs 60.78% [0.562%]</td>
+            <td>Biden needs 60.14% [0.562%]</td>
         </tr>
     
 
@@ -3714,8 +3868,7 @@
                 Biden is averaging 72.0%
             </td>
         
-            <td><abbr title="8175/9128">89.6%</abbr></td>
-            <td>Biden needs 60.21% [-0.636%]</td>
+            <td>Biden needs 59.57% [-0.636%]</td>
         </tr>
     
 
@@ -3732,11 +3885,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.5%
+                Biden is averaging 65.5%
             </td>
         
-            <td><abbr title="8168/9128">89.5%</abbr></td>
-            <td>Biden needs 60.85% [-0.042%]</td>
+            <td>Biden needs 60.21% [-0.041%]</td>
         </tr>
     
 
@@ -3753,11 +3905,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.0%
+                Biden is averaging 68.3%
             </td>
         
-            <td><abbr title="8160/9128">89.4%</abbr></td>
-            <td>Biden needs 60.89% [-0.003%]</td>
+            <td>Biden needs 60.25% [-0.003%]</td>
         </tr>
     
 
@@ -3774,11 +3925,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.3%
+                Biden is averaging 69.0%
             </td>
         
-            <td><abbr title="8159/9128">89.4%</abbr></td>
-            <td>Biden needs 60.89% [0.002%]</td>
+            <td>Biden needs 60.25% [0.002%]</td>
         </tr>
     
 
@@ -3795,11 +3945,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.3%
+                Biden is averaging 69.0%
             </td>
         
-            <td><abbr title="8159/9128">89.4%</abbr></td>
-            <td>Biden needs 60.89% [0.066%]</td>
+            <td>Biden needs 60.25% [0.062%]</td>
         </tr>
     
 
@@ -3816,11 +3965,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.4%
+                Biden is averaging 73.3%
             </td>
         
-            <td><abbr title="8155/9128">89.3%</abbr></td>
-            <td>Biden needs 60.83% [-0.025%]</td>
+            <td>Biden needs 60.19% [-0.025%]</td>
         </tr>
     
 
@@ -3837,11 +3985,10 @@
             </td>
         
             <td>
-                Biden is averaging 79.6%
+                Biden is averaging 76.3%
             </td>
         
-            <td><abbr title="8153/9128">89.3%</abbr></td>
-            <td>Biden needs 60.85% [-0.068%]</td>
+            <td>Biden needs 60.22% [-0.068%]</td>
         </tr>
     
 
@@ -3853,11 +4000,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 80.9%
+                Biden is averaging 79.4%
             </td>
         
-            <td><abbr title="8147/9128">89.3%</abbr></td>
-            <td>Biden needs 60.92% [-0.008%]</td>
+            <td>Biden needs 60.28% [-0.008%]</td>
         </tr>
     
 
@@ -3874,11 +4020,10 @@
             </td>
         
             <td>
-                Biden is averaging 80.9%
+                Biden is averaging 79.4%
             </td>
         
-            <td><abbr title="8147/9128">89.3%</abbr></td>
-            <td>Biden needs 60.93% [-0.161%]</td>
+            <td>Biden needs 60.29% [-0.161%]</td>
         </tr>
     
 
@@ -3895,11 +4040,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.4%
+                Biden is averaging 81.1%
             </td>
         
-            <td><abbr title="8147/9128">89.3%</abbr></td>
-            <td>Biden needs 61.09% [0.021%]</td>
+            <td>Biden needs 60.45% [0.021%]</td>
         </tr>
     
 
@@ -3919,8 +4063,7 @@
                 Biden is averaging 83.3%
             </td>
         
-            <td><abbr title="8144/9128">89.2%</abbr></td>
-            <td>Biden needs 61.07% [-0.005%]</td>
+            <td>Biden needs 60.43% [-0.004%]</td>
         </tr>
     
 
@@ -3937,11 +4080,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.6%
+                Biden is averaging 84.7%
             </td>
         
-            <td><abbr title="8139/9128">89.2%</abbr></td>
-            <td>Biden needs 61.07% [-0.047%]</td>
+            <td>Biden needs 60.44% [-0.046%]</td>
         </tr>
     
 
@@ -3958,11 +4100,10 @@
             </td>
         
             <td>
-                Biden is averaging 82.5%
+                Biden is averaging 85.2%
             </td>
         
-            <td><abbr title="8135/9128">89.1%</abbr></td>
-            <td>Biden needs 61.12% [-0.359%]</td>
+            <td>Biden needs 60.48% [-0.359%]</td>
         </tr>
     
 
@@ -3979,11 +4120,10 @@
             </td>
         
             <td>
-                Biden is averaging 82.1%
+                Biden is averaging 82.6%
             </td>
         
-            <td><abbr title="8126/9128">89.0%</abbr></td>
-            <td>Biden needs 61.48% [0.001%]</td>
+            <td>Biden needs 60.84% [0.002%]</td>
         </tr>
     
 
@@ -4000,11 +4140,10 @@
             </td>
         
             <td>
-                Biden is averaging 82.1%
+                Biden is averaging 82.6%
             </td>
         
-            <td><abbr title="8126/9128">89.0%</abbr></td>
-            <td>Biden needs 61.48% [-0.712%]</td>
+            <td>Biden needs 60.84% [-0.712%]</td>
         </tr>
     
 
@@ -4021,11 +4160,10 @@
             </td>
         
             <td>
-                Biden is averaging 80.8%
+                Biden is averaging 78.8%
             </td>
         
-            <td><abbr title="8098/9128">88.7%</abbr></td>
-            <td>Biden needs 62.19% [-0.175%]</td>
+            <td>Biden needs 61.55% [-0.168%]</td>
         </tr>
     
 
@@ -4042,11 +4180,10 @@
             </td>
         
             <td>
-                Biden is averaging 80.6%
+                Biden is averaging 78.8%
             </td>
         
-            <td><abbr title="8095/9128">88.7%</abbr></td>
-            <td>Biden needs 62.36% [-0.002%]</td>
+            <td>Biden needs 61.72% [-0.002%]</td>
         </tr>
     
 
@@ -4063,11 +4200,10 @@
             </td>
         
             <td>
-                Biden is averaging 80.6%
+                Biden is averaging 78.8%
             </td>
         
-            <td><abbr title="8095/9128">88.7%</abbr></td>
-            <td>Biden needs 62.37% [0.014%]</td>
+            <td>Biden needs 61.72% [0.014%]</td>
         </tr>
     
 
@@ -4084,11 +4220,10 @@
             </td>
         
             <td>
-                Biden is averaging 80.9%
+                Biden is averaging 79.5%
             </td>
         
-            <td><abbr title="8095/9128">88.7%</abbr></td>
-            <td>Biden needs 62.35% [-0.002%]</td>
+            <td>Biden needs 61.71% [-0.002%]</td>
         </tr>
     
 
@@ -4100,11 +4235,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 81.0%
+                Biden is averaging 79.5%
             </td>
         
-            <td><abbr title="8095/9128">88.7%</abbr></td>
-            <td>Biden needs 62.36% [0.822%]</td>
+            <td>Biden needs 61.71% [0.822%]</td>
         </tr>
     
 
@@ -4121,11 +4255,10 @@
             </td>
         
             <td>
-                Biden is averaging 81.0%
+                Biden is averaging 79.5%
             </td>
         
-            <td><abbr title="8095/9128">88.7%</abbr></td>
-            <td>Biden needs 61.53% [-0.299%]</td>
+            <td>Biden needs 60.89% [-0.305%]</td>
         </tr>
     
 
@@ -4140,8 +4273,7 @@
                 Biden is averaging 83.6%
             </td>
         
-            <td><abbr title="8084/9128">88.6%</abbr></td>
-            <td>Biden needs 61.83% [1.401%]</td>
+            <td>Biden needs 61.19% [1.401%]</td>
         </tr>
     
 
@@ -4161,8 +4293,7 @@
                 Biden is averaging 83.6%
             </td>
         
-            <td><abbr title="8084/9128">88.6%</abbr></td>
-            <td>Biden needs 60.43% [-1.058%]</td>
+            <td>Biden needs 59.79% [-1.058%]</td>
         </tr>
     
 
@@ -4182,8 +4313,7 @@
                 Biden is averaging 73.7%
             </td>
         
-            <td><abbr title="8031/9128">88.0%</abbr></td>
-            <td>Biden needs 61.49% [-0.626%]</td>
+            <td>Biden needs 60.85% [-0.632%]</td>
         </tr>
     
 
@@ -4200,11 +4330,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.1%
+                Biden is averaging 70.2%
             </td>
         
-            <td><abbr title="8000/9128">87.6%</abbr></td>
-            <td>Biden needs 62.12% [0.033%]</td>
+            <td>Biden needs 61.48% [0.033%]</td>
         </tr>
     
 
@@ -4221,11 +4350,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.2%
+                Biden is averaging 71.3%
             </td>
         
-            <td><abbr title="7998/9128">87.6%</abbr></td>
-            <td>Biden needs 62.08% [-0.029%]</td>
+            <td>Biden needs 61.45% [-0.026%]</td>
         </tr>
     
 
@@ -4242,11 +4370,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.9%
+                Biden is averaging 72.1%
             </td>
         
-            <td><abbr title="7990/9128">87.5%</abbr></td>
-            <td>Biden needs 62.11% [-0.082%]</td>
+            <td>Biden needs 61.47% [-0.082%]</td>
         </tr>
     
 
@@ -4263,11 +4390,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.3%
+                Biden is averaging 71.4%
             </td>
         
-            <td><abbr title="7982/9128">87.4%</abbr></td>
-            <td>Biden needs 62.19% [-0.113%]</td>
+            <td>Biden needs 61.56% [-0.113%]</td>
         </tr>
     
 
@@ -4284,11 +4410,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.4%
+                Biden is averaging 72.7%
             </td>
         
-            <td><abbr title="7973/9128">87.3%</abbr></td>
-            <td>Biden needs 62.31% [-0.069%]</td>
+            <td>Biden needs 61.67% [-0.062%]</td>
         </tr>
     
 
@@ -4305,11 +4430,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.5%
+                Biden is averaging 71.1%
             </td>
         
-            <td><abbr title="7972/9128">87.3%</abbr></td>
-            <td>Biden needs 62.38% [0.007%]</td>
+            <td>Biden needs 61.73% [0.004%]</td>
         </tr>
     
 
@@ -4326,11 +4450,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.7%
+                Biden is averaging 71.4%
             </td>
         
-            <td><abbr title="7971/9128">87.3%</abbr></td>
-            <td>Biden needs 62.37% [-0.079%]</td>
+            <td>Biden needs 61.73% [-0.081%]</td>
         </tr>
     
 
@@ -4347,11 +4470,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.9%
+                Biden is averaging 70.9%
             </td>
         
-            <td><abbr title="7958/9128">87.2%</abbr></td>
-            <td>Biden needs 62.45% [-0.111%]</td>
+            <td>Biden needs 61.81% [-0.111%]</td>
         </tr>
     
 
@@ -4366,8 +4488,7 @@
                 Biden is averaging 69.6%
             </td>
         
-            <td><abbr title="7948/9128">87.1%</abbr></td>
-            <td>Biden needs 62.56% [-0.013%]</td>
+            <td>Biden needs 61.92% [-0.013%]</td>
         </tr>
     
 
@@ -4387,8 +4508,7 @@
                 Biden is averaging 69.6%
             </td>
         
-            <td><abbr title="7948/9128">87.1%</abbr></td>
-            <td>Biden needs 62.57% [-0.120%]</td>
+            <td>Biden needs 61.93% [-0.120%]</td>
         </tr>
     
 
@@ -4405,11 +4525,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.5%
+                Biden is averaging 68.0%
             </td>
         
-            <td><abbr title="7938/9128">87.0%</abbr></td>
-            <td>Biden needs 62.69% [-0.002%]</td>
+            <td>Biden needs 62.05% [-0.002%]</td>
         </tr>
     
 
@@ -4426,11 +4545,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.5%
+                Biden is averaging 68.0%
             </td>
         
-            <td><abbr title="7937/9128">87.0%</abbr></td>
-            <td>Biden needs 62.69% [-0.135%]</td>
+            <td>Biden needs 62.06% [-0.132%]</td>
         </tr>
     
 
@@ -4450,8 +4568,7 @@
                 Biden is averaging 71.6%
             </td>
         
-            <td><abbr title="7904/9128">86.6%</abbr></td>
-            <td>Biden needs 62.83% [-0.754%]</td>
+            <td>Biden needs 62.19% [-0.759%]</td>
         </tr>
     
 
@@ -4468,11 +4585,10 @@
             </td>
         
             <td>
-                Biden is averaging 75.1%
+                Biden is averaging 75.5%
             </td>
         
-            <td><abbr title="7818/9128">85.6%</abbr></td>
-            <td>Biden needs 63.58% [-0.265%]</td>
+            <td>Biden needs 62.95% [-0.265%]</td>
         </tr>
     
 
@@ -4489,11 +4605,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.6%
+                Biden is averaging 67.8%
             </td>
         
-            <td><abbr title="7805/9128">85.5%</abbr></td>
-            <td>Biden needs 63.85% [-0.229%]</td>
+            <td>Biden needs 63.21% [-0.227%]</td>
         </tr>
     
 
@@ -4510,11 +4625,10 @@
             </td>
         
             <td>
-                Biden is averaging 67.4%
+                Biden is averaging 67.2%
             </td>
         
-            <td><abbr title="7787/9128">85.3%</abbr></td>
-            <td>Biden needs 64.08% [0.079%]</td>
+            <td>Biden needs 63.44% [0.079%]</td>
         </tr>
     
 
@@ -4531,11 +4645,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.0%
+                Biden is averaging 71.0%
             </td>
         
-            <td><abbr title="7781/9128">85.2%</abbr></td>
-            <td>Biden needs 64.00% [-0.010%]</td>
+            <td>Biden needs 63.36% [-0.009%]</td>
         </tr>
     
 
@@ -4552,11 +4665,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.4%
+                Biden is averaging 72.2%
             </td>
         
-            <td><abbr title="7777/9128">85.2%</abbr></td>
-            <td>Biden needs 64.01% [0.037%]</td>
+            <td>Biden needs 63.37% [0.037%]</td>
         </tr>
     
 
@@ -4573,11 +4685,10 @@
             </td>
         
             <td>
-                Biden is averaging 75.6%
+                Biden is averaging 74.3%
             </td>
         
-            <td><abbr title="7776/9128">85.2%</abbr></td>
-            <td>Biden needs 63.97% [-0.048%]</td>
+            <td>Biden needs 63.33% [-0.048%]</td>
         </tr>
     
 
@@ -4594,11 +4705,10 @@
             </td>
         
             <td>
-                Biden is averaging 75.7%
+                Biden is averaging 74.9%
             </td>
         
-            <td><abbr title="7771/9128">85.1%</abbr></td>
-            <td>Biden needs 64.02% [-0.163%]</td>
+            <td>Biden needs 63.38% [-0.163%]</td>
         </tr>
     
 
@@ -4615,11 +4725,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.9%
+                Biden is averaging 76.6%
             </td>
         
-            <td><abbr title="7744/9128">84.8%</abbr></td>
-            <td>Biden needs 64.18% [-0.365%]</td>
+            <td>Biden needs 63.54% [-0.358%]</td>
         </tr>
     
 
@@ -4636,11 +4745,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.2%
+                Biden is averaging 68.6%
             </td>
         
-            <td><abbr title="7713/9128">84.5%</abbr></td>
-            <td>Biden needs 64.55% [0.007%]</td>
+            <td>Biden needs 63.90% [0.011%]</td>
         </tr>
     
 
@@ -4657,11 +4765,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.7%
+                Biden is averaging 69.1%
             </td>
         
-            <td><abbr title="7712/9128">84.5%</abbr></td>
-            <td>Biden needs 64.54% [-0.206%]</td>
+            <td>Biden needs 63.89% [-0.206%]</td>
         </tr>
     
 
@@ -4678,11 +4785,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.4%
+                Biden is averaging 68.0%
             </td>
         
-            <td><abbr title="7684/9128">84.2%</abbr></td>
-            <td>Biden needs 64.75% [0.058%]</td>
+            <td>Biden needs 64.10% [0.058%]</td>
         </tr>
     
 
@@ -4699,11 +4805,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.0%
+                Biden is averaging 73.8%
             </td>
         
-            <td><abbr title="7675/9128">84.1%</abbr></td>
-            <td>Biden needs 64.69% [0.033%]</td>
+            <td>Biden needs 64.04% [0.014%]</td>
         </tr>
     
 
@@ -4723,8 +4828,7 @@
                 Biden is averaging 75.7%
             </td>
         
-            <td><abbr title="7671/9128">84.0%</abbr></td>
-            <td>Biden needs 64.65% [-0.135%]</td>
+            <td>Biden needs 64.02% [-0.114%]</td>
         </tr>
     
 
@@ -4741,11 +4845,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.3%
+                Biden is averaging 71.4%
             </td>
         
-            <td><abbr title="7659/9128">83.9%</abbr></td>
-            <td>Biden needs 64.79% [0.033%]</td>
+            <td>Biden needs 64.14% [0.021%]</td>
         </tr>
     
 
@@ -4762,11 +4865,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.4%
+                Biden is averaging 73.8%
             </td>
         
-            <td><abbr title="7657/9128">83.9%</abbr></td>
-            <td>Biden needs 64.76% [-0.222%]</td>
+            <td>Biden needs 64.12% [-0.222%]</td>
         </tr>
     
 
@@ -4778,11 +4880,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 78.7%
+                Biden is averaging 78.5%
             </td>
         
-            <td><abbr title="7639/9128">83.7%</abbr></td>
-            <td>Biden needs 64.98% [-0.051%]</td>
+            <td>Biden needs 64.34% [-0.051%]</td>
         </tr>
     
 
@@ -4794,11 +4895,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 78.7%
+                Biden is averaging 78.5%
             </td>
         
-            <td><abbr title="7639/9128">83.7%</abbr></td>
-            <td>Biden needs 65.03% [-0.031%]</td>
+            <td>Biden needs 64.39% [-0.031%]</td>
         </tr>
     
 
@@ -4810,11 +4910,10 @@
             <td>      0</td>
     <td>N/A</td>
             <td>
-                Biden is averaging 78.7%
+                Biden is averaging 78.5%
             </td>
         
-            <td><abbr title="7639/9128">83.7%</abbr></td>
-            <td>Biden needs 65.06% [-0.096%]</td>
+            <td>Biden needs 64.42% [-0.096%]</td>
         </tr>
     
 
@@ -4831,11 +4930,10 @@
             </td>
         
             <td>
-                Biden is averaging 78.7%
+                Biden is averaging 78.5%
             </td>
         
-            <td><abbr title="7639/9128">83.7%</abbr></td>
-            <td>Biden needs 65.16% [0.023%]</td>
+            <td>Biden needs 64.52% [0.024%]</td>
         </tr>
     
 
@@ -4852,11 +4950,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.7%
+                Biden is averaging 80.2%
             </td>
         
-            <td><abbr title="7634/9128">83.6%</abbr></td>
-            <td>Biden needs 65.13% [0.010%]</td>
+            <td>Biden needs 64.49% [0.010%]</td>
         </tr>
     
 
@@ -4873,11 +4970,10 @@
             </td>
         
             <td>
-                Biden is averaging 73.1%
+                Biden is averaging 80.5%
             </td>
         
-            <td><abbr title="7633/9128">83.6%</abbr></td>
-            <td>Biden needs 65.12% [-0.430%]</td>
+            <td>Biden needs 64.48% [-0.429%]</td>
         </tr>
     
 
@@ -4894,11 +4990,10 @@
             </td>
         
             <td>
-                Biden is averaging 66.8%
+                Biden is averaging 65.3%
             </td>
         
-            <td><abbr title="7577/9128">83.0%</abbr></td>
-            <td>Biden needs 65.55% [0.065%]</td>
+            <td>Biden needs 64.91% [0.065%]</td>
         </tr>
     
 
@@ -4915,11 +5010,10 @@
             </td>
         
             <td>
-                Biden is averaging 85.3%
+                Biden is averaging 76.8%
             </td>
         
-            <td><abbr title="7557/9128">82.8%</abbr></td>
-            <td>Biden needs 65.49% [-0.106%]</td>
+            <td>Biden needs 64.85% [-0.106%]</td>
         </tr>
     
 
@@ -4936,11 +5030,10 @@
             </td>
         
             <td>
-                Biden is averaging 88.5%
+                Biden is averaging 86.0%
             </td>
         
-            <td><abbr title="7547/9128">82.7%</abbr></td>
-            <td>Biden needs 65.59% [-0.063%]</td>
+            <td>Biden needs 64.95% [-0.063%]</td>
         </tr>
     
 
@@ -4957,11 +5050,10 @@
             </td>
         
             <td>
-                Biden is averaging 92.9%
+                Biden is averaging 92.8%
             </td>
         
-            <td><abbr title="7538/9128">82.6%</abbr></td>
-            <td>Biden needs 65.66% [-0.038%]</td>
+            <td>Biden needs 65.02% [-0.038%]</td>
         </tr>
     
 
@@ -4978,11 +5070,10 @@
             </td>
         
             <td>
-                Biden is averaging 90.4%
+                Biden is averaging 94.1%
             </td>
         
-            <td><abbr title="7531/9128">82.5%</abbr></td>
-            <td>Biden needs 65.70% [-0.670%]</td>
+            <td>Biden needs 65.05% [-0.679%]</td>
         </tr>
     
 
@@ -5002,8 +5093,7 @@
                 Biden is averaging 79.8%
             </td>
         
-            <td><abbr title="7479/9128">81.9%</abbr></td>
-            <td>Biden needs 66.37% [-0.174%]</td>
+            <td>Biden needs 65.73% [-0.175%]</td>
         </tr>
     
 
@@ -5020,11 +5110,10 @@
             </td>
         
             <td>
-                Biden is averaging 86.9%
+                Biden is averaging 84.9%
             </td>
         
-            <td><abbr title="7451/9128">81.6%</abbr></td>
-            <td>Biden needs 66.54% [-0.185%]</td>
+            <td>Biden needs 65.91% [-0.185%]</td>
         </tr>
     
 
@@ -5044,8 +5133,7 @@
                 Biden is averaging 90.4%
             </td>
         
-            <td><abbr title="7423/9128">81.3%</abbr></td>
-            <td>Biden needs 66.72% [-0.610%]</td>
+            <td>Biden needs 66.09% [-0.598%]</td>
         </tr>
     
 
@@ -5062,11 +5150,10 @@
             </td>
         
             <td>
-                Biden is averaging 72.9%
+                Biden is averaging 69.7%
             </td>
         
-            <td><abbr title="7368/9128">80.7%</abbr></td>
-            <td>Biden needs 67.33% [-0.048%]</td>
+            <td>Biden needs 66.69% [-0.048%]</td>
         </tr>
     
 
@@ -5086,8 +5173,7 @@
                 Biden is averaging 77.3%
             </td>
         
-            <td><abbr title="7343/9128">80.4%</abbr></td>
-            <td>Biden needs 67.38% [0.002%]</td>
+            <td>Biden needs 66.74% [0.002%]</td>
         </tr>
     
 
@@ -5107,8 +5193,7 @@
                 Biden is averaging 77.4%
             </td>
         
-            <td><abbr title="7343/9128">80.4%</abbr></td>
-            <td>Biden needs 67.38% [-0.183%]</td>
+            <td>Biden needs 66.74% [-0.176%]</td>
         </tr>
     
 
@@ -5125,11 +5210,10 @@
             </td>
         
             <td>
-                Biden is averaging 71.5%
+                Biden is averaging 72.0%
             </td>
         
-            <td><abbr title="7310/9128">80.1%</abbr></td>
-            <td>Biden needs 67.56% [-0.056%]</td>
+            <td>Biden needs 66.91% [-0.056%]</td>
         </tr>
     
 
@@ -5146,11 +5230,10 @@
             </td>
         
             <td>
-                Biden is averaging 69.1%
+                Biden is averaging 69.6%
             </td>
         
-            <td><abbr title="7299/9128">80.0%</abbr></td>
-            <td>Biden needs 67.62% [-0.078%]</td>
+            <td>Biden needs 66.97% [-0.078%]</td>
         </tr>
     
 
@@ -5167,11 +5250,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.0%
+                Biden is averaging 68.9%
             </td>
         
-            <td><abbr title="7286/9128">79.8%</abbr></td>
-            <td>Biden needs 67.70% [0.005%]</td>
+            <td>Biden needs 67.05% [0.005%]</td>
         </tr>
     
 
@@ -5188,11 +5270,10 @@
             </td>
         
             <td>
-                Biden is averaging 68.2%
+                Biden is averaging 69.1%
             </td>
         
-            <td><abbr title="7286/9128">79.8%</abbr></td>
-            <td>Biden needs 67.69% [0.034%]</td>
+            <td>Biden needs 67.04% [0.035%]</td>
         </tr>
     
 
@@ -5209,11 +5290,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.3%
+                Biden is averaging 70.5%
             </td>
         
-            <td><abbr title="7270/9128">79.6%</abbr></td>
-            <td>Biden needs 67.66% [-0.010%]</td>
+            <td>Biden needs 67.01% [-0.010%]</td>
         </tr>
     
 
@@ -5230,11 +5310,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.5%
+                Biden is averaging 71.6%
             </td>
         
-            <td><abbr title="7264/9128">79.6%</abbr></td>
-            <td>Biden needs 67.67% [0.002%]</td>
+            <td>Biden needs 67.02% [0.002%]</td>
         </tr>
     
 
@@ -5251,11 +5330,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.6%
+                Biden is averaging 71.8%
             </td>
         
-            <td><abbr title="7263/9128">79.6%</abbr></td>
-            <td>Biden needs 67.67% [0.013%]</td>
+            <td>Biden needs 67.01% [0.013%]</td>
         </tr>
     
 
@@ -5272,11 +5350,10 @@
             </td>
         
             <td>
-                Biden is averaging 75.1%
+                Biden is averaging 72.9%
             </td>
         
-            <td><abbr title="7261/9128">79.5%</abbr></td>
-            <td>Biden needs 67.65% [-0.037%]</td>
+            <td>Biden needs 67.00% [-0.036%]</td>
         </tr>
     
 
@@ -5293,11 +5370,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.9%
+                Biden is averaging 72.9%
             </td>
         
-            <td><abbr title="7255/9128">79.5%</abbr></td>
-            <td>Biden needs 67.69% [-0.042%]</td>
+            <td>Biden needs 67.04% [-0.042%]</td>
         </tr>
     
 
@@ -5314,11 +5390,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.4%
+                Biden is averaging 72.6%
             </td>
         
-            <td><abbr title="7246/9128">79.4%</abbr></td>
-            <td>Biden needs 67.73% [0.025%]</td>
+            <td>Biden needs 67.08% [0.028%]</td>
         </tr>
     
 
@@ -5335,11 +5410,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.4%
+                Biden is averaging 77.3%
             </td>
         
-            <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>Biden needs 67.71% [0.001%]</td>
+            <td>Biden needs 67.05% [0.001%]</td>
         </tr>
     
 
@@ -5356,11 +5430,10 @@
             </td>
         
             <td>
-                Biden is averaging 77.5%
+                Biden is averaging 77.4%
             </td>
         
-            <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>Biden needs 67.71% [0.003%]</td>
+            <td>Biden needs 67.05% [0.003%]</td>
         </tr>
     
 
@@ -5380,8 +5453,7 @@
                 Biden is averaging 77.6%
             </td>
         
-            <td><abbr title="7237/9128">79.3%</abbr></td>
-            <td>Biden needs 67.70% [-0.259%]</td>
+            <td>Biden needs 67.05% [-0.256%]</td>
         </tr>
     
 
@@ -5398,11 +5470,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.7%
+                Biden is averaging 71.8%
             </td>
         
-            <td><abbr title="7193/9128">78.8%</abbr></td>
-            <td>Biden needs 67.96% [-0.047%]</td>
+            <td>Biden needs 67.30% [-0.046%]</td>
         </tr>
     
 
@@ -5419,11 +5490,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.0%
+                Biden is averaging 70.1%
             </td>
         
-            <td><abbr title="7181/9128">78.7%</abbr></td>
-            <td>Biden needs 68.01% [0.000%]</td>
+            <td>Biden needs 67.35% [0.000%]</td>
         </tr>
     
 
@@ -5440,11 +5510,10 @@
             </td>
         
             <td>
-                Biden is averaging 70.0%
+                Biden is averaging 70.1%
             </td>
         
-            <td><abbr title="7181/9128">78.7%</abbr></td>
-            <td>Biden needs 68.01% [-0.034%]</td>
+            <td>Biden needs 67.35% [-0.034%]</td>
         </tr>
     
 
@@ -5461,11 +5530,10 @@
             </td>
         
             <td>
-                Biden is averaging 74.1%
+                Biden is averaging 66.7%
             </td>
         
-            <td><abbr title="7169/9128">78.5%</abbr></td>
-            <td>Biden needs 68.04% [-0.012%]</td>
+            <td>Biden needs 67.38% [-0.012%]</td>
         </tr>
     
 
@@ -5482,11 +5550,10 @@
             </td>
         
             <td>
-                Biden is averaging 76.8%
+                Biden is averaging 75.2%
             </td>
         
-            <td><abbr title="7151/9128">78.3%</abbr></td>
-            <td>Biden needs 68.06% [0.070%]</td>
+            <td>Biden needs 67.39% [0.071%]</td>
         </tr>
     
 
@@ -5506,8 +5573,7 @@
                 Biden is averaging 81.3%
             </td>
         
-            <td><abbr title="7140/9128">78.2%</abbr></td>
-            <td>Biden needs 67.99% [-0.310%]</td>
+            <td>Biden needs 67.32% [-0.310%]</td>
         </tr>
     
 
@@ -5524,11 +5590,10 @@
             </td>
         
             <td>
-                Biden is averaging 57.5%
+                Biden is averaging 65.4%
             </td>
         
-            <td><abbr title="7115/9128">77.9%</abbr></td>
-            <td>Biden needs 68.30% [-0.031%]</td>
+            <td>Biden needs 67.63% [-0.030%]</td>
         </tr>
     
 
@@ -5545,11 +5610,10 @@
             </td>
         
             <td>
-                Biden is averaging 55.2%
+                Biden is averaging 56.9%
             </td>
         
-            <td><abbr title="7102/9128">77.8%</abbr></td>
-            <td>Biden needs 68.33% [0.007%]</td>
+            <td>Biden needs 67.66% [0.007%]</td>
         </tr>
     
 
@@ -5566,11 +5630,10 @@
             </td>
         
             <td>
-                Biden is averaging 55.2%
+                Biden is averaging 57.0%
             </td>
         
-            <td><abbr title="7102/9128">77.8%</abbr></td>
-            <td>Biden needs 68.32% [0.025%]</td>
+            <td>Biden needs 67.66% [0.025%]</td>
         </tr>
     
 
@@ -5587,11 +5650,10 @@
             </td>
         
             <td>
-                Biden is averaging 55.0%
+                Biden is averaging 56.1%
             </td>
         
-            <td><abbr title="7097/9128">77.7%</abbr></td>
-            <td>Biden needs 68.30% [-0.009%]</td>
+            <td>Biden needs 67.63% [-0.009%]</td>
         </tr>
     
 
@@ -5611,8 +5673,7 @@
                 Biden is averaging 54.4%
             </td>
         
-            <td><abbr title="7097/9128">77.7%</abbr></td>
-            <td>Biden needs 68.31% [0.735%]</td>
+            <td>Biden needs 67.64% [0.737%]</td>
         </tr>
     
 
@@ -5632,8 +5693,7 @@
                 Biden is averaging 92.2%
             </td>
         
-            <td><abbr title="7035/9128">77.1%</abbr></td>
-            <td>Biden needs 67.57% [-0.683%]</td>
+            <td>Biden needs 66.90% [-0.680%]</td>
         </tr>
     
 
@@ -5650,11 +5710,10 @@
             </td>
         
             <td>
-                Biden is averaging 82.4%
+                Biden is averaging 81.7%
             </td>
         
-            <td><abbr title="6943/9128">76.1%</abbr></td>
-            <td>Biden needs 68.25% [-0.005%]</td>
+            <td>Biden needs 67.58% [-0.004%]</td>
         </tr>
     
 
@@ -5674,8 +5733,7 @@
                 Biden is averaging 83.7%
             </td>
         
-            <td><abbr title="6938/9128">76.0%</abbr></td>
-            <td>Biden needs 68.26% [0.001%]</td>
+            <td>Biden needs 67.59% [0.001%]</td>
         </tr>
     
 
@@ -5695,8 +5753,7 @@
                 Biden is averaging 83.7%
             </td>
         
-            <td><abbr title="6938/9128">76.0%</abbr></td>
-            <td>Biden needs 68.26% [-0.370%]</td>
+            <td>Biden needs 67.59% [-0.368%]</td>
         </tr>
     
 
@@ -5716,8 +5773,7 @@
                 Biden is averaging 80.1%
             </td>
         
-            <td><abbr title="6905/9128">75.6%</abbr></td>
-            <td>Biden needs 68.63% [-0.032%]</td>
+            <td>Biden needs 67.96% [-0.032%]</td>
         </tr>
     
 
@@ -5728,21 +5784,11 @@
             <td>1,658,203</td>
             <td>      0</td>
     <td>N/A</td><td>N/A</td>
-            <td><abbr title="6905/9128">75.6%</abbr></td>
-            <td>Biden needs 68.66% [68.660%]</td>
+            <td>Biden needs 67.99% [67.988%]</td>
         </tr>
     
 </table><hr>
 
-    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
-        integrity="sha384-cuApTuVdn64P5ZOzyf+qTgNxGwhvW/ZmdAbNMcl7Q3TkMKJ7/bERQ1cFDmZy7QvZ"
-        crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/dayjs@1.8.21/plugin/utc.js"
-        integrity="sha384-r1JLNIu5SkAfQejSOJPjndnEZkxex5ChJOTaiQeN91L012sA1pyw0A/543Xq97wb"
-        crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"
-        integrity="sha384-ojZWhTxW4vjtUz9IjuxEgcPAQQkFj7jlcOnGFp8IyTUTQpFisDT5u8zFh2d0GrSM"
-        crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -5786,26 +5832,12 @@
     </script>
 
     <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
-        dayjs.extend(dayjs_plugin_relativeTime)
-        dayjs.extend(dayjs_plugin_utc)
-
-        const prettyTimestamps = () => {
-            $(".timestamp").map(function (idx, tselem) {
-                tselem.innerHTML = "<abbr class='pretty-timestamp' title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+        const loadTooltips = () => {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
             })
         };
-        prettyTimestamps();
-        
-        const updateTimestamps = () => {
-            $(".pretty-timestamp").map(function (idx, tselem) {
-                tselem.innerText = dayjs.utc(tselem.title.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
-            })
-        };
-        setInterval(updateTimestamps, 60 * 1000);
+        loadTooltips();
 
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
@@ -5830,90 +5862,135 @@
     </script>
 
     <script type="text/javascript">
+        const fetchLatestCommit = async () => {
+            const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
+                cache: 'no-cache',
+                headers: {
+                    accept: 'application/vnd.github.v3+json',
+                },
+            });
+            const body = await response.json();
+            for (var i = 0; i < body.length; i++) {
+                if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
+                    body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
+                    return body[i];
+                }
+            }
+            return body[0]; // oh well, default to latest
+        };
+
+        const fetchLatestContent = async (sha) => {
+            const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                cache: 'no-cache',
+            });
+            const contentBody = await contentResponse.text();
+            const contentDom = new DOMParser().parseFromString(contentBody, 'text/html');
+
+            const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                cache: 'no-cache',
+            });
+            const updatesBody = await updatesResponse.json();
+            return {
+                updates: updatesBody,
+                dom: contentDom,
+            };
+        };
+
+        const isDeveloperEnvironment = () => {
+            return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        };
+
+        const updateCheck = async (currentCommit, currentContent) => {
+            let latestCommit = await fetchLatestCommit();
+            console.log("latest commit", latestCommit);
+
+            if (currentCommit['sha'] !== latestCommit['sha']) {
+                console.log("updating to", latestCommit);
+                let latestContent = await fetchLatestContent(latestCommit['sha']);
+
+                console.log("latest content", latestContent.updates);
+                if (currentContent &&
+                    currentContent.updates.results_hash !== latestContent.updates.results_hash &&
+                    latestContent.updates.states_updated.length
+                ) {
+                    if (Notification.permission === "granted") {
+                        new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
+                    }
+                }
+
+                let newHash = latestContent.dom.getElementById("template-hash")?.innerText;
+                let currentHash = document.getElementById("template-hash").innerText;
+
+                if (newHash && newHash !== currentHash && !isDeveloperEnvironment()) {
+                    location.reload(true);
+                } else {
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+
+                    const elementsToUpdate = [
+                        ...Array.from(document.getElementsByTagName("table")),
+                        document.getElementById("timestamps"),
+                    ];
+
+                    elementsToUpdate.forEach(oldElement => {
+                        let newElement = latestContent.dom.getElementById(oldElement.id);
+                        oldElement.parentNode.replaceChild(newElement, oldElement);
+                    });
+
+                    loadTooltips();
+                    refreshFeature(shrinkTablesFeature);
+                }
+
+                return {commit: latestCommit, content: latestContent};
+            }
+
+            return {commit: latestCommit, content: currentContent};
+        };
+
+        // do an initial update
+        if (!isDeveloperEnvironment()) {
+            updateCheck({}, undefined);
+        }
+
+        const startLiveUpdates = async () => {
+            let currentCommit = await fetchLatestCommit();
+            console.log("current commit", currentCommit);
+            let currentContent = await fetchLatestContent(currentCommit['sha']);
+            console.log("current content", currentContent.updates);
+
+            const nextCheck = () => {
+                const ONE_MINUTE = 1 * 60 * 1000;
+                const FIVE_MINUTES = 5 * ONE_MINUTE;
+                const now = new Date();
+                const lastUpdate = new Date(currentCommit.commit.author.date);
+                // check at most every minute
+                return Math.max(ONE_MINUTE, FIVE_MINUTES - (now - lastUpdate));
+            };
+
+            const runner = async () => {
+                if (!isFeatureEnabled(liveUpdatesFeature)) return;
+
+                const results = await updateCheck(currentCommit, currentContent);
+                currentCommit = results.commit;
+                currentContent = results.content;
+                console.log("new current commit", currentCommit);
+                console.log("new current content", currentContent);
+                setTimeout(runner, nextCheck());
+            };
+
+            setTimeout(runner, nextCheck());
+        };
+
         const liveUpdatesFeature = 'live-updates';
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
 
-            if (!('Notification' in window)) {
-                return;
-            }
-
-            if (Notification.permission !== "denied") {
+            if ('Notification' in window && Notification.permission !== 'granted') {
                 Notification.requestPermission();
             }
+
+            startLiveUpdates();
         }, button => {
             button.html('Enable Live Updates');
         });
-
-        (async function() {
-            const fetchLatestCommit = async () => {
-                const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
-                    cache: 'no-cache',
-                    headers: {
-                        accept: 'application/vnd.github.v3+json',
-                    },
-                });
-                const body = await response.json();
-                for (var i = 0; i < body.length; i++) {
-                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
-                        body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
-                        return body[i];
-                    }
-                }
-                return body[0]; // ???
-            };
-
-            const fetchLatestContent = async (sha) => {
-                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
-                    cache: 'no-cache',
-                });
-                const contentBody = await contentResponse.text();
-                const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
-
-                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
-                    cache: 'no-cache',
-                });
-                const updatesBody = await updatesResponse.json();
-                return {
-                    updates: updatesBody,
-                    dom: contentDom,
-                };
-            };
-
-            let currentCommit = await fetchLatestCommit();
-            console.log("current commit", currentCommit);
-
-            // live updates
-            setInterval(async function() {
-                if (!isFeatureEnabled(liveUpdatesFeature)) return;
-
-                let latestCommit = await fetchLatestCommit();
-                console.log("latest commit", latestCommit);
-
-                if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let latestContent = await fetchLatestContent(latestCommit['sha']);
-
-                    console.log("latest content", latestContent.updates);
-                    if (latestContent.updates.states_updated.length) {
-                        Array.from(document.getElementsByTagName("table")).forEach(table => {
-                            let newTable = latestContent.dom.getElementById(table.id);
-                            table.parentNode.replaceChild(newTable, table);
-                        });
-
-                        let newTimestamps = latestContent.dom.getElementById("timestamps");
-                        let currTimestamps = document.getElementById("timestamps");
-                        currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
-
-                        prettyTimestamps();
-                        refreshFeature(shrinkTablesFeature);
-
-                        currentCommit = latestCommit;
-                        if (Notifcation.permission === "granted") {
-                            new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
-                        }
-                    }
-                }
-            }, 5 * 60 * 1000);
-        })();
     </script>
 </body>

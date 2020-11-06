@@ -4,6 +4,7 @@ import csv
 import collections
 import datetime
 import git
+import hashlib
 import itertools
 import os
 import simdjson
@@ -102,7 +103,7 @@ InputRecord = collections.namedtuple(
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name']
 )
 
 IterationSummary = collections.namedtuple(
@@ -126,7 +127,7 @@ IterationSummary = collections.namedtuple(
     ]
 )
 
-def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
+def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct, trailing_candidate_name):
     """
     trend gain of last 30k (or more) votes for trailing candidate
     """
@@ -140,8 +141,19 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         this_summary = summarized_state_data[step]
         step += 1
         if this_summary.new_votes > 0:
-            agg_votes += this_summary.new_votes
-            agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+            if this_summary.trailing_candidate_name == trailing_candidate_name:
+                trailing_candidate_partition = this_summary.trailing_candidate_partition
+            else:
+                # Broken for 3 way race
+                trailing_candidate_partition = this_summary.leading_candidate_partition
+
+            if this_summary.new_votes + agg_votes > MIN_AGG_VOTES:
+                subset_pct = (MIN_AGG_VOTES - agg_votes) / float(this_summary.new_votes)
+                agg_votes += round(this_summary.new_votes * subset_pct)
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes * subset_pct)
+            else:
+                agg_votes += this_summary.new_votes
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes)
 
     if agg_votes:
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
@@ -152,28 +164,37 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
 def string_summary(summary):
     thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
 
+    bumped = summary.leading_candidate_partition
+    bumped_name = summary.leading_candidate_name
+    if bumped < summary.trailing_candidate_partition:
+      bumped = summary.trailing_candidate_partition
+      bumped_name = summary.trailing_candidate_name
+    bumped -= 0.50
+
+    lead_part = summary.leading_candidate_partition - 50
+
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         '***' if summary.timestamp > thirty_ago else '---',
-        f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
-        f'Remaining (est.): {summary.votes_remaining:,}',
-        f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
-        f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
+        f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
+        f'Left (est.): {summary.votes_remaining:,}',
+        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
+        f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
-        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
+        f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
+            <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
                 <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -182,8 +203,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k votes.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
@@ -219,7 +239,6 @@ def html_summary(summary: IterationSummary):
         html += '<td>N/A</td>'
 
     html += f'''
-            <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
             <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
         </tr>
     '''
@@ -258,10 +277,13 @@ def json_to_summary(
     precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
-    hurdle = ((((votes_remaining + vote_diff) / 2)) / votes_remaining) if votes_remaining > 0 else 0
+    hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
-        repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
+        last_vote_diff = last_iteration_info.vote_diff
+        if candidate1_name != last_iteration_info.leading_candidate_name:
+            last_vote_diff *= -1
+        repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
 
     # Info we’ll need for the next loop iteration
     iteration_info = IterationInfo(
@@ -269,10 +291,11 @@ def json_to_summary(
         votes=votes,
         precincts_reporting=precincts_reporting,
         hurdle=hurdle,
+        leading_candidate_name=candidate1_name
     )
 
     # Compute aggregate of last 5 hurdle, if available
-    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0, candidate2_name)
 
     summary = IterationSummary(
         batch_time,
@@ -306,7 +329,8 @@ for rows in records.values():
         vote_diff=None,
         votes=None,
         precincts_reporting=None,
-        hurdle=0
+        hurdle=0,
+        leading_candidate_name=None
     )
 
     for row in rows:
@@ -335,6 +359,10 @@ for rows in records.values():
 html_template = "<!-- Don't update me by hand, I'm generated by a program -->\n\n"
 with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
     html_template += f.read()
+TEMPLATE_HASH = hashlib.sha256(html_template.encode('utf8')).hexdigest()
+
+with open("results.json", "r", encoding='utf8') as f:
+    RESULTS_HASH = hashlib.sha256(f.read().encode('utf8')).hexdigest()
 
 html_chunks = []
 
@@ -357,7 +385,7 @@ for (state, timestamped_results) in summarized.items():
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)
     f.write(html)
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
@@ -369,5 +397,6 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
 
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
+        "results_hash": RESULTS_HASH,
         "states_updated": states_updated,
     }))
