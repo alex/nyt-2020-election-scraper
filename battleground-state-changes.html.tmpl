@@ -193,7 +193,8 @@
                 });
                 const body = await response.json();
                 for (var i = 0; i < body.length; i++) {
-                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com') {
+                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
+                        body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
                         return body[i];
                     }
                 }
