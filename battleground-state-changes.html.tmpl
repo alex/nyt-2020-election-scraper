@@ -167,6 +167,7 @@
     </p>
 
     <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">{% SCRAPE_TIME %}</span> | Last batch: <span class="timestamp">{% BATCH_TIME %}</span></p>
+    <div id="template-hash" style="display: none;">{% TEMPLATE_HASH %}</div>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -218,9 +219,12 @@
     </script>
 
     <script type="text/javascript">
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+        const loadTooltips = () => {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        };
+        loadTooltips();
 
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
@@ -245,100 +249,121 @@
     </script>
 
     <script type="text/javascript">
-        const liveUpdatesFeature = 'live-updates';
-        feature(liveUpdatesFeature, '#live_update_button', button => {
-            button.html('Disable Live Updates');
-
-            if (!('Notification' in window)) {
-                return;
+        const fetchLatestCommit = async () => {
+            const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
+                cache: 'no-cache',
+                headers: {
+                    accept: 'application/vnd.github.v3+json',
+                },
+            });
+            const body = await response.json();
+            for (var i = 0; i < body.length; i++) {
+                if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
+                    body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
+                    return body[i];
+                }
             }
+            return body[0]; // oh well, default to latest
+        };
 
-            if (Notification.permission !== "granted") {
-                Notification.requestPermission();
-            }
-        }, button => {
-            button.html('Enable Live Updates');
-        });
+        const fetchLatestContent = async (sha) => {
+            const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                cache: 'no-cache',
+            });
+            const contentBody = await contentResponse.text();
+            const contentDom = new DOMParser().parseFromString(contentBody, 'text/html');
 
-        (async function() {
-            const fetchLatestCommit = async () => {
-                const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
-                    cache: 'no-cache',
-                    headers: {
-                        accept: 'application/vnd.github.v3+json',
-                    },
-                });
-                const body = await response.json();
-                for (var i = 0; i < body.length; i++) {
-                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
-                        body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
-                        return body[i];
+            const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                cache: 'no-cache',
+            });
+            const updatesBody = await updatesResponse.json();
+            return {
+                updates: updatesBody,
+                dom: contentDom,
+            };
+        };
+
+        const isDeveloperEnvironment = () => {
+            return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        };
+
+        const updateCheck = async (currentCommit, notify) => {
+            let latestCommit = await fetchLatestCommit();
+            console.log("latest commit", latestCommit);
+
+            if (currentCommit['sha'] !== latestCommit['sha']) {
+                console.log("updating to", latestCommit);
+                let latestContent = await fetchLatestContent(latestCommit['sha']);
+
+                console.log("latest content", latestContent.updates);
+                if (notify && latestContent.updates.states_updated.length) {
+                    if (Notification.permission === "granted") {
+                        new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                     }
                 }
-                return body[0]; // ???
-            };
 
-            const fetchLatestContent = async (sha) => {
-                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
-                    cache: 'no-cache',
-                });
-                const contentBody = await contentResponse.text();
-                const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
+                let newHash = latestContent.dom.getElementById("template-hash")?.innerText;
+                let currentHash = document.getElementById("template-hash").innerText;
 
-                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
-                    cache: 'no-cache',
-                });
-                const updatesBody = await updatesResponse.json();
-                return {
-                    updates: updatesBody,
-                    dom: contentDom,
-                };
-            };
+                if (newHash && newHash !== currentHash && !isDeveloperEnvironment()) {
+                    location.reload(true);
+                } else {
+                    const elementsToUpdate = [
+                        ...Array.from(document.getElementsByTagName("table")),
+                        document.getElementById("timestamps"),
+                    ];
 
+                    elementsToUpdate.forEach(oldElement => {
+                        let newElement = latestContent.dom.getElementById(oldElement.id);
+                        oldElement.parentNode.replaceChild(newElement, oldElement);
+                    });
+
+                    loadTooltips();
+                    refreshFeature(shrinkTablesFeature);
+                }
+            }
+
+            return latestCommit;
+        };
+
+        // do an initial update
+        updateCheck({}, false);
+
+        const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
 
-            function nextCheck(){
+            const nextCheck = () => {
                 const ONE_MINUTE = 1 * 60 * 1000;
                 const FIVE_MINUTES = 5 * ONE_MINUTE;
                 const now = new Date();
                 const lastUpdate = new Date(currentCommit.commit.author.date);
                 // check at most every minute
                 return Math.max(ONE_MINUTE, FIVE_MINUTES - (now - lastUpdate));
-            }
+            };
 
-            // live updates
-            async function getUpdates() {
+            const runner = async () => {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
-                let latestCommit = await fetchLatestCommit();
-                console.log("latest commit", latestCommit);
+                currentCommit = await updateCheck(currentCommit, true);
+                console.log("new current commit", currentCommit);
+                setTimeout(runner, nextCheck());
+            };
 
-                if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let latestContent = await fetchLatestContent(latestCommit['sha']);
+            setTimeout(runner, nextCheck());
+        };
 
-                    console.log("latest content", latestContent.updates);
-                    if (latestContent.updates.states_updated.length) {
-                        Array.from(document.getElementsByTagName("table")).forEach(table => {
-                            let newTable = latestContent.dom.getElementById(table.id);
-                            table.parentNode.replaceChild(newTable, table);
-                        });
+        const liveUpdatesFeature = 'live-updates';
+        feature(liveUpdatesFeature, '#live_update_button', button => {
+            button.html('Disable Live Updates');
 
-                        let newTimestamps = latestContent.dom.getElementById("timestamps");
-                        let currTimestamps = document.getElementById("timestamps");
-                        currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
-
-                        refreshFeature(shrinkTablesFeature);
-
-                        currentCommit = latestCommit;
-                        if (Notification.permission === "granted") {
-                            new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
-                        }
-                    }
-                }
-                setTimeout(getUpdates, nextCheck());
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                Notification.requestPermission();
             }
-            setTimeout(getUpdates, nextCheck());
-        })();
+
+            startLiveUpdates();
+        }, button => {
+            button.html('Enable Live Updates');
+        });
     </script>
 </body>
