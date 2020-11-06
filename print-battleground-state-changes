@@ -181,7 +181,7 @@ def string_summary(summary):
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
+        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -223,7 +223,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td>{summary.new_votes:7,}</td>
     '''
 
-    if (summary.leading_candidate_partition):
+    if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
         html += f'''
             <td>
                 {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
