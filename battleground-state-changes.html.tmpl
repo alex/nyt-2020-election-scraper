@@ -215,11 +215,15 @@
         const features = {};
         const isFeatureEnabled = key => localStorage.getItem(key) === 'true';
 
-        const feature = (key, buttonId, onEnable, onDisable) => {
+        const feature = (key, buttonId, defaultValue, onEnable, onDisable) => {
+            if (localStorage.getItem(key) == null) {
+                localStorage.setItem(key, defaultValue);
+            }
+
             const button = $(buttonId);
             button.on('click', function() {
                 if (isFeatureEnabled(key)) {
-                    localStorage.removeItem(key);
+                    localStorage.setItem(key, 'false');
                     onDisable(button);
                 } else {
                     localStorage.setItem(key, 'true');
@@ -256,7 +260,7 @@
         loadTooltips();
 
         const shrinkTablesFeature = 'shrunk';
-        feature(shrinkTablesFeature, '#shrink_button', button => {
+        feature(shrinkTablesFeature, '#shrink_button', true, button => {
             button.html('Expand Tables');
             $('.table').each(function(){
                 var countOfNonHiddenBlock = 0;
@@ -385,7 +389,7 @@
         };
 
         const liveUpdatesFeature = 'live-updates';
-        feature(liveUpdatesFeature, '#live_update_button', button => {
+        feature(liveUpdatesFeature, '#live_update_button', false, button => {
             button.html('Disable Live Updates');
 
             if ('Notification' in window && Notification.permission !== 'granted') {
