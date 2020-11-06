@@ -19,6 +19,18 @@ jobs:
       run: |-
         python -m pip install -U pip
         pip install -r requirements.txt
+
+    - id: files
+      uses: jitterbit/get-changed-files@v1
+    - name: Check for changed static files
+      run: |
+        for changed_file in ${{ steps.files.outputs.modified }}; do
+          if [[ "${changed_file}" =~ ^(battleground-state-changes.csv|battleground-state-changes.html|battleground-state-changes.txt|notification-updates.json)$ ]]; then
+            echo "Modifications to static files are not allowed."
+            exit 1
+          fi
+        done
+
     - name: Generate battleground-state-changes.txt/html
       run: |-
         ./print-battleground-state-changes > tmp

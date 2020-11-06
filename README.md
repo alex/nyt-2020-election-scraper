@@ -8,6 +8,10 @@ Outputted files:
 
 Inspired by Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
 
-
 ## Slackbot
 - To get updates on slack, go to https://github.com/joshcarp/election-bot and install on your workspace
+
+## Development
+
+Please do not modify any of the static files (html, csv, or txt). These files are dynamically generated.
+
