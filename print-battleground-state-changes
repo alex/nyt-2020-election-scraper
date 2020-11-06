@@ -152,15 +152,24 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
 def string_summary(summary):
     thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
 
+    bumped = summary.leading_candidate_partition
+    bumped_name = summary.leading_candidate_name
+    if bumped < summary.trailing_candidate_partition:
+      bumped = summary.trailing_candidate_partition
+      bumped_name = summary.trailing_candidate_name
+    bumped -= 0.50
+
+    lead_part = summary.leading_candidate_partition - 50
+
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         '***' if summary.timestamp > thirty_ago else '---',
-        f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
-        f'Remaining (est.): {summary.votes_remaining:,}',
-        f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
-        f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
+        f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
+        f'Left (est.): {summary.votes_remaining:,}',
+        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if summary.leading_candidate_partition else "n/a"})',
+        f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
-        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
+        f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
