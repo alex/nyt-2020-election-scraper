@@ -8,6 +8,10 @@ Outputted files:
 
 Inspired by Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
 
+
+
 ## Development
+
+Contributions are welcome, but please make sure you read and fill out the [the pull request template](.github/pull_request_template.md) when submitting your changes.
 
 Please do not modify any of the static files (html, csv, or txt). These files are dynamically generated.
