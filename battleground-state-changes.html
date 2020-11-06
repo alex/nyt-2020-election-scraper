@@ -3207,7 +3207,7 @@
                     <img src="flags/pennsylvania.svg" width="50px" /> <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 3,282,048 votes, Biden trails with 3,255,729 votes.
+                Total Votes: Trump leads with 3,283,032 votes, Biden trails with 3,258,548 votes.
             </th>
         </tr>
         <tr>
@@ -3223,6 +3223,28 @@
             <th>Suspense</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 04:32:22 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>24,484</td>
+            <td>288,029</td>
+            <td>  3,865</td>
+    
+            <td>
+                Trump 26.3% /
+                73.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 78.1%
+            </td>
+        
+            <td><abbr title="8371/9128">91.7%</abbr></td>
+            <td>Biden needs 54.25% [-0.258%]</td>
+            <td>51.43%</td>
+        </tr>
     
 
         <tr>
@@ -6099,13 +6121,13 @@
             };
 
             const fetchLatestContent = async (sha) => {
-                const contentResponse = await fetch(`https://raw.githubusercontent.com/blaine/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
                     cache: 'no-cache',
                 });
                 const contentBody = await contentResponse.text();
                 const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
 
-                const updatesResponse = await fetch(`https://raw.githubusercontent.com/blaine/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
                     cache: 'no-cache',
                 });
                 const updatesBody = await updatesResponse.json();
