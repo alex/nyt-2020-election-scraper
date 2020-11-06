@@ -326,11 +326,8 @@
             return latestCommit;
         };
 
-        const forceUpdate = async () => {
-            updateCheck({}, false);
-        };
-
-        forceUpdate();
+        // do an initial update
+        updateCheck({}, false);
 
         const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();
