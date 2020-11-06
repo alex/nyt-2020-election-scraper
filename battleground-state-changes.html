@@ -20,6 +20,16 @@
         padding: .25rem .5rem;
     }
 
+    .table th.text-center {
+        position: sticky;
+        top: -1px;
+    }
+
+     .table th.has-tip {
+        position: sticky;
+        top: calc(.25rem + 1.5rem + 2px);
+    }
+
     .has-tip:after{
         content: "ℹ";
         margin-left: 5px;
@@ -31,9 +41,32 @@
     .Trump{
         background-color: #ED98A9;
     }
-}
+
+    @media (prefers-color-scheme: dark) {
+        body {
+            color: #ffffff;
+            background-color: #202020;
+        }
+        .table {
+            color: #dedad6;
+            background-color: #202020;
+        }
+        .table .thead-light th {
+            background-color: #495057;
+            color: #e9ecef;
+        }
+        .table .thead-light th, .table td {
+            border-color: #211d19;
+        }
+        .Biden {
+            background-color: #05456F;
+        }
+        .Trump {
+            background-color: #6E192A;
+        }
+    }
     </style>
-    <title>Election 2020 | Last scrape: Thu Nov  5 22:15:53 2020 (UTC)</title>
+    <title>Election 2020 | Last scrape: Fri Nov  6 01:53:36 2020 (UTC)</title>
 </head>
 
 <body>
@@ -44,11 +77,18 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
+    <p class="text-right">
+      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
+      <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
+      <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
+    </p>
+
+
     <table id='alaska' class='table table-bordered'>
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Alaska (3)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Alaska (EV: 3) Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -106,7 +146,7 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Arizona (11)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Arizona (EV: 11) Total Votes: Biden leads with 1,496,619 votes, Trump trails with 1,439,786 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -125,6 +165,185 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>56,833</td>
+            <td>391,241</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Trump is averaging 51.8%
+            </td>
+        
+            <td><abbr title="1386/1489">93.1%</abbr></td>
+            <td>Trump needs 57.26% [-0.293%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>56,833</td>
+            <td>376,072</td>
+            <td>  1,957</td>
+    
+            <td>
+                Biden 24.2% /
+                75.8% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 51.8%
+            </td>
+        
+            <td><abbr title="1386/1489">93.1%</abbr></td>
+            <td>Trump needs 57.56% [-0.095%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:15:19 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>57,844</td>
+            <td>378,029</td>
+            <td>  2,485</td>
+    
+            <td>
+                Biden 76.1% /
+                23.9% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 50.2%
+            </td>
+        
+            <td><abbr title="1383/1489">92.9%</abbr></td>
+            <td>Trump needs 57.65% [0.220%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:04:29 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>56,547</td>
+            <td>380,514</td>
+            <td> 28,344</td>
+    
+            <td>
+                Biden 47.5% /
+                52.5% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 53.5%
+            </td>
+        
+            <td><abbr title="1380/1489">92.7%</abbr></td>
+            <td>Trump needs 57.43% [0.339%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:55:18 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>57,986</td>
+            <td>408,858</td>
+            <td>  5,990</td>
+    
+            <td>
+                Biden 41.9% /
+                58.1% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 66.1%
+            </td>
+        
+            <td><abbr title="1366/1489">91.7%</abbr></td>
+            <td>Trump needs 57.09% [-0.014%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:46:52 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>58,953</td>
+            <td>414,848</td>
+            <td>  5,169</td>
+    
+            <td>
+                Biden 27.5% /
+                72.5% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 61.1%
+            </td>
+        
+            <td><abbr title="1362/1489">91.5%</abbr></td>
+            <td>Trump needs 57.11% [-0.190%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:35:53 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>61,280</td>
+            <td>420,017</td>
+            <td>  7,456</td>
+    
+            <td>
+                Biden 23.9% /
+                76.1% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 60.4%
+            </td>
+        
+            <td><abbr title="1361/1489">91.4%</abbr></td>
+            <td>Trump needs 57.29% [-0.329%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:07:42 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>65,179</td>
+            <td>427,473</td>
+            <td> 12,227</td>
+    
+            <td>
+                Biden 38.8% /
+                61.2% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 59.0%
+            </td>
+        
+            <td><abbr title="1359/1489">91.3%</abbr></td>
+            <td>Trump needs 57.62% [-0.098%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 22:27:06 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>67,906</td>
+            <td>439,700</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Trump is averaging 58.5%
+            </td>
+        
+            <td><abbr title="1352/1489">90.8%</abbr></td>
+            <td>Trump needs 57.72% [0.172%]</td>
+        </tr>
     
 
         <tr>
@@ -486,7 +705,7 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Georgia (16)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Georgia (EV: 16) Total Votes: Trump leads with 2,446,850 votes, Biden trails with 2,443,364 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -505,6 +724,207 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>13,273</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 63.13% [1.880%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:35:23 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>15,491</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 61.25% [-0.001%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>15,490</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 61.25% [2.994%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:27:54 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>21,106</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 58.26% [-0.007%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:47 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>21,087</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 58.27% [-1.175%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:00 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>18,462</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 59.44% [1.815%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:35:53 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,486</td>
+            <td>22,856</td>
+            <td>  2,831</td>
+    
+            <td>
+                Trump 47.4% /
+                52.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 65.2%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 57.63% [0.550%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:01:17 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>3,635</td>
+            <td>25,687</td>
+            <td> 17,356</td>
+    
+            <td>
+                Trump 33.3% /
+                66.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.3%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 57.08% [-3.874%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:07:42 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>9,426</td>
+            <td>43,043</td>
+            <td>    342</td>
+    
+            <td>
+                Trump 34.2% /
+                65.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.7%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 60.95% [-0.038%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 22:45:37 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>9,534</td>
+            <td>43,385</td>
+            <td>     19</td>
+    
+            <td>
+                Trump 47.4% /
+                52.6% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.8%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 60.99% [0.004%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 22:21:28 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>9,535</td>
+            <td>43,404</td>
+            <td>    241</td>
+    
+            <td>
+                Trump 52.1% /
+                47.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 69.8%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 60.98% [0.072%]</td>
+        </tr>
     
 
         <tr>
@@ -2213,7 +2633,7 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">North Carolina (15)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">North Carolina (EV: 15) Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2329,7 +2749,7 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Nevada (6)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Nevada (EV: 6) Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2520,7 +2940,7 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">Pennsylvania (20)</th>
+            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Pennsylvania (EV: 20) Total Votes: Trump leads with 3,272,697 votes, Biden trails with 3,222,026 votes.</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2539,6 +2959,295 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:52:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>50,671</td>
+            <td>335,465</td>
+            <td>  7,474</td>
+    
+            <td>
+                Trump 32.9% /
+                67.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.4%
+            </td>
+        
+            <td><abbr title="8309/9128">91.0%</abbr></td>
+            <td>Biden needs 57.55% [-0.207%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:44:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>53,221</td>
+            <td>342,939</td>
+            <td>      0</td>
+    <td>N/A</td>
+            <td>
+                Biden is averaging 77.6%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 57.76% [0.112%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:33:55 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>53,221</td>
+            <td>347,939</td>
+            <td>  9,975</td>
+    
+            <td>
+                Trump 24.6% /
+                75.4% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.6%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 57.65% [-0.494%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:26:00 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>58,286</td>
+            <td>357,914</td>
+            <td>  4,130</td>
+    
+            <td>
+                Trump 20.2% /
+                79.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.0%
+            </td>
+        
+            <td><abbr title="8298/9128">90.9%</abbr></td>
+            <td>Biden needs 58.14% [-0.248%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:22:40 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>60,751</td>
+            <td>362,044</td>
+            <td>  8,867</td>
+    
+            <td>
+                Trump 33.2% /
+                66.8% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 77.4%
+            </td>
+        
+            <td><abbr title="8293/9128">90.9%</abbr></td>
+            <td>Biden needs 58.39% [-0.200%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:55:18 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>63,725</td>
+            <td>370,911</td>
+            <td>    936</td>
+    
+            <td>
+                Trump 21.1% /
+                78.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.1%
+            </td>
+        
+            <td><abbr title="8287/9128">90.8%</abbr></td>
+            <td>Biden needs 58.59% [-0.051%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:35:53 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>64,266</td>
+            <td>371,847</td>
+            <td>    545</td>
+    
+            <td>
+                Trump 52.7% /
+                47.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.0%
+            </td>
+        
+            <td><abbr title="8286/9128">90.8%</abbr></td>
+            <td>Biden needs 58.64% [0.017%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 00:11:13 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>64,237</td>
+            <td>372,392</td>
+            <td> 12,480</td>
+    
+            <td>
+                Trump 12.5% /
+                87.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.2%
+            </td>
+        
+            <td><abbr title="8284/9128">90.8%</abbr></td>
+            <td>Biden needs 58.62% [-0.938%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:59:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>73,609</td>
+            <td>384,872</td>
+            <td>    205</td>
+    
+            <td>
+                Trump 60.5% /
+                39.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 68.0%
+            </td>
+        
+            <td><abbr title="8258/9128">90.5%</abbr></td>
+            <td>Biden needs 59.56% [0.011%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:51:41 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>73,566</td>
+            <td>385,077</td>
+            <td>  4,634</td>
+    
+            <td>
+                Trump 29.9% /
+                70.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 68.2%
+            </td>
+        
+            <td><abbr title="8258/9128">90.5%</abbr></td>
+            <td>Biden needs 59.55% [-0.125%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:30:04 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>75,427</td>
+            <td>389,711</td>
+            <td>  4,416</td>
+    
+            <td>
+                Trump 17.3% /
+                82.7% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.9%
+            </td>
+        
+            <td><abbr title="8254/9128">90.4%</abbr></td>
+            <td>Biden needs 59.68% [-0.258%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 23:25:57 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>78,314</td>
+            <td>394,127</td>
+            <td>    405</td>
+    
+            <td>
+                Trump 50.0% /
+                50.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.2%
+            </td>
+        
+            <td><abbr title="8230/9128">90.2%</abbr></td>
+            <td>Biden needs 59.94% [0.010%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 22:53:30 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>78,314</td>
+            <td>394,532</td>
+            <td> 35,858</td>
+    
+            <td>
+                Trump 33.7% /
+                66.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.3%
+            </td>
+        
+            <td><abbr title="8229/9128">90.2%</abbr></td>
+            <td>Biden needs 59.92% [-0.534%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-05 22:45:37 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>90,027</td>
+            <td>430,390</td>
+            <td>  1,333</td>
+    
+            <td>
+                Trump 30.7% /
+                69.3% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 72.5%
+            </td>
+        
+            <td><abbr title="8196/9128">89.8%</abbr></td>
+            <td>Biden needs 60.46% [-0.027%]</td>
+        </tr>
     
 
         <tr>
@@ -4714,6 +5423,42 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        const features = {};
+        const isFeatureEnabled = key => localStorage.getItem(key) === 'true';
+
+        const feature = (key, buttonId, onEnable, onDisable) => {
+            const button = $(buttonId);
+            button.on('click', function() {
+                if (isFeatureEnabled(key)) {
+                    localStorage.removeItem(key);
+                    onDisable(button);
+                } else {
+                    localStorage.setItem(key, 'true');
+                    onEnable(button);
+                }
+            });
+
+            if (isFeatureEnabled(key)) {
+                onEnable(button);
+            }
+
+            features[key] = {
+                buttonId,
+                onEnable,
+                onDisable
+            };
+        };
+
+        const refreshFeature = key => {
+            if (isFeatureEnabled(key)) {
+                features[key].onEnable($(features[key].buttonId));
+            } else {
+                features[key].onDisable($(features[key].buttonId));
+            }
+        };
+    </script>
+
+    <script type="text/javascript">
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
@@ -4721,8 +5466,98 @@
         dayjs.extend(dayjs_plugin_relativeTime)
         dayjs.extend(dayjs_plugin_utc)
 
-        $(".timestamp").map(function (idx, tselem) {
-            tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
-        })
+        const prettyTimestamps = () => {
+            $(".timestamp").map(function (idx, tselem) {
+                tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
+            })
+        };
+        prettyTimestamps();
+
+        const shrinkTablesFeature = 'shrunk';
+        feature(shrinkTablesFeature, '#shrink_button', button => {
+            button.html('Expand Tables');
+            $('.table').each(function() { $(this).find('tbody tr:gt(2)').hide(); });
+        }, button => {
+            button.html('Shrink Tables');
+            $('.table').each(function() { $(this).find('tbody tr').show(); });
+        });
+    </script>
+
+    <script type="text/javascript">
+        const liveUpdatesFeature = 'live-updates';
+        feature(liveUpdatesFeature, '#live_update_button', button => {
+            button.html('Disable Live Updates');
+        }, button => {
+            button.html('Enable Live Updates');
+        });
+
+        const notificationFeature = 'notifications';
+        feature(notificationFeature, '#notification_button', button => {
+            button.html('Disable Notifications');
+
+            if (!('Notification' in window)) {
+                return;
+            }
+
+            if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }, button => {
+            button.html('Enable Notifications');
+        });
+
+        (async function() {
+            const fetchLatestCommit = async () => {
+                const response = await fetch("https://api.github.com/repos/alex/nyt-2020-election-scraper/commits?per_page=10", {
+                    cache: 'no-cache',
+                    headers: {
+                        accept: 'application/vnd.github.v3+json',
+                    },
+                });
+                const body = await response.json();
+                for (var i = 0; i < body.length; i++) {
+                    if (body[i]['commit']['author']['email'] === 'actions@users.noreply.github.com' &&
+                        body[i]['commit']['message'] === 'Regenerate battleground-state-changes.txt/html') {
+                        return body[i];
+                    }
+                }
+                return body[0]; // ???
+            };
+
+            const fetchLatestContent = async (sha) => {
+                const response = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                    cache: 'no-cache',
+                });
+                const body = await response.text();
+                return new DOMParser().parseFromString(body, 'text/html');
+            };
+
+            let currentCommit = await fetchLatestCommit();
+            console.log("current commit", currentCommit);
+
+            // live updates
+            setInterval(async function() {
+                if (!isFeatureEnabled(liveUpdatesFeature)) return;
+
+                let latestCommit = await fetchLatestCommit();
+                console.log("latest commit", latestCommit);
+
+                if (currentCommit['sha'] !== latestCommit['sha']) {
+                    let newContent = await fetchLatestContent(latestCommit['sha']);
+
+                    Array.from(document.getElementsByTagName("table")).forEach(table => {
+                        let newTable = newContent.getElementById(table.id);
+                        table.parentNode.replaceChild(newTable, table);
+                    });
+                    prettyTimestamps();
+                    refreshFeature(shrinkTablesFeature);
+
+                    currentCommit = latestCommit;
+                    if (isFeatureEnabled(notificationFeature)) {
+                        new Notification("New ballots were counted!");
+                    }
+                }
+            }, 5 * 60 * 1000);
+        })();
     </script>
 </body>
