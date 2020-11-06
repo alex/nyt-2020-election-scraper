@@ -104,7 +104,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 05:17:27 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:05:06 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 05:19:14 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:05:06 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -5904,8 +5904,17 @@
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
 
+            function nextCheck(){
+                const ONE_MINUTE = 1 * 60 * 1000;
+                const FIVE_MINUTES = 5 * ONE_MINUTE;
+                const now = new Date();
+                const lastUpdate = new Date(currentCommit.commit.author.date);
+                // check at most every minute
+                return Math.max(ONE_MINUTE, FIVE_MINUTES - (now - lastUpdate));
+            }
+
             // live updates
-            setInterval(async function() {
+            async function getUpdates() {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
                 let latestCommit = await fetchLatestCommit();
@@ -5929,12 +5938,14 @@
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (Notifcation.permission === "granted") {
+                        if (Notification.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
                 }
-            }, 5 * 60 * 1000);
+                setTimeout(getUpdates, nextCheck());
+            }
+            setTimeout(getUpdates, nextCheck());
         })();
     </script>
 </body>
