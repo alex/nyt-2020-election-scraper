@@ -165,7 +165,7 @@ def html_write_state_head(state: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-center" colspan="9">{state}: Total Votes: ({summary.leading_candidate_name}: {summary.leading_candidate_votes:,}, {summary.trailing_candidate_name}: {summary.trailing_candidate_votes:,})</th>
+            <th class="text-center" colspan="9">{state} Total Votes: ({summary.leading_candidate_name}: {summary.leading_candidate_votes:,}, {summary.trailing_candidate_name}: {summary.trailing_candidate_votes:,})</th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -293,7 +293,7 @@ def json_to_summary(
     return iteration_info, summary
 
 for _, rows in records.items():
-    state_name = f"{rows[0].state_name} ({rows[0].electoral_votes})"
+    state_name = f"{rows[0].state_name} (EV: {rows[0].electoral_votes})"
     summarized[state_name] = []
 
     last_iteration_info = IterationInfo(
@@ -336,7 +336,7 @@ print(tabulate([
     ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
 ]))
 for (state, timestamped_results) in summarized.items():
-    print(f'\n{state}: Total Votes: ({timestamped_results[1][1]}: {timestamped_results[1][3]}, {timestamped_results[1][2]}: {timestamped_results[1][4]})')
+    print(f'\n{state} Total Votes: ({timestamped_results[1][1]}: {timestamped_results[1][3]:,}, {timestamped_results[1][2]}: {timestamped_results[1][4]:,})')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
