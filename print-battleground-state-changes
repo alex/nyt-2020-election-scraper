@@ -140,8 +140,13 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         this_summary = summarized_state_data[step]
         step += 1
         if this_summary.new_votes > 0:
-            agg_votes += this_summary.new_votes
-            agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+            if this_summary.new_votes + agg_votes > MIN_AGG_VOTES:
+                subset_pct = (MIN_AGG_VOTES - agg_votes) / float(this_summary.new_votes)
+                agg_votes += round(this_summary.new_votes * subset_pct)
+                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes * subset_pct)
+            else:
+                agg_votes += this_summary.new_votes
+                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
 
     if agg_votes:
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
@@ -191,7 +196,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k.">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
