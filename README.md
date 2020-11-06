@@ -7,3 +7,7 @@ Outputted files:
 - <https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.csv>
 
 Inspired by Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
+
+
+## Slackbot
+- To get updates on slack, go to https://github.com/joshcarp/election-bot and install on your workspace
