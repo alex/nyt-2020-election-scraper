@@ -180,9 +180,9 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 19:00:11 UTC</span> | Last batch: <span class="timestamp">2020-11-06 18:59:15 UTC</span></p>
-            <div id="template-hash" style="display: none;">2e42d4fe9322281b6c4b649b8fc6713f300f27cb80ce1ca517323cdc95c6b4be</div>
-            <div id="page-metadata" style="display: none;">{"template_hash": "2e42d4fe9322281b6c4b649b8fc6713f300f27cb80ce1ca517323cdc95c6b4be", "results_hash": "4f465fec9e4bde0faebf993587c1ea560d859bd13abb7f5b6f500e1e56683d4c", "states_updated": ["Pennsylvania"]}</div>
+            <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 19:12:01 UTC</span> | Last batch: <span class="timestamp">2020-11-06 19:11:02 UTC</span></p>
+            <div id="template-hash" style="display: none;">c22ec4e8a4f2d75599187b87a79b7362c035fa667ebfb92a88ff05fcbd3755d5</div>
+            <div id="page-metadata" style="display: none;">{"template_hash": "c22ec4e8a4f2d75599187b87a79b7362c035fa667ebfb92a88ff05fcbd3755d5", "results_hash": "a5e0164523e0ff05452422526edfd545b70376b60b7d3db6407ea6f0cb288ee8", "states_updated": ["Georgia", "Pennsylvania"]}</div>
         </div>
         <div class="col-sm">
             <p class="float-right">
@@ -934,7 +934,7 @@
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 2,450,194 votes, Trump trails with 2,448,633 votes.
+                Total Votes: Biden leads with 2,450,200 votes, Trump trails with 2,448,646 votes.
             </td>
         </tr>
         <tr>
@@ -948,6 +948,26 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='georgia-2020-11-06T19:11:02.226000'>
+            <td class="timestamp">2020-11-06 19:11:02 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>1,554</td>
+            <td>4,481</td>
+            <td>     20</td>
+    
+            <td>
+                Biden 32.5% /
+                67.5% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 31.2%
+            </td>
+        
+            <td>Trump needs 66.71% [-0.001%]</td>
+        </tr>
     
 
         <tr id='georgia-2020-11-06T18:51:26.274000'>
@@ -3758,7 +3778,7 @@
                     <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
-                Total Votes: Biden leads with 3,310,371 votes, Trump trails with 3,296,961 votes.
+                Total Votes: Biden leads with 3,311,365 votes, Trump trails with 3,297,807 votes.
             </td>
         </tr>
         <tr>
@@ -3772,6 +3792,26 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the block breakdown! This is intentional.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr id='pennsylvania-2020-11-06T19:11:02.226000'>
+            <td class="timestamp">2020-11-06 19:11:02 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>13,558</td>
+            <td>120,550</td>
+            <td>  1,869</td>
+    
+            <td>
+                Biden 54.0% /
+                46.0% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 29.8%
+            </td>
+        
+            <td>Trump needs 54.98% [0.146%]</td>
+        </tr>
     
 
         <tr id='pennsylvania-2020-11-06T18:59:15.457000'>
@@ -6736,36 +6776,36 @@
         // if the new page has notifications, show them
         // if the new page is an updated template, hard refresh (which should get us the new page since we just loaded it)
         // otherwise, replace the div id=body element
-        const updateCheck = async currentMetadata => {
+        const updateCheck = async (currentMetadata, forceNotify) => {
             const latestContent = await fetchLatestContent();
             const latestMetadata = latestContent.metadata;
             const latestDom = latestContent.dom;
             console.log("latest content", latestContent);
 
-            if (
-                currentMetadata &&
-                currentMetadata.results_hash !== latestMetadata.results_hash &&
-                latestMetadata.states_updated.length
-            ) {
-                if (Notification.permission === "granted") {
-                    const notification = new Notification(`New ballots were counted in: ${latestMetadata.states_updated.join(", ")}!`);
-                    notification.onclick = function (event) {
-                        // focus page
-                        window.parent.focus();
-                        // just in case, older browsers
-                        window.focus();
-                        // dismiss notification
-                        event.target.close();
-                    };
+            let shouldNotify = latestMetadata.states_updated.length && (
+                forceNotify ||
+                (currentMetadata && currentMetadata.results_hash !== latestMetadata.results_hash)
+            );
+
+            if (currentMetadata && currentMetadata.template_hash !== latestMetadata.template_hash) {
+                console.log("new template, forcing reload");
+                if (shouldNotify) {
+                    location.hash = "notify";
                 }
+                location.reload(true);
+                return;
             }
 
-            if (
-                currentMetadata &&
-                currentMetadata.template_hash !== latestMetadata.template_hash
-            ) {
-                console.log("new template, forcing reload");
-                location.reload(true);
+            if (shouldNotify && Notification.permission === "granted") {
+                const notification = new Notification(`New ballots were counted in: ${latestMetadata.states_updated.join(", ")}!`);
+                notification.onclick = function (event) {
+                    // focus page
+                    window.parent.focus();
+                    // just in case, older browsers
+                    window.focus();
+                    // dismiss notification
+                    event.target.close();
+                };
             }
 
             $('[data-toggle="tooltip"]').tooltip('hide')
@@ -6787,7 +6827,8 @@
         };
 
         // do a test update
-        updateCheck(undefined);
+        updateCheck(undefined, location.hash === '#notify');
+        location.hash = "";
 
         const startLiveUpdates = async () => {
             let currentMetadata = (await fetchLatestContent()).metadata;
@@ -6801,7 +6842,7 @@
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
                 try {
-                    currentMetadata = await updateCheck(currentMetadata);
+                    currentMetadata = await updateCheck(currentMetadata, false);
                 } catch (e) {
                     console.log("failed to check for updates", e);
                 }
