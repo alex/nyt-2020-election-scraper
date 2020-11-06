@@ -333,7 +333,25 @@
             }
 
             if (shouldNotify && Notification.permission === "granted") {
-                const notification = new Notification(`New ballots were counted in: ${latestMetadata.states_updated.join(", ")}!`);
+                const lastIndex = latestMetadata.states_updated.length - 1
+                const useCommas = latestMetadata.states_updated.length >= 3
+
+                const oxfordCommaList = stateList.reduce((accumulator, currentValue, index) => {
+                  switch (index) {
+                    case 0:
+                      return currentValue;
+                    case lastIndex:
+                      if (useCommas) {
+                        return `${accumulator}, and ${currentValue}`
+                      } else {
+                        return `${accumulator} and ${currentValue}`
+                      }
+                    default:
+                      return `${accumulator}, ${currentValue}`
+                  }
+                })
+
+                const notification = new Notification(`New ballots were counted in ${oxfordCommaList}!`);
                 notification.onclick = function (event) {
                     // focus page
                     window.parent.focus();
