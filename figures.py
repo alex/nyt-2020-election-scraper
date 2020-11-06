@@ -51,5 +51,3 @@ def update_figures():
         )
         fig.write_html(f"figures/{order[i]}.html")
 
-
-update_figures()
