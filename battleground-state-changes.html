@@ -6099,13 +6099,13 @@
             };
 
             const fetchLatestContent = async (sha) => {
-                const contentResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
+                const contentResponse = await fetch(`https://raw.githubusercontent.com/blaine/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
                     cache: 'no-cache',
                 });
                 const contentBody = await contentResponse.text();
                 const contentDom =  new DOMParser().parseFromString(contentBody, 'text/html');
 
-                const updatesResponse = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
+                const updatesResponse = await fetch(`https://raw.githubusercontent.com/blaine/nyt-2020-election-scraper/${sha}/notification-updates.json`, {
                     cache: 'no-cache',
                 });
                 const updatesBody = await updatesResponse.json();
