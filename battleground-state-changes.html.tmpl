@@ -27,8 +27,6 @@
 
     .table th.text-left {
         font-weight: normal;
-        position: sticky;
-        top: -1px;
     }
 
     .table th span.statename {
@@ -36,9 +34,16 @@
         font-size: 14pt;
     }
 
-     .table th.has-tip {
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: -1px;
+    }
+
+    thead tr:nth-child(2) th {
         position: sticky;
         top: calc(.25rem + 1.5rem + 2px);
+        border-right: none;
+        border-left: none;
     }
 
     .has-tip:after{
