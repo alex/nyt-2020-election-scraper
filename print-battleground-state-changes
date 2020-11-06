@@ -271,7 +271,7 @@ def json_to_summary(
     precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
-    hurdle = ((((votes_remaining + vote_diff) / 2)) / votes_remaining) if votes_remaining > 0 else 0
+    hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
         repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
