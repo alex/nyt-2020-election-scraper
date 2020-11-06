@@ -8,6 +8,7 @@ import itertools
 import os
 import simdjson
 import subprocess
+import json
 from tabulate import tabulate
 from typing import Tuple
 from figures import update_figures
@@ -176,9 +177,9 @@ def html_write_state_head(state: str, summary: IterationSummary):
     return f"""
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" colspan="9">
+            <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    {state}
+                    <span class="statename">{state}</span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
@@ -190,16 +191,10 @@ def html_write_state_head(state: str, summary: IterationSummary):
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
-                Block Breakdown
-            </th>
-            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">
-                Block Trend
-            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">Block Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">Block Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">\
-                Hurdle
-            </th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
     """
@@ -311,7 +306,11 @@ def json_to_summary(
 
     return iteration_info, summary
 
+states_updated = []
+
 for _, rows in records.items():
+    latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+
     state_name = f"{rows[0].state_name} (EV: {rows[0].electoral_votes})"
     summarized[state_name] = []
 
@@ -336,6 +335,9 @@ for _, rows in records.items():
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
+
+    if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
+        states_updated.append(rows[0].state_name)
 
 # print the summaries
 
@@ -385,4 +387,12 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
     for state, results in summarized.items():
         for row in results:
             wr.writerow((state,) + row)
+
 update_figures()
+
+
+with open("notification-updates.json", "w") as f:
+    f.write(json.dumps({
+        "states_updated": states_updated,
+    }))
+
