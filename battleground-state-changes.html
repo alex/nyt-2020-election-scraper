@@ -128,10 +128,10 @@
             for (let i = 0, len = mutations.length; i < len; i++) {
                 let added = mutations[i].addedNodes;
                 for (let j = 0, node; (node = added[j]); j++) {
-                    if (node.tagName === 'td') {
+                    if (node.tagName === 'td' || node.tagName === 'span') {
                         handleNode(node);
                     } else if (node.firstElementChild) {
-                        for (const child of node.getElementsByTagName('td')) {
+                        for (const child of node.querySelectorAll('td,span')) {
                             handleNode(child);
                         }
                     }
@@ -158,7 +158,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 05:43:22 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:41:02 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 05:44:36 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:41:02 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
