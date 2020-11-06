@@ -209,10 +209,10 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
         </thead>
     '''
 
-def html_summary(summary: IterationSummary):
+def html_summary(state_slug: str, summary: IterationSummary):
     html = f'''
         <tr>
-            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
+            <td id='{state_slug}-{summary.timestamp.isoformat()}' class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
             <td>{summary.votes_remaining:,}</td>
@@ -382,7 +382,7 @@ for (state, timestamped_results) in sorted(summarized.items()):
     html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state, state_slug, timestamped_results[0]))
     for summary in timestamped_results:
-        html_chunks.append(html_summary(summary))
+        html_chunks.append(html_summary(state_slug=state_slug, summary=summary))
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
