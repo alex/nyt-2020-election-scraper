@@ -350,6 +350,9 @@ with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
     html_template += f.read()
 TEMPLATE_HASH = hashlib.sha256(html_template.encode('utf8')).hexdigest()
 
+with open("results.json", "r", encoding='utf8') as f:
+    RESULTS_HASH = hashlib.sha256(f.read().encode('utf8')).hexdigest()
+
 html_chunks = []
 
 batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
@@ -383,5 +386,6 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
 
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
-        "states_updated": [],
+        "results_hash": RESULTS_HASH,
+        "states_updated": states_updated,
     }))
