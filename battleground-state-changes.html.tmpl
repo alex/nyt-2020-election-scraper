@@ -13,6 +13,8 @@
     <meta property="og:image" content="https://avatars3.githubusercontent.com/u/772?s=400&u=7c00c7c8ac3691da556d7686e16ff08b797d4a38&v=4" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗳️</text></svg>">
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -51,6 +53,13 @@
         margin-left: 5px;
     }
 
+    .flag-bg {
+        background-position: fixed;
+        background-repeat: no-repeat;
+        background-size: 100px;
+        background-position: 100%;
+    }
+
     .Biden{
         background-color: #84C4EE
     }
@@ -83,6 +92,60 @@
     }
     </style>
     <title>Election 2020 Results</title>
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"
+            integrity="sha384-cuApTuVdn64P5ZOzyf+qTgNxGwhvW/ZmdAbNMcl7Q3TkMKJ7/bERQ1cFDmZy7QvZ"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/utc.js"
+            integrity="sha384-r1JLNIu5SkAfQejSOJPjndnEZkxex5ChJOTaiQeN91L012sA1pyw0A/543Xq97wb"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"
+            integrity="sha384-ojZWhTxW4vjtUz9IjuxEgcPAQQkFj7jlcOnGFp8IyTUTQpFisDT5u8zFh2d0GrSM"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.extend(dayjs_plugin_utc)
+
+        const prettyTime = timestamp => dayjs.utc(timestamp.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
+
+        const handleNode = node => {
+            if (node.classList && node.classList.contains('timestamp')) {
+                let timestamp;
+                if (node.hasAttribute('data-timestamp')) {
+                    timestamp = node.getAttribute('data-timestamp');
+                } else {
+                    timestamp = node.innerHTML;
+                    node.setAttribute('data-timestamp', timestamp);
+                }
+                node.innerHTML = `<abbr class='pretty-timestamp' title='${timestamp}'>${prettyTime(timestamp)}</abbr>`;
+            }
+        };
+
+        new MutationObserver(mutations => {
+            for (let i = 0, len = mutations.length; i < len; i++) {
+                let added = mutations[i].addedNodes;
+                for (let j = 0, node; (node = added[j]); j++) {
+                    if (node.tagName === 'td') {
+                        handleNode(node);
+                    } else if (node.firstElementChild) {
+                        for (const child of node.getElementsByTagName('td')) {
+                            handleNode(child);
+                        }
+                    }
+                }
+            }
+        }).observe(document, {
+            childList: true,
+            subtree: true,
+        });
+
+        setInterval(() => {
+            $(".pretty-timestamp").map((_, tselem) => {
+                tselem.innerText = prettyTime(tselem.title);
+            });
+        }, 60 * 1000);
+    </script>
 </head>
 
 <body>
@@ -96,7 +159,6 @@
     <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">{% SCRAPE_TIME %}</span> | Last batch: <span class="timestamp">{% BATCH_TIME %}</span></p>
 
     <p class="float-right">
-      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
@@ -159,23 +221,6 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
 
-        dayjs.extend(dayjs_plugin_relativeTime)
-        dayjs.extend(dayjs_plugin_utc)
-
-        const prettyTimestamps = () => {
-            $(".timestamp").map(function (idx, tselem) {
-                tselem.innerHTML = "<abbr class='pretty-timestamp' title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
-            })
-        };
-        prettyTimestamps();
-        
-        const updateTimestamps = () => {
-            $(".pretty-timestamp").map(function (idx, tselem) {
-                tselem.innerText = dayjs.utc(tselem.title.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow()
-            })
-        };
-        setInterval(updateTimestamps, 60 * 1000);
-
         const shrinkTablesFeature = 'shrunk';
         feature(shrinkTablesFeature, '#shrink_button', button => {
             button.html('Expand Tables');
@@ -202,23 +247,16 @@
         const liveUpdatesFeature = 'live-updates';
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
-        }, button => {
-            button.html('Enable Live Updates');
-        });
-
-        const notificationFeature = 'notifications';
-        feature(notificationFeature, '#notification_button', button => {
-            button.html('Disable Notifications');
 
             if (!('Notification' in window)) {
                 return;
             }
 
-            if (Notification.permission !== "denied") {
+            if (Notification.permission !== "granted") {
                 Notification.requestPermission();
             }
         }, button => {
-            button.html('Enable Notifications');
+            button.html('Enable Live Updates');
         });
 
         (async function() {
@@ -259,8 +297,17 @@
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
 
+            function nextCheck(){
+                const ONE_MINUTE = 1 * 60 * 1000;
+                const FIVE_MINUTES = 5 * ONE_MINUTE;
+                const now = new Date();
+                const lastUpdate = new Date(currentCommit.commit.author.date);
+                // check at most every minute
+                return Math.max(ONE_MINUTE, FIVE_MINUTES - (now - lastUpdate));
+            }
+
             // live updates
-            setInterval(async function() {
+            async function getUpdates() {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
                 let latestCommit = await fetchLatestCommit();
@@ -280,16 +327,17 @@
                         let currTimestamps = document.getElementById("timestamps");
                         currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
 
-                        prettyTimestamps();
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (isFeatureEnabled(notificationFeature)) {
+                        if (Notification.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
                 }
-            }, 5 * 60 * 1000);
+                setTimeout(getUpdates, nextCheck());
+            }
+            setTimeout(getUpdates, nextCheck());
         })();
     </script>
 </body>
