@@ -6,6 +6,13 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ANN Election Results" />
+    <meta name="twitter:description" content="Battleground state changes, updated every five minutes using NYT data." />
+    <meta name="twitter:url" content="https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html" />
+    <meta property="og:title" content="ANN Election Results" />
+    <meta property="og:description" content="Battleground state changes, updated every five minutes using NYT data." />
+    <meta property="og:image" content="https://avatars3.githubusercontent.com/u/772?s=400&u=7c00c7c8ac3691da556d7686e16ff08b797d4a38&v=4" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
     <!-- Bootstrap CSS -->
@@ -66,7 +73,7 @@
         }
     }
     </style>
-    <title>Election 2020 | Last scrape: Fri Nov  6 01:47:50 2020 (UTC)</title>
+    <title>Election 2020 Results</title>
 </head>
 
 <body>
@@ -77,18 +84,25 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="text-right">
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:29:47 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:07:55 UTC</span></p>
+
+    <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
 
-
     <table id='alaska' class='table table-bordered'>
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Alaska (EV: 3) Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    Alaska (EV: 3)
+                </span>
+                <br>
+                Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -146,7 +160,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Arizona (EV: 11) Total Votes: Biden leads with 1,496,619 votes, Trump trails with 1,439,786 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    Arizona (EV: 11)
+                </span>
+                <br>
+                Total Votes: Biden leads with 1,528,319 votes, Trump trails with 1,482,062 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -165,6 +185,27 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 02:07:55 UTC</td>
+            <td class="Biden">Biden</td>
+            <td>46,257</td>
+            <td>315,927</td>
+            <td> 75,314</td>
+    
+            <td>
+                Biden 43.0% /
+                57.0% Trump
+            </td>
+        
+            <td>
+                Trump is averaging 57.0%
+            </td>
+        
+            <td><abbr title="1415/1489">95.0%</abbr></td>
+            <td>Trump needs 57.32% [0.058%]</td>
+        </tr>
     
 
         <tr>
@@ -705,7 +746,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Georgia (EV: 16) Total Votes: Trump leads with 2,446,850 votes, Biden trails with 2,443,364 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    Georgia (EV: 16)
+                </span>
+                <br>
+                Total Votes: Trump leads with 2,447,015 votes, Biden trails with 2,444,518 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -724,6 +771,27 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 02:00:51 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>2,497</td>
+            <td>11,936</td>
+            <td>  1,337</td>
+    
+            <td>
+                Trump 13.0% /
+                87.0% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 66.1%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 60.46% [-2.672%]</td>
+        </tr>
     
 
         <tr>
@@ -2633,7 +2701,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">North Carolina (EV: 15) Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    North Carolina (EV: 15)
+                </span>
+                <br>
+                Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2749,7 +2823,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Nevada (EV: 6) Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    Nevada (EV: 6)
+                </span>
+                <br>
+                Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2940,7 +3020,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-center has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate." colspan="9">Pennsylvania (EV: 20) Total Votes: Trump leads with 3,270,273 votes, Biden trails with 3,217,052 votes.</th>
+            <th class="text-center has-tip" colspan="9">
+                <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
+                    Pennsylvania (EV: 20)
+                </span>
+                <br>
+                Total Votes: Trump leads with 3,273,789 votes, Biden trails with 3,224,935 votes.
+            </th>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2959,6 +3045,48 @@
             </th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 02:07:55 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>48,854</td>
+            <td>331,430</td>
+            <td>  4,035</td>
+    
+            <td>
+                Trump 27.5% /
+                72.5% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.6%
+            </td>
+        
+            <td><abbr title="8316/9128">91.1%</abbr></td>
+            <td>Biden needs 57.37% [-0.182%]</td>
+        </tr>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 01:52:07 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>50,671</td>
+            <td>335,465</td>
+            <td>  7,474</td>
+    
+            <td>
+                Trump 32.9% /
+                67.1% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 71.4%
+            </td>
+        
+            <td><abbr title="8309/9128">91.0%</abbr></td>
+            <td>Biden needs 57.55% [-0.207%]</td>
+        </tr>
     
 
         <tr>
@@ -5528,6 +5656,11 @@
                         let newTable = newContent.getElementById(table.id);
                         table.parentNode.replaceChild(newTable, table);
                     });
+
+                    let newTimestamps = newContent.getElementById("timestamps");
+                    let currTimestamps = document.getElementById("timestamps");
+                    currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
+
                     prettyTimestamps();
                     refreshFeature(shrinkTablesFeature);
 
