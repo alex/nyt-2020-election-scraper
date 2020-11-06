@@ -13,6 +13,10 @@
     body {
         margin: 1rem;
     }
+
+    .table th:hover {
+      background-color: #00c1f0;
+    }
     
     .table td, .table th {
         padding: .25rem .5rem;
@@ -24,8 +28,9 @@
     }
 
     .Biden{
-        background-color: #84C4EE
+        background-color: #84C4EE;
     }
+
     .Trump{
         background-color: #ED98A9;
     }
@@ -70,5 +75,14 @@
         $(".timestamp").map(function (idx, tselem) {
             tselem.innerHTML = "<abbr title='" + tselem.innerHTML + "'>" + dayjs.utc(tselem.innerHTML.replace(" UTC", ""), 'YYYY-MM-DD HH:MM:SS').fromNow() + "</abbr>"
         })
+    </script>
+    <script type="text/javascript">
+      function toggleVisible({id}) {
+        const el = document.getElementById(id);
+
+        if (el?.style?.display) {
+          el.style.display = el.style.display === 'block' ? 'none' : 'block';
+        }
+      }
     </script>
 </body>

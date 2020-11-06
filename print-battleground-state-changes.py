@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+
+import collections
+import datetime
+import git
+import itertools
+import simdjson
+import subprocess
+from tabulate import tabulate
+
+AK_INDEX = 0
+AZ_INDEX = 3
+GA_INDEX = 10
+NC_INDEX = 27
+NV_INDEX = 33
+PA_INDEX = 38
+
+STATE_INDEXES = [
+    AK_INDEX,
+    AZ_INDEX,
+    GA_INDEX,
+    NC_INDEX,
+    NV_INDEX,
+    PA_INDEX,
+]
+
+
+def git_commits_for(path):
+    return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
+
+def git_show(ref, name, repo_client):
+    commit_tree = repo_client.commit(ref).tree
+
+    return commit_tree[name].data_stream.read()
+
+def fetch_all_results_jsons():
+    commits = git_commits_for("results.json")
+
+    repo = git.Repo('.', odbt=git.db.GitCmdObjectDB)
+    blobs = (git_show(ref, "results.json", repo) for ref in commits)
+
+    parsers = [simdjson.Parser() for blob in commits] # These can't be reused apparently
+    jsons = (parser.parse(blob) for parser, blob in zip(parsers, blobs))
+
+    return sorted(jsons, key=lambda j: j['meta']['timestamp']), parsers # Really make sure we’re in order
+
+# Information that is shared across loop iterations
+IterationInfo = collections.namedtuple(
+    'IterationInfo',
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
+)
+
+IterationSummary = collections.namedtuple(
+    'IterationSummary',
+    [
+        'timestamp',
+        'leading_candidate_name',
+        'trailing_candidate_name',
+        'vote_differential',
+        'votes_remaining',
+        'new_votes',
+        'leading_candidate_partition',
+        'trailing_candidate_partition',
+        'precincts_reporting',
+        'precincts_total',
+        'hurdle',
+        'hurdle_change',
+        'hurdle_mov_avg'
+    ]
+)
+
+def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
+    """
+    trend gain of last 30k (or more) votes for trailing candidate
+    """
+    hurdle_moving_average = None
+    MIN_AGG_VOTES = 30000
+
+    agg_votes = newest_votes
+    agg_c2_votes = round(new_partition_pct * newest_votes)
+    step = 0
+    while step < len(summarized_state_data) and agg_votes < MIN_AGG_VOTES:
+        this_summary = summarized_state_data[step]
+        step += 1
+        if this_summary.new_votes > 0:
+            agg_votes += this_summary.new_votes
+            agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+
+    if agg_votes:
+        hurdle_moving_average = float(agg_c2_votes) / agg_votes
+
+    return hurdle_moving_average
+
+
+def string_summary(summary):
+    thirty_ago = (datetime.datetime.utcnow() - datetime.timedelta(minutes=30))
+
+    return [
+        f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
+        '***' if summary.timestamp > thirty_ago else '---',
+        f'{summary.leading_candidate_name} leading by {summary.vote_differential:,} votes',
+        f'Remaining (est.): {summary.votes_remaining:,}',
+        f'Change: {summary.new_votes:7,} ({f"{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} / {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}" if summary.leading_candidate_partition else "n/a"})',
+        f'Precincts: {summary.precincts_reporting}/{summary.precincts_total}',
+        f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]',
+        f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
+    ]
+
+def html_write_state_head(state: str):
+    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    id = state_slug + "_content"
+
+    return f'''
+        <thead class="thead-light" onclick="toggleVisible({id})">
+        <tr>
+            <th class="text-center" colspan="9">{state}</th>
+        </tr>
+        <tbody id={id} style="display: block; width: 100%;">
+        <tr>
+            <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
+            <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Differential</th>
+            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this block?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this block break down, per candidate. Based on the number of reported votes and the change in differential.">
+                Block Breakdown
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent blocks trended? Computed using a moving average of previous 30k or more votes (or as many as available).">
+                Block Trend
+            </th>
+            <th class="has-tip" data-toggle="tooltip" title="How many precincts have reported?">Precincts Reporting</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">\
+                Hurdle
+            </th>
+        </tr>
+        </thead>
+    '''
+
+def html_summary(summary: IterationSummary):
+    html = f'''
+        <tr>
+            <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
+            <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
+            <td>{summary.vote_differential:,}</td>
+            <td>{summary.votes_remaining:,}</td>
+            <td>{summary.new_votes:7,}</td>
+    '''
+
+    if (summary.leading_candidate_partition):
+        html += f'''
+            <td>
+                {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
+                {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
+            </td>
+        '''
+    else:
+        html += '<td>N/A</td>'
+
+    if (summary.hurdle_mov_avg):
+        html += f'''
+            <td>
+                {summary.trailing_candidate_name} is averaging {summary.hurdle_mov_avg:5.01%}
+            </td>
+        '''
+    else:
+        html += '<td>N/A</td>'
+
+    html += f'''
+            <td><abbr title="{summary.precincts_reporting}/{summary.precincts_total}">{summary.precincts_reporting/summary.precincts_total:.1%}</abbr></td>
+            <td>{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]</td>
+        </tr>
+    '''
+
+    return html
+
+# Capture the time at the top of the main script logic so it's closer to when the pull of data happened
+scrape_time = datetime.datetime.utcnow()
+
+# List of results.json dicts, in chronological order
+#
+# Implementation note: `_pysimdjson_lifetime_hacks` is here because if the
+# `simdjson.Parser` object isn't around when you access one the values it
+# returns from `Parser.parse` it'll coredump.
+jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
+
+# Where we’ll aggregate the data from the JSON files
+summarized = {}
+
+for state_index in STATE_INDEXES:
+    state_name = jsons[0]['data']['races'][state_index]['state_name']
+    state_name += f" ({jsons[0]['data']['races'][state_index]['electoral_votes']})"
+    summarized[state_name] = []
+
+    last_iteration_info = IterationInfo(
+        vote_diff=None,
+        votes=None,
+        precincts_reporting=None,
+        hurdle=0
+    )
+
+    for json in jsons:
+        timestamp = datetime.datetime.strptime(json['meta']['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
+
+        # Retrieve relevant data from the state’s JSON blob
+        state_blob = json['data']['races'][state_index]
+        candidate1 = state_blob['candidates'][0] # Leading candidate
+        candidate2 = state_blob['candidates'][1] # Trailing candidate
+        candidate1_name = candidate1['last_name']
+        candidate2_name = candidate2['last_name']
+        vote_diff = candidate1['votes'] - candidate2['votes']
+        votes = state_blob['votes']
+        expected_votes = sum(map(lambda n: n['tot_exp_vote'], state_blob['counties']))
+        votes_remaining = expected_votes - votes
+        precincts_reporting = state_blob['precincts_reporting']
+        precincts_total = state_blob['precincts_total']
+        new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
+
+        hurdle = (((votes_remaining + vote_diff) / 2)) / votes_remaining
+
+        if new_votes != 0:
+            repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
+
+        # Info we’ll need for the next loop iteration
+        iteration_info = IterationInfo(
+            vote_diff=vote_diff,
+            votes=votes,
+            precincts_reporting=precincts_reporting,
+            hurdle=hurdle,
+        )
+
+        # Avoid writing duplicate rows
+        if last_iteration_info == iteration_info:
+            continue
+
+        # Compute aggregate of last 5 hurdle, if available
+        hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+
+        summary = IterationSummary(
+            timestamp,
+            candidate1_name,
+            candidate2_name,
+            vote_diff,
+            votes_remaining,
+            new_votes,
+            1-repartition1 if new_votes else 0,
+            repartition1 if new_votes else 0,
+            precincts_reporting,
+            precincts_total,
+            hurdle,
+            hurdle-last_iteration_info.hurdle,
+            hurdle_mov_avg
+        )
+
+        # Generate the string we’ll output and store it
+        summarized[state_name].insert(0, summary)
+
+        # Save info for the next iteration
+        last_iteration_info = iteration_info
+
+# print the summaries
+
+html_template = "<!-- Don't update me by hand, I'm generated by a program -->\n\n"
+with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
+    html_template += f.read()
+
+html_chunks = []
+
+batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
+print(tabulate([
+    ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
+    ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
+    ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
+]))
+for (state, timestamped_results) in summarized.items():
+    print(f'\n{state}:')
+    print(tabulate([string_summary(summary) for summary in timestamped_results]))
+
+    # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
+    state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
+    html_chunks.append(html_write_state_head(state))
+    for summary in timestamped_results:
+        html_chunks.append(html_summary(summary))
+    html_chunks.append("</tbody>")
+    html_chunks.append("</table><hr>")
+
+with open("battleground-state-changes.html","w", encoding='utf8') as f:
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
+    f.write(html)
