@@ -130,7 +130,7 @@
                 if (node.hasAttribute('data-timestamp')) {
                     timestamp = node.getAttribute('data-timestamp');
                 } else {
-                    timestamp = dayjs.utc(node.innerHTML.replace(" UTC", ""), 'YYYY-MM-DDTHH:MM:SS').local().format('DD MMM YYYY h:mm:ss z');
+                    timestamp = dayjs.utc(node.innerHTML.replace(" UTC", ""), 'YYYY-MM-DDTHH:MM:SS').local().format('DD MMM YYYY h:mm:ss A z');
                     node.setAttribute('data-timestamp', timestamp);
                 }
                 node.innerHTML = `<abbr class='pretty-timestamp' title='${timestamp}'>${prettyTime(timestamp)}</abbr>`;
