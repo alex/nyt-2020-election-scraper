@@ -97,10 +97,9 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 04:07:10 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:45:43 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 04:12:24 UTC</span> | Last batch: <span class="timestamp">2020-11-06 04:10:39 UTC</span></p>
 
     <p class="float-right">
-      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
@@ -775,7 +774,7 @@
                     <img src="flags/georgia.svg" width="50px" /> <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
-                Total Votes: Trump leads with 2,447,343 votes, Biden trails with 2,445,568 votes.
+                Total Votes: Trump leads with 2,448,016 votes, Biden trails with 2,446,211 votes.
             </th>
         </tr>
         <tr>
@@ -790,6 +789,27 @@
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%.">Hurdle</th>
         </tr>
         </thead>
+    
+
+        <tr>
+            <td class="timestamp">2020-11-06 04:10:39 UTC</td>
+            <td class="Trump">Trump</td>
+            <td>1,805</td>
+            <td>9,159</td>
+            <td>  1,375</td>
+    
+            <td>
+                Trump 51.1% /
+                48.9% Biden
+            </td>
+        
+            <td>
+                Biden is averaging 67.6%
+            </td>
+        
+            <td><abbr title="2643/2655">99.5%</abbr></td>
+            <td>Biden needs 59.85% [1.429%]</td>
+        </tr>
     
 
         <tr>
@@ -5764,13 +5784,6 @@
         const liveUpdatesFeature = 'live-updates';
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
-        }, button => {
-            button.html('Enable Live Updates');
-        });
-
-        const notificationFeature = 'notifications';
-        feature(notificationFeature, '#notification_button', button => {
-            button.html('Disable Notifications');
 
             if (!('Notification' in window)) {
                 return;
@@ -5780,7 +5793,7 @@
                 Notification.requestPermission();
             }
         }, button => {
-            button.html('Enable Notifications');
+            button.html('Enable Live Updates');
         });
 
         (async function() {
@@ -5846,7 +5859,7 @@
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (isFeatureEnabled(notificationFeature)) {
+                        if (Notifcation.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
