@@ -73,7 +73,7 @@
         }
     }
     </style>
-    <title>Election 2020 | Last scrape: Fri Nov  6 02:27:27 2020 (UTC)</title>
+    <title>Election 2020 Results</title>
 </head>
 
 <body>
@@ -84,12 +84,13 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="text-right">
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 02:29:47 UTC</span> | Last batch: <span class="timestamp">2020-11-06 02:07:55 UTC</span></p>
+
+    <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
-
 
     <table id='alaska' class='table table-bordered'>
 
@@ -5655,6 +5656,11 @@
                         let newTable = newContent.getElementById(table.id);
                         table.parentNode.replaceChild(newTable, table);
                     });
+
+                    let newTimestamps = newContent.getElementById("timestamps");
+                    let currTimestamps = document.getElementById("timestamps");
+                    currTimestamps.parentNode.replaceChild(newTimestamps, currTimestamps);
+
                     prettyTimestamps();
                     refreshFeature(shrinkTablesFeature);
 
