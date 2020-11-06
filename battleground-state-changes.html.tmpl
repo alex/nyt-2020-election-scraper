@@ -330,7 +330,7 @@
                     if (latestContent.updates.states_updated.length) {
                         Array.from(document.getElementsByTagName("table")).forEach(table => {
                             let newTable = latestContent.dom.getElementById(table.id);
-                            table.replaceChild(newTable, table);
+                            table.parentNode.replaceChild(newTable, table);
                             $('[data-toggle="tooltip"]').tooltip();
                         });
 
