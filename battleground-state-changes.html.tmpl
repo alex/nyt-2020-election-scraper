@@ -201,8 +201,8 @@
                 return body[0]; // ???
             };
 
-            const fetchLatestContent = async() => {
-                const response = await fetch("https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html", {
+            const fetchLatestContent = async (sha) => {
+                const response = await fetch(`https://raw.githubusercontent.com/alex/nyt-2020-election-scraper/${sha}/battleground-state-changes.html`, {
                     cache: 'no-cache',
                 });
                 const body = await response.text();
@@ -220,7 +220,7 @@
                 console.log("current commit", currentCommit);
 
                 if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let newContent = await fetchLatestContent();
+                    let newContent = await fetchLatestContent(currentCommit['sha']);
 
                     Array.from(document.getElementsByTagName("table")).forEach(table => {
                         let newTable = newContent.getElementById(table.id);
