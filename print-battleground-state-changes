@@ -163,13 +163,13 @@ def string_summary(summary):
         f'{summary.trailing_candidate_name} recent trend {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
-def html_write_state_head(state: str, summary: IterationSummary):
+def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
         <tr>
             <th class="text-left has-tip" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    <span class="statename">{state}</span>
+                    <img src="flags/{state_slug}.svg" width="50px" /> <span class="statename">{state}</span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
@@ -351,7 +351,7 @@ for (state, timestamped_results) in summarized.items():
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
     state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
     html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
-    html_chunks.append(html_write_state_head(state, timestamped_results[0]))
+    html_chunks.append(html_write_state_head(state, state_slug, timestamped_results[0]))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
     html_chunks.append("</table><hr>")
