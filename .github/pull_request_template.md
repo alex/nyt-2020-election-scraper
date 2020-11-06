@@ -16,4 +16,4 @@ List of open PRs: https://github.com/alex/nyt-2020-election-scraper/pulls
 - [ ] Ensured that you have [rebased your branch](https://stackoverflow.com/a/7244456) with this repo's latest master branch.
 - [ ] Ensured that relevant issues are linked, if this PR resolves any outstanding.
 - [ ] Added a screenshot for all UI changes (you can drag the file into this edit box and it will be uploaded).
-- [ ] Ensured that changes to auto-generated files have not been committed; in particular, `*.html`, `*.csv` and `*.json` files.
+- [ ] Ensured that changes to auto-generated files have not been committed; in particular, `*.html`, `*.csv`, `*.xml` and `*.json` files.
