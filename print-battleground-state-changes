@@ -334,7 +334,7 @@ for _, rows in records.items():
         last_iteration_info = iteration_info
 
     if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
-        states_updated.append(rows[0].state_id)
+        states_updated.append(rows[0].state_name)
 
 # print the summaries
 
