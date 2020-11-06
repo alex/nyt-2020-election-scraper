@@ -29,25 +29,35 @@
         padding: .25rem .5rem;
     }
 
-    .table th.text-left {
+    thead td {
+      background-color: #e9ecef;
+      line-height: 1.2rem;
+    }
+
+    thead .text-left {
         font-weight: normal;
     }
 
-    .table th span.statename {
+    thead span.statename {
         font-weight: bold;
-        font-size: 14pt;
+        /* If changing these, update "thead tr:nth-child(2) th" too */
+        font-size: 1.2rem;
+        line-height: 1.2rem;
     }
 
-    thead tr:nth-child(1) th {
+    thead tr:nth-child(1) td {
         position: sticky;
         top: -1px;
+        border-bottom: none;
     }
 
     thead tr:nth-child(2) th {
         position: sticky;
-        top: calc(.25rem + 1.5rem + 2px);
+        /* Padding, first line, second line, padding */
+        top: calc(.25rem + 1.2rem + 1.2rem + .25rem);
         border-right: none;
         border-left: none;
+        border-top: none;
     }
 
     .has-tip:after{
@@ -58,7 +68,7 @@
     .flag-bg {
         background-position: fixed;
         background-repeat: no-repeat;
-        background-size: 100px;
+        background-size: auto 100%;
         background-position: 100%;
     }
 
@@ -78,7 +88,7 @@
             color: #dedad6;
             background-color: #202020;
         }
-        .table .thead-light th {
+        .table .thead-light th, .table .thead-light td {
             background-color: #495057;
             color: #e9ecef;
         }
@@ -158,7 +168,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 05:58:05 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:41:02 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 06:11:41 UTC</span> | Last batch: <span class="timestamp">2020-11-06 05:41:02 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -169,13 +179,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/alaska.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Alaska (EV: 3)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 108,231 votes, Biden trails with 56,849 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -225,13 +235,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/arizona.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Arizona (EV: 11)</span>
                 </span>
                 <br>
                 Total Votes: Biden leads with 1,532,062 votes, Trump trails with 1,485,010 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -816,13 +826,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/georgia.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Georgia (EV: 16)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 2,448,037 votes, Biden trails with 2,446,328 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2767,13 +2777,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/north-carolina.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">North Carolina (EV: 15)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 2,732,120 votes, Biden trails with 2,655,383 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -2878,13 +2888,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/nevada.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Nevada (EV: 6)</span>
                 </span>
                 <br>
                 Total Votes: Biden leads with 604,251 votes, Trump trails with 592,813 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
@@ -3060,13 +3070,13 @@
 
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/pennsylvania.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">Pennsylvania (EV: 20)</span>
                 </span>
                 <br>
                 Total Votes: Trump leads with 3,285,445 votes, Biden trails with 3,262,869 votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
