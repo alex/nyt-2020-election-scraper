@@ -194,7 +194,8 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                     <span class="statename">{state}</span>
                 </span>
                 <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
+                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes. 
+                Margin: {(summary.leading_candidate_votes-summary.trailing_candidate_votes)/(summary.leading_candidate_votes+summary.trailing_candidate_votes)*100:.0}%
             </td>
         </tr>
         <tr>
