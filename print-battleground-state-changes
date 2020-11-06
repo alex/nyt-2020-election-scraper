@@ -172,7 +172,7 @@ def string_summary(summary):
     ]
 
 
-def html_write_state_head(state: str):
+def html_write_state_head(state: str, summary: IterationSummary):
     return f"""
         <thead class="thead-light">
         <tr>
