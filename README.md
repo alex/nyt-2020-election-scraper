@@ -8,4 +8,4 @@ Outputted files:
 
 Inspired by Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
 
-**IMPORTANT**: Contributions are welcome, but make sure you check the pull request template: https://github.com/fractionalhare/nyt-2020-election-scraper/blob/master/.github/pull_request_template.md
+**IMPORTANT**: Contributions are welcome, but make sure you check [the pull request template](.github/pull_request_template.md)
