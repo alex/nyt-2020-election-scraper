@@ -127,7 +127,7 @@ IterationSummary = collections.namedtuple(
     ]
 )
 
-def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
+def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct, trailing_candidate_name):
     """
     trend gain of last 30k (or more) votes for trailing candidate
     """
@@ -141,13 +141,19 @@ def compute_hurdle_sma(summarized_state_data, newest_votes, new_partition_pct):
         this_summary = summarized_state_data[step]
         step += 1
         if this_summary.new_votes > 0:
+            if this_summary.trailing_candidate_name == trailing_candidate_name:
+                trailing_candidate_partition = this_summary.trailing_candidate_partition
+            else:
+                # Broken for 3 way race
+                trailing_candidate_partition = this_summary.leading_candidate_partition
+
             if this_summary.new_votes + agg_votes > MIN_AGG_VOTES:
                 subset_pct = (MIN_AGG_VOTES - agg_votes) / float(this_summary.new_votes)
                 agg_votes += round(this_summary.new_votes * subset_pct)
-                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes * subset_pct)
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes * subset_pct)
             else:
                 agg_votes += this_summary.new_votes
-                agg_c2_votes += round(this_summary.trailing_candidate_partition * this_summary.new_votes)
+                agg_c2_votes += round(trailing_candidate_partition * this_summary.new_votes)
 
     if agg_votes:
         hurdle_moving_average = float(agg_c2_votes) / agg_votes
@@ -285,7 +291,7 @@ def json_to_summary(
     )
 
     # Compute aggregate of last 5 hurdle, if available
-    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0)
+    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0, candidate2_name)
 
     summary = IterationSummary(
         batch_time,
