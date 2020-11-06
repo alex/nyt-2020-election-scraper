@@ -186,6 +186,7 @@ def string_summary(summary):
     ]
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
+    differential = summary.leading_candidate_votes - summary.trailing_candidate_votes
     return f'''
         <thead class="thead-light">
         <tr>
@@ -194,7 +195,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                     <span class="statename">{state}</span>
                 </span>
                 <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
+                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes. Differential: {differential:,}
             </td>
         </tr>
         <tr>
@@ -415,7 +416,7 @@ with open('battleground-state-changes.xml', 'w') as rssfile:
   <title>NYT 2020 Election Scraper RSS Feed</title>
   <link>https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html</link>
   <description>Latest results from battleground states.</description>
-  <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>''')    
+  <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>''')
 
     for state, results in summarized.items():
         try:
