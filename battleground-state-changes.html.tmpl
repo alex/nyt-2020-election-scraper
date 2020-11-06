@@ -361,7 +361,7 @@
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
 
-            if ('Notification' in window && Notification.permission !== 'denied') {
+            if ('Notification' in window && Notification.permission !== 'granted') {
                 Notification.requestPermission();
             }
 
