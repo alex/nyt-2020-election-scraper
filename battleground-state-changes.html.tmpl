@@ -287,7 +287,7 @@
             return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         };
 
-        const updateCheck = async (currentCommit, notify) => {
+        const updateCheck = async (currentCommit, currentContent) => {
             let latestCommit = await fetchLatestCommit();
             console.log("latest commit", latestCommit);
 
@@ -296,7 +296,10 @@
                 let latestContent = await fetchLatestContent(latestCommit['sha']);
 
                 console.log("latest content", latestContent.updates);
-                if (notify && latestContent.updates.states_updated.length) {
+                if (currentContent &&
+                    currentContent.updates.results_hash !== latestContent.updates.results_hash &&
+                    latestContent.updates.states_updated.length
+                ) {
                     if (Notification.permission === "granted") {
                         new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                     }
@@ -323,19 +326,23 @@
                     loadTooltips();
                     refreshFeature(shrinkTablesFeature);
                 }
+
+                return {commit: latestCommit, content: latestContent};
             }
 
-            return latestCommit;
+            return {commit: latestCommit, content: currentContent};
         };
 
         // do an initial update
         if (!isDeveloperEnvironment()) {
-            updateCheck({}, false);
+            updateCheck({}, undefined);
         }
 
         const startLiveUpdates = async () => {
             let currentCommit = await fetchLatestCommit();
             console.log("current commit", currentCommit);
+            let currentContent = await fetchLatestContent(currentCommit['sha']);
+            console.log("current content", currentContent.updates);
 
             const nextCheck = () => {
                 const ONE_MINUTE = 1 * 60 * 1000;
@@ -349,8 +356,11 @@
             const runner = async () => {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
-                currentCommit = await updateCheck(currentCommit, true);
+                const results = await updateCheck(currentCommit, currentContent);
+                currentCommit = results.commit;
+                currentContent = results.content;
                 console.log("new current commit", currentCommit);
+                console.log("new current content", currentContent);
                 setTimeout(runner, nextCheck());
             };
 
