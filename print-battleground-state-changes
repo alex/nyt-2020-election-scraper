@@ -383,5 +383,5 @@ with open('battleground-state-changes.csv', 'w') as csvfile:
 
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
-        "states_updated": states_updated,
+        "states_updated": [],
     }))
