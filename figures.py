@@ -20,7 +20,10 @@ def update_figures():
                     except:
                         Biden.append(float(item.strip(" ").split(" ")[0].strip("%")))
                 else:
-                    Trump.append(float(item.strip(" ").split(" ")[1].strip("%")))
+                    try:
+                        Trump.append(float(item.strip(" ").split(" ")[1].strip("%")))
+                    except:
+                        Trump.append(float(item.strip(" ").split(" ")[0].strip("%")))
         change = [x for x in df["Change"]]
         bvotes = []
         tvotes = []
