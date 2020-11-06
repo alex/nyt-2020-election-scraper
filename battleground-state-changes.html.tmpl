@@ -330,7 +330,8 @@
                     if (latestContent.updates.states_updated.length) {
                         Array.from(document.getElementsByTagName("table")).forEach(table => {
                             let newTable = latestContent.dom.getElementById(table.id);
-                            table.parentNode.replaceChild(newTable, table);
+                            table.replaceChild(newTable, table);
+                            $('[data-toggle="tooltip"]').tooltip();
                         });
 
                         let newTimestamps = latestContent.dom.getElementById("timestamps");
