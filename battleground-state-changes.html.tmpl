@@ -260,10 +260,10 @@
                     refreshFeature(shrinkTablesFeature);
 
                     currentCommit = latestCommit;
-                    if (isFeatureEnabled(notificationFeature) && updatedStates) {
+                    if (isFeatureEnabled(notificationFeature) && updatedStates.length) {
                         updatedStates = updatedStates.map(state => state[0].toUpperCase() + state.substring(1));
                         let lastUpdatedState = updatedStates.pop();
-                        updatedStates = [updatedStates.join(", "), lastUpdatedState].join(updatedStates ? " and " : "");
+                        updatedStates = [updatedStates.join(", "), lastUpdatedState].join(updatedStates.length ? " and " : "");
                         new Notification("New " + updatedStates + " ballots were counted!");
                     }
                 }
