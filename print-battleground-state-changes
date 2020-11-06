@@ -103,7 +103,7 @@ InputRecord = collections.namedtuple(
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name']
 )
 
 IterationSummary = collections.namedtuple(
@@ -280,7 +280,10 @@ def json_to_summary(
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
     if new_votes != 0:
-        repartition1 = ((new_votes + (last_iteration_info.vote_diff - vote_diff)) / 2.) / new_votes
+        last_vote_diff = last_iteration_info.vote_diff
+        if candidate1_name != last_iteration_info.leading_candidate_name:
+            last_vote_diff *= -1
+        repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
 
     # Info we’ll need for the next loop iteration
     iteration_info = IterationInfo(
@@ -288,6 +291,7 @@ def json_to_summary(
         votes=votes,
         precincts_reporting=precincts_reporting,
         hurdle=hurdle,
+        leading_candidate_name=candidate1_name
     )
 
     # Compute aggregate of last 5 hurdle, if available
@@ -325,7 +329,8 @@ for rows in records.values():
         vote_diff=None,
         votes=None,
         precincts_reporting=None,
-        hurdle=0
+        hurdle=0,
+        leading_candidate_name=None
     )
 
     for row in rows:
