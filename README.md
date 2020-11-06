@@ -7,3 +7,7 @@ Outputted files:
 - <https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.csv>
 
 Inspired by Simon Willison: https://simonwillison.net/2020/Oct/9/git-scraping/
+
+## Development
+
+Please do not modify any of the static files (html, csv, or txt). These files are dynamically generated.
