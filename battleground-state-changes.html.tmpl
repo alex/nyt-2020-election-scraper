@@ -126,10 +126,10 @@
             for (let i = 0, len = mutations.length; i < len; i++) {
                 let added = mutations[i].addedNodes;
                 for (let j = 0, node; (node = added[j]); j++) {
-                    if (node.tagName === 'td') {
+                    if (node.tagName === 'td' || node.tagName === 'span') {
                         handleNode(node);
                     } else if (node.firstElementChild) {
-                        for (const child of node.getElementsByTagName('td')) {
+                        for (const child of node.querySelectorAll('td,span')) {
                             handleNode(child);
                         }
                     }
