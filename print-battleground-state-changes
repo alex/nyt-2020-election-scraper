@@ -176,12 +176,10 @@ jsons, _pysimdjson_lifetime_hacks = fetch_all_results_jsons()
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 
-
 for state_index in STATE_INDEXES:
     state_name = jsons[0]['data']['races'][state_index]['state_name']
     state_name += f" ({jsons[0]['data']['races'][state_index]['electoral_votes']})"
     summarized[state_name] = []
-    datajson[state_name] = []
 
     last_iteration_info = IterationInfo(
         vote_diff=None,
@@ -245,7 +243,6 @@ for state_index in STATE_INDEXES:
 
         # Generate the string we’ll output and store it
         summarized[state_name].insert(0, summary)
-        datajson[state_name].insert(0, summary)
 
         # Save info for the next iteration
         last_iteration_info = iteration_info
