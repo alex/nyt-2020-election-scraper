@@ -287,7 +287,7 @@
             return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         };
 
-        const updateCheck = async (currentCommit) => {
+        const updateCheck = async (currentCommit, notify) => {
             let latestCommit = await fetchLatestCommit();
             console.log("latest commit", latestCommit);
 
@@ -296,7 +296,7 @@
                 let latestContent = await fetchLatestContent(latestCommit['sha']);
 
                 console.log("latest content", latestContent.updates);
-                if (latestContent.updates.states_updated.length) {
+                if (notify && latestContent.updates.states_updated.length) {
                     if (Notification.permission === "granted") {
                         new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                     }
@@ -327,9 +327,7 @@
         };
 
         const forceUpdate = async () => {
-            updateCheck({
-                sha: undefined,
-            });
+            updateCheck({}, false);
         };
 
         forceUpdate();
@@ -350,7 +348,8 @@
             const runner = async () => {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
-                currentCommit = updateCheck(currentCommit);
+                currentCommit = await updateCheck(currentCommit, true);
+                console.log("new current commit", currentCommit);
                 setTimeout(runner, nextCheck());
             };
 
