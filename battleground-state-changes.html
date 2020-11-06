@@ -168,8 +168,8 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 07:44:24 UTC</span> | Last batch: <span class="timestamp">2020-11-06 07:41:51 UTC</span></p>
-    <div id="template-hash" style="display: none;">a03a0c9fdf5c27fcd02fe674a37eced0530de671dbe8d5ab0a6f0c454931612c</div>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 07:48:31 UTC</span> | Last batch: <span class="timestamp">2020-11-06 07:41:51 UTC</span></p>
+    <div id="template-hash" style="display: none;">5927651f53502692169cc46b7118f1a82630df89a132031619bba30261208acd</div>
 
     <p class="float-right">
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
@@ -5771,6 +5771,8 @@
                 if (newHash && newHash !== currentHash && !isDeveloperEnvironment()) {
                     location.reload(true);
                 } else {
+                    $('[data-toggle="tooltip"]').tooltip('hide')
+
                     const elementsToUpdate = [
                         ...Array.from(document.getElementsByTagName("table")),
                         document.getElementById("timestamps"),
