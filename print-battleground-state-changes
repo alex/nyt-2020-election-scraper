@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import os
+import csv
 import collections
 import datetime
 import git
 import itertools
+import os
 import simdjson
 import subprocess
 from tabulate import tabulate
@@ -350,3 +351,10 @@ for (state, timestamped_results) in summarized.items():
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
     f.write(html)
+
+with open('battleground-state-changes.csv', 'w') as csvfile:
+    wr = csv.writer(csvfile)
+    wr.writerow(('state',) + IterationSummary._fields)
+    for state, results in summarized.items():
+        for row in results:
+            wr.writerow((state,) + row)
