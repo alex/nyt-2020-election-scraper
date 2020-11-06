@@ -349,7 +349,7 @@ for (state, timestamped_results) in summarized.items():
     html_chunks.append("</table><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
-    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE %}', scrape_time.strftime("%c (UTC)"))
+    html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))
     f.write(html)
 
 with open('battleground-state-changes.csv', 'w') as csvfile:
