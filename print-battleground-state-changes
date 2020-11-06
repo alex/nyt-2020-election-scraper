@@ -22,6 +22,22 @@ PA_INDEX = 38
 
 STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
+AK_URL = 'https://www.elections.alaska.gov/results/20GENR/index.php'
+AZ_URL = 'https://results.arizona.vote/#/featured/18/0'
+GA_URL = 'https://results.enr.clarityelections.com/GA/105369/web.264614/#/summary'
+NC_URL = 'https://www.ncsbe.gov/results-data/election-results'
+NV_URL = 'https://silverstateelection.nv.gov/'
+PA_URL = 'https://www.electionreturns.pa.gov/'
+
+state_urls = {
+    'alaska' : AK_URL,
+    'arizona': AZ_URL,
+    'georgia': GA_URL,
+    'north-carolina': NC_URL,
+    'nevada': NV_URL,
+    'pennsylvania': PA_URL
+}
+
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
 CACHE_VERSION = 1
@@ -178,13 +194,13 @@ def string_summary(summary):
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
     ]
 
-def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
+def html_write_state_head(state: str, state_slug: str, state_url: str, summary: IterationSummary):
     return f'''
         <thead class="thead-light">
         <tr>
             <td class="text-left has-tip flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    <span class="statename">{state}</span>
+                    <span class="statename"><a href="{state_url}" target="_blank">{state}</a></span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
@@ -364,8 +380,10 @@ for (state, timestamped_results) in summarized.items():
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
     state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+    state_url = state_urls[state_slug]
+
     html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
-    html_chunks.append(html_write_state_head(state, state_slug, timestamped_results[0]))
+    html_chunks.append(html_write_state_head(state, state_slug, state_url, timestamped_results[0]))
     for summary in timestamped_results:
         html_chunks.append(html_summary(summary))
     html_chunks.append("</table><hr>")
