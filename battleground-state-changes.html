@@ -90,7 +90,7 @@
         This website is <a href="https://github.com/alex/nyt-2020-election-scraper">open source</a> and was written by <a href="https://github.com/alex/nyt-2020-election-scraper/graphs/contributors">these people</a>.
     </p>
 
-    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:08:05 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:06:46 UTC</span></p>
+    <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">2020-11-06 03:09:04 UTC</span> | Last batch: <span class="timestamp">2020-11-06 03:06:46 UTC</span></p>
 
     <p class="float-right">
       <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
@@ -5698,8 +5698,12 @@
                 if (currentCommit['sha'] !== latestCommit['sha']) {
                     let newContent = await fetchLatestContent(latestCommit['sha']);
 
+                    let updatedStates = [];
                     Array.from(document.getElementsByTagName("table")).forEach(table => {
                         let newTable = newContent.getElementById(table.id);
+                        if (newTable.rows.length > table.rows.length) {
+                            updatedStates.push(table.id);
+                        }
                         table.parentNode.replaceChild(newTable, table);
                     });
 
@@ -5711,8 +5715,11 @@
                     refreshFeature(shrinkTablesFeature);
 
                     currentCommit = latestCommit;
-                    if (isFeatureEnabled(notificationFeature)) {
-                        new Notification("New ballots were counted!");
+                    if (isFeatureEnabled(notificationFeature) && updatedStates.length) {
+                        updatedStates = updatedStates.map(state => state[0].toUpperCase() + state.substring(1));
+                        let lastUpdatedState = updatedStates.pop();
+                        updatedStates = [updatedStates.join(", "), lastUpdatedState].join(updatedStates.length ? " and " : "");
+                        new Notification("New " + updatedStates + " ballots were counted!");
                     }
                 }
             }, 5 * 60 * 1000);
