@@ -98,7 +98,6 @@
     <p class="float-left" id="timestamps">Last scrape: <span class="timestamp">{% SCRAPE_TIME %}</span> | Last batch: <span class="timestamp">{% BATCH_TIME %}</span></p>
 
     <p class="float-right">
-      <button type='button' id='notification_button' class='btn btn-secondary'>Enable Notifications</button>
       <button type='button' id='live_update_button' class='btn btn-secondary'>Enable Live Updates</button>
       <button type='button' id='shrink_button' class='btn btn-secondary'>Shrink Tables</button>
     </p>
@@ -204,13 +203,6 @@
         const liveUpdatesFeature = 'live-updates';
         feature(liveUpdatesFeature, '#live_update_button', button => {
             button.html('Disable Live Updates');
-        }, button => {
-            button.html('Enable Live Updates');
-        });
-
-        const notificationFeature = 'notifications';
-        feature(notificationFeature, '#notification_button', button => {
-            button.html('Disable Notifications');
 
             if (!('Notification' in window)) {
                 return;
@@ -220,7 +212,7 @@
                 Notification.requestPermission();
             }
         }, button => {
-            button.html('Enable Notifications');
+            button.html('Enable Live Updates');
         });
 
         (async function() {
@@ -286,7 +278,7 @@
                         refreshFeature(shrinkTablesFeature);
 
                         currentCommit = latestCommit;
-                        if (isFeatureEnabled(notificationFeature)) {
+                        if (Notifcation.permission === "granted") {
                             new Notification(`New ballots were counted in: ${latestContent.updates.states_updated.join(", ")}!`);
                         }
                     }
