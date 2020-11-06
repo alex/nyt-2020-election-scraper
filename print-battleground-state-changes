@@ -379,11 +379,11 @@ for (state, timestamped_results) in sorted(summarized.items()):
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
     state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
-    html_chunks.append(f"<table id='{state_slug}' class='table table-bordered'>")
+    html_chunks.append(f"<div class='table-responsive'><table id='{state_slug}' class='table table-bordered'>")
     html_chunks.append(html_write_state_head(state, state_slug, timestamped_results[0]))
     for summary in timestamped_results:
         html_chunks.append(html_summary(state_slug=state_slug, summary=summary))
-    html_chunks.append("</table><hr>")
+    html_chunks.append("</table></div><hr>")
 
 with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template.replace('{% TABLES %}', "\n".join(html_chunks)).replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')).replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)
