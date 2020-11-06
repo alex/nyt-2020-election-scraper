@@ -340,4 +340,18 @@
             setTimeout(getUpdates, nextCheck());
         })();
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.table').click(function(){
+                if ($(this).hasClass('collapsed')) {
+                    $(this).removeClass('collapsed');
+                    $(this).find('tbody tr').each(function() { $(this).show(); });
+                } else {
+                    $(this).addClass('collapsed');
+                    $(this).find('tbody tr').each(function() { $(this).hide(); });
+                }
+            });
+        });
+    </script>
 </body>
