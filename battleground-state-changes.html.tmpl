@@ -209,18 +209,18 @@
                 return new DOMParser().parseFromString(body, 'text/html');
             };
 
-            let latestCommit = await fetchLatestCommit();
-            console.log("latest commit", latestCommit);
+            let currentCommit = await fetchLatestCommit();
+            console.log("current commit", currentCommit);
 
             // live updates
             setInterval(async function() {
                 if (!isFeatureEnabled(liveUpdatesFeature)) return;
 
-                let currentCommit = await fetchLatestCommit();
-                console.log("current commit", currentCommit);
+                let latestCommit = await fetchLatestCommit();
+                console.log("latest commit", latestCommit);
 
                 if (currentCommit['sha'] !== latestCommit['sha']) {
-                    let newContent = await fetchLatestContent(currentCommit['sha']);
+                    let newContent = await fetchLatestContent(latestCommit['sha']);
 
                     Array.from(document.getElementsByTagName("table")).forEach(table => {
                         let newTable = newContent.getElementById(table.id);
@@ -229,12 +229,12 @@
                     prettyTimestamps();
                     refreshFeature(shrinkTablesFeature);
 
-                    latestCommit = currentCommit;
+                    currentCommit = latestCommit;
                     if (isFeatureEnabled(notificationFeature)) {
                         new Notification("New ballots were counted!");
                     }
                 }
-            }, 5000);
+            }, 5 * 60 * 1000);
         })();
     </script>
 </body>
