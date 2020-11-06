@@ -220,8 +220,14 @@ def html_summary(summary: IterationSummary):
     '''
 
     if (summary.leading_candidate_partition):
+        if summary.leading_candidate_partition > summary.trailing_candidate_partition:
+            partition_leader = summary.leading_candidate_name
+        elif summary.leading_candidate_partition < summary.trailing_candidate_partition:
+            partition_leader = summary.trailing_candidate_name
+        else:
+            partition_leader = ''
         html += f'''
-            <td>
+            <td class="{partition_leader}">
                 {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
                 {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
             </td>
