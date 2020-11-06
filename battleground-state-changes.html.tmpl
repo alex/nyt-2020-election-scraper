@@ -27,25 +27,35 @@
         padding: .25rem .5rem;
     }
 
-    .table th.text-left {
+    thead td {
+      background-color: #e9ecef;
+      line-height: 1.2rem;
+    }
+
+    thead .text-left {
         font-weight: normal;
     }
 
-    .table th span.statename {
+    thead span.statename {
         font-weight: bold;
-        font-size: 14pt;
+        /* If changing these, update "thead tr:nth-child(2) th" too */
+        font-size: 1.2rem;
+        line-height: 1.2rem;
     }
 
-    thead tr:nth-child(1) th {
+    thead tr:nth-child(1) td {
         position: sticky;
         top: -1px;
+        border-bottom: none;
     }
 
     thead tr:nth-child(2) th {
         position: sticky;
-        top: calc(.25rem + 1.5rem + 2px);
+        /* Padding, first line, second line, padding */
+        top: calc(.25rem + 1.2rem + 1.2rem + .25rem);
         border-right: none;
         border-left: none;
+        border-top: none;
     }
 
     .has-tip:after{
@@ -56,7 +66,7 @@
     .flag-bg {
         background-position: fixed;
         background-repeat: no-repeat;
-        background-size: 100px;
+        background-size: auto 100%;
         background-position: 100%;
     }
 
@@ -76,7 +86,7 @@
             color: #dedad6;
             background-color: #202020;
         }
-        .table .thead-light th {
+        .table .thead-light th, .table .thead-light td {
             background-color: #495057;
             color: #e9ecef;
         }

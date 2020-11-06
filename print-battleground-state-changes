@@ -181,13 +181,13 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     return f'''
         <thead class="thead-light">
         <tr>
-            <th class="text-left has-tip flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
+            <td class="text-left has-tip flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
                 <span data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
-            </th>
+            </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this block of votes get reported?">Timestamp</th>
