@@ -401,7 +401,7 @@ with open("battleground-state-changes.html","w", encoding='utf8') as f:
         .replace('{% TABLES %}', "\n".join(html_chunks))\
         .replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC'))\
         .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')) \
-        .replace('{% LAST_BATCH %}', f"({', '.join(states_updated)})" if states_updated else None) \
+        .replace('{% LAST_BATCH %}', f"({', '.join(states_updated)})" if states_updated else "") \
         .replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)\
         .replace('{% PAGE_METADATA %}', page_metadata)
     f.write(html)
