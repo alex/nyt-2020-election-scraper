@@ -214,11 +214,12 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
 
 def html_summary(state_slug: str, summary: IterationSummary):
     shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
+    margin_percent = (summary.leading_candidate_votes-summary.trailing_candidate_votes)/(summary.leading_candidate_votes+summary.trailing_candidate_votes)
     html = f'''
         <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
-            <td>{summary.vote_differential:,}</td>
+            <td>{summary.vote_differential:,} <span class="margin">({margin_percent:3.2%})</span></td>
             <td>{shown_votes_remaining}</td>
             <td>{summary.new_votes:7,}</td>
     '''
