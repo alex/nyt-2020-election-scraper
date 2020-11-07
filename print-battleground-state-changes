@@ -61,17 +61,28 @@ def fetch_all_records():
         rows = []
         for index in STATE_INDEXES:
             race = json['data']['races'][index]
+
+            county_tot_exp_vote = [county['tot_exp_vote'] for county in race['counties']]
+            if all(county_tot_exp_vote):
+                tot_exp_vote = sum(county_tot_exp_vote)
+            else:
+                # NYT's data doesn't seem to have a county-by-county vote
+                # estimate for the following states: Connecticut, Massachusetts,
+                # Maine, New Hampshire, Rhode Island, and Vermont. So we have to
+                # fall back to the state wide one.
+                tot_exp_vote = race['tot_exp_vote']
+
             record = InputRecord(
                 timestamp,
                 race['state_name'],
                 race['electoral_votes'],
                 race['candidates'].as_list(),
                 race['votes'],
-                sum(map(lambda n: n['tot_exp_vote'], race['counties'])),
+                tot_exp_vote,
                 race['precincts_total'],
                 race['precincts_reporting'],
                 {n['name']: n['votes'] for n in race['counties']},
-                )
+            )
             rows.append(record)
             out.append(record)
         try:
@@ -424,7 +435,7 @@ print(tabulate([
 ]))
 # The NYTimes array of states is not sorted alphabetically, so we'll use `sorted`
 for (state, timestamped_results) in sorted(summarized.items()):
-    print(f'\n{state} Total Votes: ({timestamped_results[1][1]}: {timestamped_results[1][3]:,}, {timestamped_results[1][2]}: {timestamped_results[1][4]:,})')
+    print(f'\n{state} Total Votes: ({timestamped_results[0][1]}: {timestamped_results[0][3]:,}, {timestamped_results[0][2]}: {timestamped_results[0][4]:,})')
     print(tabulate([string_summary(summary) for summary in timestamped_results]))
 
     # 'Alaska (3)' -> 'alaska', 'North Carolina (15)' -> 'north-carolina'
