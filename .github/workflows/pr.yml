@@ -42,3 +42,14 @@ jobs:
         name: battleground-state-changes
         path: |
           battleground-state-changes.*
+
+    - name: Generate screenshots
+      run: |-
+        npm install --prefix .github/screenshot
+        npm start --prefix .github/screenshot
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: |
+          screenshot-*.png
