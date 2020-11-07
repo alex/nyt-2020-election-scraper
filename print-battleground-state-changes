@@ -21,7 +21,8 @@ NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
 
-STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
+BATTLEGROUND_STATES = set(["Alaska (EV: 3)", "Arizona (EV: 11)", "Georgia (EV: 16)", "North Carolina (EV: 15)", "Nevada (EV: 6)", "Pennsylvania (EV: 20)"])
+STATE_INDEXES = range(51) # 50 States + DC
 
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
