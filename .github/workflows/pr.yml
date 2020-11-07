@@ -45,8 +45,10 @@ jobs:
 
     - name: Generate screenshots
       run: |-
-        npm install --prefix .github/screenshot
-        npm start --prefix .github/screenshot
+        PUPPETEER_PRODUCT=chrome npm install --prefix .github/screenshot
+        PUPPETEER_PRODUCT=chrome npm start --prefix .github/screenshot
+        PUPPETEER_PRODUCT=firefox npm install --prefix .github/screenshot puppeteer
+        PUPPETEER_PRODUCT=firefox npm start --prefix .github/screenshot
     - name: Upload screenshots
       uses: actions/upload-artifact@v2
       with:
