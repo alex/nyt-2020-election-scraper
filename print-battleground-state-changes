@@ -21,6 +21,16 @@ NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
 
+STATE_ELECTION_SITES = {
+    "Alaska": "https://www.elections.alaska.gov/results/20GENR/index.php",
+    "Arizona": "https://results.arizona.vote/#/featured/18/0",
+    "Georgia": "https://sos.ga.gov/index.php/elections",
+    "Nevada": "https://silverstateelection.nv.gov/",
+    "North Carolina": "https://er.ncsbe.gov/",
+    "Pennsylvania": "https://www.votespa.com/About-Elections/Pages/Counting-Dashboard.aspx"
+   
+}
+
 STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
 
 CACHE_DIR = '_cache'
@@ -124,7 +134,8 @@ IterationSummary = collections.namedtuple(
         'precincts_total',
         'hurdle',
         'hurdle_change',
-        'hurdle_mov_avg'
+        'hurdle_mov_avg',
+        'election_results_url'
     ]
 )
 
@@ -195,8 +206,11 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                 <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
                     <span class="statename">{state}</span>
                 </span>
+
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
+                <br>
+                <a href="{summary.election_results_url}" target="_blank">Official Results</a>
             </td>
         </tr>
         <tr>
@@ -267,6 +281,7 @@ def json_to_summary(
 ) -> Tuple[IterationInfo, IterationSummary]:
     timestamp = datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
 
+
     # Retrieve relevant data from the state’s JSON blob
     candidate1 = row.candidates[0] # Leading candidate
     candidate2 = row.candidates[1] # Trailing candidate
@@ -286,6 +301,7 @@ def json_to_summary(
 
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
+    election_results_url = STATE_ELECTION_SITES[row.state_name]
     if new_votes != 0:
         last_vote_diff = (-1 if bumped else 1) * last_iteration_info.vote_diff
         repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
@@ -317,7 +333,8 @@ def json_to_summary(
         precincts_total,
         hurdle,
         hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
-        hurdle_mov_avg
+        hurdle_mov_avg,
+        election_results_url
     )
 
     return iteration_info, summary
