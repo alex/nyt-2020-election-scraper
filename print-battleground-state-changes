@@ -222,10 +222,10 @@ def html_summary(state_slug: str, summary: IterationSummary):
         counties_tooltip_attributes = (
             'class="has-tip" data-toggle="tooltip" data-html="true" data-title="' +
             '<strong>Estimated county-level breakdown:</strong><br>' +
-            '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.2%}' for name, value in counties_partition) +
+            '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.0%}' for name, value in counties_partition) +
             '" title="' +
             'Estimated county-level breakdown: ' +
-            ', '.join(f'{name}: {value / counties_total:.2%}' for name, value in counties_partition) +
+            ', '.join(f'{name}: {value / counties_total:.0%}' for name, value in counties_partition) +
             '"'
         )
     else:
