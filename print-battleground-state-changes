@@ -374,7 +374,7 @@ html_chunks = []
 batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
 print(tabulate([
     ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
-    [f"({', '.join(states_updated)})" if states_updated else None],
+    [f"Last batch received: {({', '.join(states_updated)}) if states_updated else None}"],
     ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
 ]))
 # The NYTimes array of states is not sorted alphabetically, so we'll use `sorted`
