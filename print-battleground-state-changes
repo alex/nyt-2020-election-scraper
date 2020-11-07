@@ -483,12 +483,15 @@ def html_output(path, html_table):
 
 html_output("battleground-state-changes.html", html_table(battlegrounds_summarized))
 
-with open('battleground-state-changes.csv', 'w') as csvfile:
-    wr = csv.writer(csvfile)
-    wr.writerow(('state',) + IterationSummary._fields)
-    for state, results in summarized.items():
-        for row in results:
-            wr.writerow((state,) + row)
+def csv_output(path, summarized):
+    with open(path, 'w') as csvfile:
+        wr = csv.writer(csvfile)
+        wr.writerow(('state',) + IterationSummary._fields)
+        for state, results in summarized.items():
+            for row in results:
+                wr.writerow((state,) + row)
+
+csv_output('battleground-state-changes.csv', battlegrounds_summarized)
 
 with open('battleground-state-changes.xml', 'w') as rssfile:
     rssfile.write(f'''<?xml version="1.0" encoding="UTF-8"?>
