@@ -45,8 +45,13 @@ jobs:
 
     - name: Generate screenshots
       run: |-
+        sudo apt-get install libwebkit2gtk-4.0-37 libgles2 gstreamer1.0-libav libgstreamer-plugins-bad1.0-0 xvfb
         npm install --prefix .github/screenshot
         npm start --prefix .github/screenshot
+        # WebKit doesn't work properly in headless mode, use an Xvfb server
+        PUPPETEER_PRODUCT=webkit xvfb-run npm start --prefix .github/screenshot
+        PUPPETEER_PRODUCT=firefox npm install --prefix .github/screenshot puppeteer
+        PUPPETEER_PRODUCT=firefox npm start --prefix .github/screenshot
     - name: Upload screenshots
       uses: actions/upload-artifact@v2
       with:
