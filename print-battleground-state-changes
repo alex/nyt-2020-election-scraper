@@ -139,6 +139,7 @@ IterationSummary = collections.namedtuple(
         'hurdle_change',
         'hurdle_mov_avg',
         'counties_partition',
+        'total_votes_count',
     ]
 )
 
@@ -202,6 +203,8 @@ def string_summary(summary):
     ]
 
 def html_write_state_head(state: str, state_slug: str, summary: IterationSummary):
+    percentage_candidate1 = summary.leading_candidate_votes / summary.total_votes_count
+    percentage_candidate2 = summary.trailing_candidate_votes / summary.total_votes_count
     return f'''
         <thead class="thead-light">
         <tr>
@@ -210,7 +213,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                     <span class="statename">{state}</span>
                 </span>
                 <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes, {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes.
+                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
             </td>
         </tr>
         <tr>
@@ -304,6 +307,7 @@ def json_to_summary(
     candidate2_votes = candidate2['votes']
     candidate1_key = candidate1['candidate_key']
     candidate2_key = candidate2['candidate_key']
+    total_votes = sum([candidate['votes'] for candidate in row.candidates])
     vote_diff = candidate1_votes - candidate2_votes
     votes = row.votes
     expected_votes = row.expected_votes
@@ -372,6 +376,7 @@ def json_to_summary(
         hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
         hurdle_mov_avg,
         counties_partition,
+        total_votes,
     )
 
     return iteration_info, summary
