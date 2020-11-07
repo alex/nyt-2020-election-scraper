@@ -14,18 +14,11 @@ import json
 from tabulate import tabulate
 from typing import Tuple
 
-AK_INDEX = 0
-AZ_INDEX = 3
-GA_INDEX = 10
-NC_INDEX = 27
-NV_INDEX = 33
-PA_INDEX = 38
-
-STATE_INDEXES = [AK_INDEX, AZ_INDEX, GA_INDEX, NC_INDEX, NV_INDEX, PA_INDEX]
+STATE_INDEXES = range(0, 51)
 
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
-CACHE_VERSION = 1
+CACHE_VERSION = 2
 
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
