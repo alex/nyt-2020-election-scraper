@@ -18,9 +18,22 @@ const HTML_URL = url.pathToFileURL(path.join(REPOSITORY_ROOT, "battleground-stat
 
     async function screenshot(filename) {
         await page.goto(HTML_URL, { waitUntil: "networkidle0" });
+
         await page.screenshot({
             path: path.join(REPOSITORY_ROOT, `screenshot-${filename}.png`),
             fullPage: true,
+        });
+
+        await page.evaluate(() => {
+            (() => {
+                const feature = features["shrunk"];
+                feature.onDisable($(feature.buttonId));
+
+                document.querySelector("#arizona tr:nth-last-child(5)").scrollIntoView(true);
+            })();
+        });
+        await page.screenshot({
+            path: path.join(REPOSITORY_ROOT, `screenshot-${filename}-scrolled.png`),
         });
     }
 
