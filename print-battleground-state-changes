@@ -174,7 +174,7 @@ def string_summary(summary):
 
     lead_part = summary.leading_candidate_partition - 50
 
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else 'Unknown'
+    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}' if summary.hurdle > 0 else 'Unknown'
 
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
@@ -242,7 +242,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
     else:
         html += '<td>N/A</td>'
     
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%} [{summary.hurdle_change:.3%}]' if summary.hurdle > 0 else 'Unknown'
+    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}' if summary.hurdle > 0 else 'Unknown'
     html += f'''
             <td class="hurdle">{visible_hurdle}</td>
         </tr>
