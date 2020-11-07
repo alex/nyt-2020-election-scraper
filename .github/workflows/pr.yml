@@ -34,8 +34,7 @@ jobs:
 
     - name: Generate battleground-state-changes.txt/html
       run: |-
-        ./print-battleground-state-changes > tmp
-        mv tmp battleground-state-changes.txt
+        ./print-battleground-state-changes
     - name: Upload test artifacts
       uses: actions/upload-artifact@v2
       with:
