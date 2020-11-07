@@ -73,6 +73,11 @@
         border-right-width: 1px;
     }
 
+    tr {
+        /* Fixes position: sticky headers from covering rows when deep linked, by keeping the anchor away from the top */
+        scroll-margin-top: 130px;
+    }
+
     .has-tip {
         text-decoration: underline;
         text-decoration-style: dotted;
