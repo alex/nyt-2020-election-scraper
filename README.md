@@ -18,7 +18,7 @@ Simon Willison: <https://simonwillison.net/2020/Oct/9/git-scraping/>
 
 Dependencies
 
-* Python 3 + is required
+* Python 3 is required
 
 
 ```
