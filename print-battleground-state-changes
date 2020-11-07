@@ -225,9 +225,9 @@ def html_summary(state_slug: str, summary: IterationSummary):
 
     if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
         html += f'''
-            <td>
-                {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
-                {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
+            <td class="batch-cell">
+                <div class="batch-breakdown {summary.leading_candidate_name}" style="width: {summary.leading_candidate_partition:5.01%}" title="{summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%}">{summary.leading_candidate_partition:5.01%}</div>
+                <div class="batch-breakdown {summary.trailing_candidate_name}" style="width: {summary.trailing_candidate_partition:5.01%}" title="{summary.trailing_candidate_name} {summary.trailing_candidate_partition:5.01%}">{summary.trailing_candidate_partition:5.01%}</div>
             </td>
         '''
     else:
