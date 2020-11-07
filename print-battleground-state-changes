@@ -207,8 +207,8 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party and write-in votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
-            <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How were the votes in this batch, excluding third-party votes, split between the two candidates?">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
         </tr>
