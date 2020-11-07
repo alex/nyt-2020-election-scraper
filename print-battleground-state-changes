@@ -374,7 +374,7 @@ html_chunks = []
 batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
 print(tabulate([
     ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
-    ["Latest batch received:", batch_time.strftime("%Y-%m-%d %H:%M UTC")],
+    ["Latest batch received: {}".format(f"({', '.join(states_updated)})" if states_updated else ""), batch_time.strftime("%Y-%m-%d %H:%M UTC")],
     ["Prettier web version:", "https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html"],
 ]))
 # The NYTimes array of states is not sorted alphabetically, so we'll use `sorted`
@@ -400,7 +400,8 @@ with open("battleground-state-changes.html","w", encoding='utf8') as f:
     html = html_template\
         .replace('{% TABLES %}', "\n".join(html_chunks))\
         .replace('{% SCRAPE_TIME %}', scrape_time.strftime('%Y-%m-%d %H:%M:%S UTC'))\
-        .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC'))\
+        .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')) \
+        .replace('{% LAST_BATCH %}', f"({', '.join(states_updated)})" if states_updated else None) \
         .replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH)\
         .replace('{% PAGE_METADATA %}', page_metadata)
     f.write(html)
