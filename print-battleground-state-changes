@@ -70,6 +70,7 @@ def fetch_all_records():
                 sum(map(lambda n: n['tot_exp_vote'], race['counties'])),
                 race['precincts_total'],
                 race['precincts_reporting'],
+                {n['name']: n['votes'] for n in race['counties']},
                 )
             rows.append(record)
             out.append(record)
@@ -98,13 +99,14 @@ InputRecord = collections.namedtuple(
         'expected_votes',
         'precincts_total',
         'precincts_reporting',
+        'counties',
     ],
 )
 
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name', 'counties']
 )
 
 IterationSummary = collections.namedtuple(
@@ -124,7 +126,8 @@ IterationSummary = collections.namedtuple(
         'precincts_total',
         'hurdle',
         'hurdle_change',
-        'hurdle_mov_avg'
+        'hurdle_mov_avg',
+        'counties_partition',
     ]
 )
 
@@ -204,7 +207,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch?">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
@@ -213,6 +216,20 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     '''
 
 def html_summary(state_slug: str, summary: IterationSummary):
+    if summary.counties_partition:
+        counties_partition = sorted(summary.counties_partition.items(), key=lambda x: x[1], reverse=True)
+        counties_total = sum(summary.counties_partition.values())
+        counties_tooltip_attributes = (
+            'class="has-tip" data-toggle="tooltip" data-html="true" data-title="' +
+            '<strong>Estimated county-level breakdown:</strong><br>' +
+            '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.2%}' for name, value in counties_partition) +
+            '" title="' +
+            'Estimated county-level breakdown: ' +
+            ', '.join(f'{name}: {value / counties_total:.2%}' for name, value in counties_partition) +
+            '"'
+        )
+    else:
+        counties_tooltip_attributes = ''
     shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
     html = f'''
         <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
@@ -220,7 +237,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td>{summary.vote_differential:,}</td>
             <td>{shown_votes_remaining}</td>
-            <td>{summary.new_votes:7,}</td>
+            <td {counties_tooltip_attributes}>{summary.new_votes:7,}</td>
     '''
 
     if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
@@ -282,6 +299,14 @@ def json_to_summary(
     precincts_total = row.precincts_total
     new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
 
+    counties_partition = {}
+    if new_votes != 0:
+        assert row.counties.keys() == last_iteration_info.counties.keys()
+        for k, v in row.counties.items():
+            partition = (v - last_iteration_info.counties[k])
+            if partition > 0:
+                counties_partition[k] = partition
+
     bumped = candidate1_name != last_iteration_info.leading_candidate_name
 
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
@@ -296,7 +321,8 @@ def json_to_summary(
         votes=votes,
         precincts_reporting=precincts_reporting,
         hurdle=hurdle,
-        leading_candidate_name=candidate1_name
+        leading_candidate_name=candidate1_name,
+        counties=row.counties,
     )
 
     # Compute aggregate of last 5 hurdle, if available
@@ -317,7 +343,8 @@ def json_to_summary(
         precincts_total,
         hurdle,
         hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
-        hurdle_mov_avg
+        hurdle_mov_avg,
+        counties_partition,
     )
 
     return iteration_info, summary
@@ -335,7 +362,8 @@ for rows in records.values():
         votes=None,
         precincts_reporting=None,
         hurdle=0,
-        leading_candidate_name=None
+        leading_candidate_name=None,
+        counties=None,
     )
 
     for row in rows:
