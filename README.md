@@ -18,13 +18,11 @@ Simon Willison: <https://simonwillison.net/2020/Oct/9/git-scraping/>
 
 Dependencies
 
-* Python
+* Python 3 + is required
 
-```python
-pip install pybind11
-pip install gitpython
-pip install pysimdjson
-pip install tabulate 
+
+```
+pip install -r requirements.txt
  ```
 
 Contributions are welcome, but please make sure you read and fill out the [the pull request template](.github/pull_request_template.md) when submitting your changes. We would also appreciate it if you could read the short [contributing guide](https://github.com/alex/nyt-2020-election-scraper/blob/master/CONTRIBUTING.md).
