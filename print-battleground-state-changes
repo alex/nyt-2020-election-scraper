@@ -106,7 +106,7 @@ InputRecord = collections.namedtuple(
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
-    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name', 'counties']
+    ['vote_diff', 'votes', 'precincts_reporting', 'hurdle', 'leading_candidate_name', 'counties', 'candidate_votes']
 )
 
 IterationSummary = collections.namedtuple(
@@ -207,7 +207,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
+            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party and write-in votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How did the votes in this batch break down, per candidate. Based on the number of reported votes and the change in margin.">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
@@ -291,6 +291,8 @@ def json_to_summary(
     candidate2_name = candidate2['last_name']
     candidate1_votes = candidate1['votes']
     candidate2_votes = candidate2['votes']
+    candidate1_key = candidate1['candidate_key']
+    candidate2_key = candidate2['candidate_key']
     vote_diff = candidate1_votes - candidate2_votes
     votes = row.votes
     expected_votes = row.expected_votes
@@ -311,9 +313,22 @@ def json_to_summary(
 
     hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
 
-    if new_votes != 0:
-        last_vote_diff = (-1 if bumped else 1) * last_iteration_info.vote_diff
-        repartition1 = ((new_votes + (last_vote_diff - vote_diff)) / 2.) / new_votes
+    candidate_votes = {c['candidate_key']: c['votes'] for c in row.candidates}
+
+    # We need to use the votes delta for our two leading candidates, not for
+    # all the candidates, when calculating the breakdown - especially since our
+    # data source frequently revises write-in and third party figures.
+    if new_votes == 0:
+        new_votes_relevant = 0
+    else:
+        new_votes_relevant = sum(candidate_votes[k] - last_iteration_info.candidate_votes[k] for k in (candidate1_key, candidate2_key))
+
+    if new_votes_relevant == 0:
+        trailing_candidate_partition = 0
+        leading_candidate_partition = 0
+    else:
+        trailing_candidate_partition = (candidate2_votes - last_iteration_info.candidate_votes[candidate2_key]) / new_votes_relevant
+        leading_candidate_partition = 1 - trailing_candidate_partition
 
     # Info we’ll need for the next loop iteration
     iteration_info = IterationInfo(
@@ -323,10 +338,11 @@ def json_to_summary(
         hurdle=hurdle,
         leading_candidate_name=candidate1_name,
         counties=row.counties,
+        candidate_votes=candidate_votes,
     )
 
     # Compute aggregate of last 5 hurdle, if available
-    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, repartition1 if new_votes else 0, candidate2_name)
+    hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes, trailing_candidate_partition, candidate2_name)
 
     summary = IterationSummary(
         batch_time,
@@ -337,8 +353,8 @@ def json_to_summary(
         vote_diff,
         votes_remaining,
         new_votes,
-        1-repartition1 if new_votes else 0,
-        repartition1 if new_votes else 0,
+        leading_candidate_partition,
+        trailing_candidate_partition,
         precincts_reporting,
         precincts_total,
         hurdle,
@@ -364,6 +380,7 @@ for rows in records.values():
         hurdle=0,
         leading_candidate_name=None,
         counties=None,
+        candidate_votes=None,
     )
 
     for row in rows:
