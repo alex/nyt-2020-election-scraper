@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "finalhandler": "^1.1.2",
+    "playwright-webkit": "^1.5.2",
     "puppeteer": "^5.4.1",
     "serve-static": "^1.14.1"
   },

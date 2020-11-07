@@ -1,9 +1,36 @@
 const finalhandler = require("finalhandler");
 const http = require("http");
 const path = require("path");
-const puppeteer = require("puppeteer");
 const serveStatic = require("serve-static");
-const url = require("url");
+
+let puppeteer;
+let puppeteerDevices;
+let puppeteerProduct;
+let puppeteerHeadless;
+let puppeteerSetViewport;
+let puppeteerEmulate;
+
+if (process.env.PUPPETEER_PRODUCT === "webkit") {
+    puppeteer = require("playwright-webkit").webkit;
+    puppeteerDevices = require("playwright-webkit").devices;
+    puppeteerProduct = "webkit";
+    puppeteerHeadless = false;
+    puppeteerSetViewport = "setViewportSize";
+    puppeteerEmulate = async function (browser, device) {
+        return await browser.newPage(device);
+    }
+} else {
+    puppeteer = require("puppeteer");
+    puppeteerDevices = puppeteer.devices;
+    puppeteerProduct = puppeteer.product;
+    puppeteerHeadless = true;
+    puppeteerSetViewport = "setViewport";
+    puppeteerEmulate = async function (browser, device) {
+        const page = await browser.newPage();
+        await page.emulate(device);
+        return page;
+    }
+}
 
 const DEVICES = {
     "iphone": "iPhone X",
@@ -34,13 +61,7 @@ process.on("unhandledRejection", (reason, promise) => {
     });
     server.listen();
 
-    const address = server.address();
-    const pageUrl = url.format({
-        protocol: "http",
-        hostname: address.address,
-        port: address.port,
-        pathname: "battleground-state-changes.html",
-    });
+    const pageUrl = `http://127.0.0.1:${server.address().port}/battleground-state-changes.html`;
     console.log(`Server listening at ${pageUrl}`);
 
     /*
@@ -48,18 +69,16 @@ process.on("unhandledRejection", (reason, promise) => {
      * we have to use PUPPETEER_PRODUCT to choose which browser to install and
      * use. Sigh.
      */
-    const product = puppeteer.product;
-    console.log(`Launching ${product}`);
+    console.log(`Launching ${puppeteerProduct}`);
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    const browser = await puppeteer.launch({ headless: puppeteerHeadless });
 
-    async function screenshot(filename) {
+    async function screenshot(page, filename) {
         console.log(`Generating ${filename}`);
         await page.goto(pageUrl, { waitUntil: "load" });
 
         await page.screenshot({
-            path: path.join(REPOSITORY_ROOT, `screenshot-${product}-${filename}.png`),
+            path: path.join(REPOSITORY_ROOT, `screenshot-${puppeteerProduct}-${filename}.png`),
             fullPage: true,
         });
 
@@ -72,19 +91,22 @@ process.on("unhandledRejection", (reason, promise) => {
             })();
         });
         await page.screenshot({
-            path: path.join(REPOSITORY_ROOT, `screenshot-${product}-${filename}-scrolled.png`),
+            path: path.join(REPOSITORY_ROOT, `screenshot-${puppeteerProduct}-${filename}-scrolled.png`),
         });
     }
 
-    await page.setViewport({
+    const page = await browser.newPage();
+    await page[puppeteerSetViewport]({
         width: 1280,
         height: 720,
     });
-    await screenshot("desktop");
+    await screenshot(page, "desktop");
+    await page.close();
 
     for (const [filename, name] of Object.entries(DEVICES)) {
-        await page.emulate(puppeteer.devices[name]);
-        await screenshot(filename);
+        const page = await puppeteerEmulate(browser, puppeteerDevices[name]);
+        await screenshot(page, filename);
+        await page.close();
     }
 
     await browser.close();
