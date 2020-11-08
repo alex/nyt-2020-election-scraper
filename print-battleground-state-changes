@@ -216,15 +216,15 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                     <span class="statename">{state_formatted_name[state]}</span>
                 </span>
                 <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
+                {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
             </td>
         </tr>
         <tr>
             <th class="has-tip" data-toggle="tooltip" title="When did this batch of votes get reported?">Timestamp</th>
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
-            <th class="has-tip" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
+            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
+            <th class="has-tip numeric" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
+            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How were the votes in this batch, excluding third-party votes, split between the two candidates?">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
@@ -237,7 +237,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
         counties_partition = sorted(summary.counties_partition.items(), key=lambda x: x[1], reverse=True)
         counties_total = sum(summary.counties_partition.values())
         counties_tooltip_attributes = (
-            'class="has-tip" data-toggle="tooltip" data-html="true" data-title="' +
+            'class="has-tip numeric" data-toggle="tooltip" data-html="true" data-title="' +
             '<strong>Estimated county-level breakdown:</strong><br>' +
             '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.0%}' for name, value in counties_partition) +
             '" title="' +
@@ -246,14 +246,14 @@ def html_summary(state_slug: str, summary: IterationSummary):
             '"'
         )
     else:
-        counties_tooltip_attributes = ''
+        counties_tooltip_attributes = 'class="numeric"'
     shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
     html = f'''
         <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
-            <td>{summary.vote_differential:,}</td>
-            <td>{shown_votes_remaining}</td>
+            <td class="numeric">{summary.vote_differential:,}</td>
+            <td class="numeric">{shown_votes_remaining}</td>
             <td {counties_tooltip_attributes}>{summary.new_votes:7,}</td>
     '''
 
