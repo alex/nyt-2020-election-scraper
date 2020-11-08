@@ -430,6 +430,10 @@ battlegrounds_summarized = {
     for state, results in summarized.items()
     if state in BATTLEGROUND_STATES
 }
+states_updated = [
+    state for state in states_updated
+    if any(state in bs for bs in BATTLEGROUND_STATES)
+]
 
 # print the summaries
 batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
