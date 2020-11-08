@@ -37,8 +37,7 @@ jobs:
         pip install -r requirements.txt
     - name: Generate battleground-state-changes.txt/html
       run: |-
-        ./print-battleground-state-changes > tmp
-        mv tmp battleground-state-changes.txt
+        ./print-battleground-state-changes
     - name: Commit and push if it changed
       run: |-
         git config user.name "Automated"
