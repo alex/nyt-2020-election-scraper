@@ -22,7 +22,7 @@ NC_INDEX = 27
 NV_INDEX = 33
 PA_INDEX = 38
 
-BATTLEGROUND_STATES = set(["Alaska (EV: 3)", "Arizona (EV: 11)", "Georgia (EV: 16)", "North Carolina (EV: 15)", "Nevada (EV: 6)", "Pennsylvania (EV: 20)"])
+BATTLEGROUND_STATES = ["Alaska", "Arizona", "Georgia", "North Carolina", "Nevada", "Pennsylvania"]
 STATE_INDEXES = range(51) # 50 States + DC
 
 CACHE_DIR = '_cache'
@@ -213,7 +213,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
         <tr>
             <td class="text-left flag-bg" style="background-image: url('flags/{state_slug}.svg')" colspan="9">
                 <span class="has-tip" data-toggle="tooltip" title="Number of electoral votes contributed by this state and total votes by each candidate.">
-                    <span class="statename">{state}</span>
+                    <span class="statename">{state_formatted_name[state]}</span>
                 </span>
                 <br>
                 Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
@@ -292,6 +292,7 @@ records = fetch_all_records()
 
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
+state_formatted_name = {}
 
 def json_to_summary(
     state_name: str,
@@ -390,8 +391,9 @@ states_updated = []
 for rows in records.values():
     latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
 
-    state_name = f"{rows[0].state_name} (EV: {rows[0].electoral_votes})"
+    state_name = rows[0].state_name
     summarized[state_name] = []
+    state_formatted_name[state_name] = f"{state_name} (EV: {rows[0].electoral_votes})"
 
     last_iteration_info = IterationInfo(
         vote_diff=None,
@@ -422,17 +424,16 @@ for rows in records.values():
         last_iteration_info = iteration_info
 
     if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
-        states_updated.append(rows[0].state_name)
+        states_updated.append(state_name)
 
 # Pull out the battleground state summaries
 battlegrounds_summarized = {
-    state: results
-    for state, results in summarized.items()
-    if state in BATTLEGROUND_STATES
+    state: summarized[state]
+    for state in BATTLEGROUND_STATES
 }
 states_updated = [
     state for state in states_updated
-    if any(state in bs for bs in BATTLEGROUND_STATES)
+    if state in BATTLEGROUND_STATES
 ]
 
 # print the summaries
@@ -449,7 +450,7 @@ def txt_output(path, summarized):
         ]), file=f)
 
         for (state, timestamped_results) in sorted(summarized.items()):
-            print(f'\n{state} Total Votes: ({timestamped_results[0][1]}: {timestamped_results[0][3]:,}, {timestamped_results[0][2]}: {timestamped_results[0][4]:,})', file=f)
+            print(f'\n{state_formatted_name[state]} Total Votes: ({timestamped_results[0][1]}: {timestamped_results[0][3]:,}, {timestamped_results[0][2]}: {timestamped_results[0][4]:,})', file=f)
             print(tabulate([string_summary(summary) for summary in timestamped_results]), file=f)
 
 txt_output("battleground-state-changes.txt", battlegrounds_summarized)
@@ -496,7 +497,7 @@ def csv_output(path, summarized):
         wr.writerow(('state',) + IterationSummary._fields)
         for state, results in summarized.items():
             for row in results:
-                wr.writerow((state,) + row)
+                wr.writerow((state_formatted_name[state],) + row)
 
 csv_output('battleground-state-changes.csv', battlegrounds_summarized)
 
@@ -521,7 +522,7 @@ def rss_output(path, summarized):
             timestamp = result.timestamp.timestamp()
             print(indent(dedent(f'''
                 <item>
-                 <description>{state}: {result.leading_candidate_name} +{result.vote_differential}</description>
+                 <description>{state_formatted_name[state]}: {result.leading_candidate_name} +{result.vote_differential}</description>
                  <pubDate>{email.utils.formatdate(timestamp)}</pubDate>
                  <guid isPermaLink="false">{state_slug}@{timestamp}</guid>
                 </item>
