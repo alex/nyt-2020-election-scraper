@@ -11,6 +11,7 @@ import os
 import simdjson
 import subprocess
 import json
+from textwrap import dedent, indent
 from tabulate import tabulate
 from typing import Tuple
 
@@ -493,33 +494,39 @@ def csv_output(path, summarized):
 
 csv_output('battleground-state-changes.csv', battlegrounds_summarized)
 
-with open('battleground-state-changes.xml', 'w') as rssfile:
-    rssfile.write(f'''<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
- <channel>
-  <title>NYT 2020 Election Scraper RSS Feed</title>
-  <link>https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html</link>
-  <description>Latest results from battleground states.</description>
-  <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>''')    
+def rss_output(path, summarized):
+    with open(path, 'w') as rssfile:
+        print(dedent(f'''
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rss version="2.0">
+             <channel>
+              <title>NYT 2020 Election Scraper RSS Feed</title>
+              <link>https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html</link>
+              <description>Latest results from battleground states.</description>
+              <lastBuildDate>{email.utils.formatdate(batch_time.timestamp())}</lastBuildDate>
+            ''').strip(), file=rssfile)
 
-    for state, results in summarized.items():
-        try:
-            result = results[0]
-        except IndexError:
-            continue
-        state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
-        timestamp = result.timestamp.timestamp()
-        rssfile.write(f'''
-  <item>
-   <description>{state}: {result.leading_candidate_name} +{result.vote_differential}</description>
-   <pubDate>{email.utils.formatdate(timestamp)}</pubDate>
-   <guid isPermaLink="false">{state_slug}@{timestamp}</guid>
-  </item>''')
+        for state, results in summarized.items():
+            try:
+                result = results[0]
+            except IndexError:
+                continue
+            state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
+            timestamp = result.timestamp.timestamp()
+            print(indent(dedent(f'''
+                <item>
+                 <description>{state}: {result.leading_candidate_name} +{result.vote_differential}</description>
+                 <pubDate>{email.utils.formatdate(timestamp)}</pubDate>
+                 <guid isPermaLink="false">{state_slug}@{timestamp}</guid>
+                </item>
+            ''').strip(), "  "), file=rssfile)
 
-    rssfile.write('''
- </channel>
-</rss>
-''')
+        print(dedent('''
+             </channel>
+            </rss>'''
+        ), file=rssfile)
+
+rss_output('battleground-state-changes.xml', battlegrounds_summarized)
 
 # this file is deprecated and should not be used! it will be removed soontm
 with open("notification-updates.json", "w") as f:
