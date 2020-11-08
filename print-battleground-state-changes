@@ -436,7 +436,7 @@ states_updated = [
 ]
 
 # print the summaries
-batch_time = max(itertools.chain.from_iterable(summarized.values()), key=lambda s: s.timestamp).timestamp
+batch_time = max(itertools.chain.from_iterable(battlegrounds_summarized.values()), key=lambda s: s.timestamp).timestamp
 with open("results.json", "r", encoding='utf8') as f:
     RESULTS_HASH = hashlib.sha256(f.read().encode('utf8')).hexdigest()
 
