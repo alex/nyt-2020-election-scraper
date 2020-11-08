@@ -216,7 +216,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
                     <span class="statename">{state_formatted_name[state]}</span>
                 </span>
                 <br>
-                Total Votes: {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
+                {summary.leading_candidate_name} leads with {summary.leading_candidate_votes:,} votes ({percentage_candidate1:5.01%}), {summary.trailing_candidate_name} trails with {summary.trailing_candidate_votes:,} votes ({percentage_candidate2:5.01%}).
             </td>
         </tr>
         <tr>
