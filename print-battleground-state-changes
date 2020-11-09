@@ -13,7 +13,7 @@ import subprocess
 import json
 from textwrap import dedent, indent
 from tabulate import tabulate
-from typing import Tuple
+from typing import Dict, Tuple
 
 AK_INDEX = 0
 AZ_INDEX = 3
@@ -227,7 +227,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How were the votes in this batch, excluding third-party votes, split between the two candidates?">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
-            <th class="has-tip" data-toggle="tooltip" title="What percentage of the remaining votes does the trailing candidate need to flip the lead. 'Flip' happens at 50%, not at 0%. Note that third party candidates are not included in the batch breakdown! This is intentional.">Hurdle</th>
+            <th class="has-tip" data-toggle="tooltip" title="What percentage of estimated remaining votes (excluding third-party votes) does the trailing candidate need to take the lead? Since this assumes the proportion of third-party votes remains the same, this might deviate from the breakdown in batches where this is not the case.">Hurdle</th>
         </tr>
         </thead>
     '''
@@ -298,6 +298,7 @@ def json_to_summary(
     state_name: str,
     row: InputRecord,
     last_iteration_info: IterationInfo,
+    latest_candidate_votes: Dict[str, int],
     batch_time: datetime.datetime,
 ) -> Tuple[IterationInfo, IterationSummary]:
     timestamp = datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -330,7 +331,12 @@ def json_to_summary(
 
     bumped = candidate1_name != last_iteration_info.leading_candidate_name
 
-    hurdle = (vote_diff + (votes_remaining * (candidate1_votes + candidate2_votes)) / votes) / (2 * votes_remaining) if votes_remaining > 0 else 0
+    # If we're trying to estimate the proportion of third-party votes across
+    # the entire vote population, we want to use the largest sample size we
+    # have - i.e. the newest data we've received
+    latest_relevant_proportion = (latest_candidate_votes[candidate1_key] + latest_candidate_votes[candidate2_key]) / sum(latest_candidate_votes.values())
+    votes_remaining_relevant = votes_remaining * latest_relevant_proportion
+    hurdle = (vote_diff + votes_remaining_relevant) / (2 * votes_remaining_relevant) if votes_remaining_relevant > 0 else 0
 
     candidate_votes = {c['candidate_key']: c['votes'] for c in row.candidates}
 
@@ -405,11 +411,14 @@ for rows in records.values():
         candidate_votes=None,
     )
 
+    latest_candidate_votes = {c['candidate_key']: c['votes'] for c in rows[-1].candidates}
+
     for row in rows:
         iteration_info, summary = json_to_summary(
             state_name,
             row,
             last_iteration_info,
+            latest_candidate_votes,
             batch_time=datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ'),
         )
 
