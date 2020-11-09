@@ -13,7 +13,7 @@ import subprocess
 import json
 from textwrap import dedent, indent
 from tabulate import tabulate
-from typing import Dict, Tuple
+from typing import Dict, Tuple, NamedTuple
 
 AK_INDEX = 0
 AZ_INDEX = 3
@@ -116,6 +116,23 @@ InputRecord = collections.namedtuple(
     ],
 )
 
+
+class VoteDifferential(NamedTuple):
+    amount: int
+    math_string: str
+
+    def __str__(self):
+        return str(self.amount)
+
+
+class NewVotes(NamedTuple):
+    amount: int
+    math_string: str
+
+    def __str__(self):
+        return str(self.amount)
+
+
 # Information that is shared across loop iterations
 IterationInfo = collections.namedtuple(
     'IterationInfo',
@@ -130,9 +147,9 @@ IterationSummary = collections.namedtuple(
         'trailing_candidate_name',
         'leading_candidate_votes',
         'trailing_candidate_votes',
-        'vote_differential',
+        'vote_differential', # type: VoteDifferential
         'votes_remaining',
-        'new_votes',
+        'new_votes', # type: NewVotes
         'new_votes_relevant',
         'leading_candidate_partition',
         'trailing_candidate_partition',
@@ -197,9 +214,9 @@ def string_summary(summary):
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
         '***' if summary.timestamp > thirty_ago else '---',
-        f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
+        f'{summary.leading_candidate_name} up {summary.vote_differential.amount:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
+        f'Δ: {summary.new_votes.amount:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -233,28 +250,26 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     '''
 
 def html_summary(state_slug: str, summary: IterationSummary):
+    new_votes_tooltip = f"<strong>Calculation</strong><br>{summary.new_votes.math_string}"
+    vote_differential_tooltip = f"<strong>Calculation</strong><br>{summary.vote_differential.math_string}"
+
     if summary.counties_partition:
         counties_partition = sorted(summary.counties_partition.items(), key=lambda x: x[1], reverse=True)
         counties_total = sum(summary.counties_partition.values())
-        counties_tooltip_attributes = (
-            'class="has-tip numeric" data-toggle="tooltip" data-html="true" data-title="' +
+        new_votes_tooltip += (
+            '<br><br>' +
             '<strong>Estimated county-level breakdown:</strong><br>' +
-            '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.0%}' for name, value in counties_partition) +
-            '" title="' +
-            'Estimated county-level breakdown: ' +
-            ', '.join(f'{name}: {value / counties_total:.0%}' for name, value in counties_partition) +
-            '"'
+            '<br>'.join(f'<strong>{name}:</strong> {value / counties_total:.0%}' for name, value in counties_partition)
         )
-    else:
-        counties_tooltip_attributes = 'class="numeric"'
+
     shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
     html = f'''
         <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
-            <td class="numeric">{summary.vote_differential:,}</td>
+            <td class="numeric has-tip" data-toggle="tooltip" data-html="true" data-title="{vote_differential_tooltip}">{summary.vote_differential.amount:,}</td>
             <td class="numeric">{shown_votes_remaining}</td>
-            <td {counties_tooltip_attributes}>{summary.new_votes:7,}</td>
+            <td class="numeric has-tip" data-toggle="tooltip" data-html="true" data-title="{new_votes_tooltip}">{summary.new_votes.amount:7,}</td>
     '''
 
     if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
@@ -313,16 +328,25 @@ def json_to_summary(
     candidate1_key = candidate1['candidate_key']
     candidate2_key = candidate2['candidate_key']
     total_votes = sum([candidate['votes'] for candidate in row.candidates])
-    vote_diff = candidate1_votes - candidate2_votes
+    vote_diff = VoteDifferential(
+        amount=candidate1_votes - candidate2_votes,
+        math_string=f"{candidate1_votes:,} ({candidate1_name} votes) - {candidate2_votes:,} ({candidate2_name} votes)",
+    )
     votes = row.votes
     expected_votes = row.expected_votes
     votes_remaining = expected_votes - votes
     precincts_reporting = row.precincts_reporting
     precincts_total = row.precincts_total
-    new_votes = 0 if last_iteration_info.votes is None else (votes - last_iteration_info.votes)
+    new_votes = (
+        NewVotes(amount=0, math_string="Unknown") if last_iteration_info.votes is None else
+        NewVotes(
+            amount=(votes - last_iteration_info.votes),
+            math_string=f"{votes:,} (total votes) - {last_iteration_info.votes:,} (prev. total votes)"
+        )
+    )
 
     counties_partition = {}
-    if new_votes != 0:
+    if new_votes.amount != 0:
         assert row.counties.keys() == last_iteration_info.counties.keys()
         for k, v in row.counties.items():
             partition = (v - last_iteration_info.counties[k])
@@ -336,14 +360,14 @@ def json_to_summary(
     # have - i.e. the newest data we've received
     latest_relevant_proportion = (latest_candidate_votes[candidate1_key] + latest_candidate_votes[candidate2_key]) / sum(latest_candidate_votes.values())
     votes_remaining_relevant = votes_remaining * latest_relevant_proportion
-    hurdle = (vote_diff + votes_remaining_relevant) / (2 * votes_remaining_relevant) if votes_remaining_relevant > 0 else 0
+    hurdle = (vote_diff.amount + votes_remaining_relevant) / (2 * votes_remaining_relevant) if votes_remaining_relevant > 0 else 0
 
     candidate_votes = {c['candidate_key']: c['votes'] for c in row.candidates}
 
     # We need to use the votes delta for our two leading candidates, not for
     # all the candidates, when calculating the breakdown - especially since our
     # data source frequently revises write-in and third party figures.
-    if new_votes == 0:
+    if new_votes.amount == 0:
         new_votes_relevant = 0
     else:
         new_votes_relevant = sum(candidate_votes[k] - last_iteration_info.candidate_votes[k] for k in (candidate1_key, candidate2_key))
@@ -370,24 +394,24 @@ def json_to_summary(
     hurdle_mov_avg = compute_hurdle_sma(summarized[state_name], new_votes_relevant, trailing_candidate_partition, candidate2_name)
 
     summary = IterationSummary(
-        batch_time,
-        candidate1_name,
-        candidate2_name,
-        candidate1_votes,
-        candidate2_votes,
-        vote_diff,
-        votes_remaining,
-        new_votes,
-        new_votes_relevant,
-        leading_candidate_partition,
-        trailing_candidate_partition,
-        precincts_reporting,
-        precincts_total,
-        hurdle,
-        hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
-        hurdle_mov_avg,
-        counties_partition,
-        total_votes,
+        timestamp=batch_time,
+        leading_candidate_name=candidate1_name,
+        trailing_candidate_name=candidate2_name,
+        leading_candidate_votes=candidate1_votes,
+        trailing_candidate_votes=candidate2_votes,
+        vote_differential=vote_diff,
+        votes_remaining=votes_remaining,
+        new_votes=new_votes,
+        new_votes_relevant=new_votes_relevant,
+        leading_candidate_partition=leading_candidate_partition,
+        trailing_candidate_partition=trailing_candidate_partition,
+        precincts_reporting=precincts_reporting,
+        precincts_total=precincts_total,
+        hurdle=hurdle,
+        hurdle_change=hurdle-(1-last_iteration_info.hurdle if bumped else last_iteration_info.hurdle),
+        hurdle_mov_avg=hurdle_mov_avg,
+        counties_partition=counties_partition,
+        total_votes_count=total_votes,
     )
 
     return iteration_info, summary
