@@ -26,7 +26,7 @@ jobs:
     - name: Check for changed static files
       run: |
         for changed_file in ${{ steps.files.outputs.modified }}; do
-          if [[ "${changed_file}" =~ ^(battleground-state-changes.csv|battleground-state-changes.html|battleground-state-changes.txt|battleground-state-changes.xml|notification-updates.json)$ ]]; then
+          if [[ "${changed_file}" =~ ^((all|battleground)-state-changes.csv|(all|battleground)-state-changes.html|(all|battleground)-state-changes.txt|(all|battleground)-state-changes.xml|notification-updates.json)$ ]]; then
             echo "Modifications to static files are not allowed."
             exit 1
           fi
@@ -38,9 +38,10 @@ jobs:
     - name: Upload test artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: battleground-state-changes
+        name: "state-changes"
         path: |
           battleground-state-changes.*
+          all-state-changes.*
 
     - name: Generate screenshots
       run: |-

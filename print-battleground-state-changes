@@ -134,6 +134,7 @@ IterationSummary = collections.namedtuple(
         'votes_remaining',
         'new_votes',
         'new_votes_relevant',
+        'new_votes_formatted',
         'leading_candidate_partition',
         'trailing_candidate_partition',
         'precincts_reporting',
@@ -199,7 +200,7 @@ def string_summary(summary):
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
+        f'Δ: {summary.new_votes_formatted} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -224,7 +225,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip numeric" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip numeric" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
+            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch, excluding third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How were the votes in this batch, excluding third-party votes, split between the two candidates?">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of estimated remaining votes (excluding third-party votes) does the trailing candidate need to take the lead? Since this assumes the proportion of third-party votes remains the same, this might deviate from the breakdown in batches where this is not the case.">Hurdle</th>
@@ -254,25 +255,31 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td class="numeric">{summary.vote_differential:,}</td>
             <td class="numeric">{shown_votes_remaining}</td>
-            <td {counties_tooltip_attributes}>{summary.new_votes:7,}</td>
+            <td {counties_tooltip_attributes}>{summary.new_votes_formatted}</td>
     '''
 
-    if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
+    if summary.leading_candidate_partition == 0 and summary.trailing_candidate_partition == 0:
+        html += '<td>N/A</td>'
+    elif summary.leading_candidate_partition >= 0 or summary.trailing_candidate_partition >= 0:
+        # Since both must now positive or zero, so we're abs them because `-0`
+        # is a thing for floats.
         html += f'''
             <td>
-                {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
-                {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
+                {summary.leading_candidate_name} {abs(summary.leading_candidate_partition):5.01%} /
+                {abs(summary.trailing_candidate_partition):5.01%} {summary.trailing_candidate_name}
             </td>
         '''
     else:
-        html += '<td>N/A</td>'
+        html += '<td>Unknown</td>'
 
-    if (summary.hurdle_mov_avg):
+    if summary.hurdle_mov_avg and summary.hurdle_mov_avg >= 0:
         html += f'''
             <td>
                 {summary.trailing_candidate_name} is averaging {summary.hurdle_mov_avg:5.01%}
             </td>
         '''
+    elif summary.hurdle_mov_avg and summary.hurdle_mov_avg < 0:
+        html += '<td>Unknown</td>'
     else:
         html += '<td>N/A</td>'
     
@@ -379,6 +386,7 @@ def json_to_summary(
         votes_remaining,
         new_votes,
         new_votes_relevant,
+        f"{new_votes_relevant:7,}" if new_votes_relevant >= 0 else "Unknown",
         leading_candidate_partition,
         trailing_candidate_partition,
         precincts_reporting,
@@ -440,7 +448,7 @@ battlegrounds_summarized = {
     state: summarized[state]
     for state in BATTLEGROUND_STATES
 }
-states_updated = [
+battleground_states_updated = [
     state for state in states_updated
     if state in BATTLEGROUND_STATES
 ]
@@ -450,7 +458,7 @@ batch_time = max(itertools.chain.from_iterable(battlegrounds_summarized.values()
 with open("results.json", "r", encoding='utf8') as f:
     RESULTS_HASH = hashlib.sha256(f.read().encode('utf8')).hexdigest()
 
-def txt_output(path, summarized):
+def txt_output(path, summarized, states_updated):
     with open(path, "w") as f:
         print(tabulate([
             ["Last updated:", scrape_time.strftime("%Y-%m-%d %H:%M UTC")],
@@ -462,7 +470,8 @@ def txt_output(path, summarized):
             print(f'\n{state_formatted_name[state]} Total Votes: ({timestamped_results[0][1]}: {timestamped_results[0][3]:,}, {timestamped_results[0][2]}: {timestamped_results[0][4]:,})', file=f)
             print(tabulate([string_summary(summary) for summary in timestamped_results]), file=f)
 
-txt_output("battleground-state-changes.txt", battlegrounds_summarized)
+txt_output("battleground-state-changes.txt", battlegrounds_summarized, battleground_states_updated)
+txt_output("all-state-changes.txt", summarized, states_updated)
 
 def html_table(summarized):
     # The NYTimes array of states is not sorted alphabetically, so we'll use `sorted`
@@ -475,7 +484,7 @@ def html_table(summarized):
             yield html_summary(state_slug=state_slug, summary=summary)
         yield "</table></div><hr>"
 
-def html_output(path, html_table):
+def html_output(path, html_table, states_updated, other_page_html):
     html_template = "<!-- Don't update me by hand, I'm generated by a program -->\n\n"
     with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
         html_template += f.read()
@@ -494,11 +503,23 @@ def html_output(path, html_table):
             .replace('{% BATCH_TIME %}', batch_time.strftime('%Y-%m-%d %H:%M:%S UTC')) \
             .replace('{% LAST_BATCH %}', f"({', '.join(states_updated)})" if states_updated else "") \
             .replace('{% TEMPLATE_HASH %}', TEMPLATE_HASH) \
-            .replace('{% PAGE_METADATA %}', page_metadata)
+            .replace('{% PAGE_METADATA %}', page_metadata) \
+            .replace('{% OTHER_PAGE_TEXT %}', other_page_html)
 
         f.write(html)
 
-html_output("battleground-state-changes.html", html_table(battlegrounds_summarized))
+html_output(
+    "battleground-state-changes.html",
+    html_table(battlegrounds_summarized),
+    battleground_states_updated,
+    'Data for all 50 states and DC is <a href="all-state-changes.html">also available</a>.'
+)
+html_output(
+    "all-state-changes.html",
+    html_table(summarized),
+    states_updated,
+    'View <a href="battleground-state-changes.html">battleground states only</a>.'
+)
 
 def csv_output(path, summarized):
     with open(path, 'w') as csvfile:
@@ -509,6 +530,7 @@ def csv_output(path, summarized):
                 wr.writerow((state_formatted_name[state],) + row)
 
 csv_output('battleground-state-changes.csv', battlegrounds_summarized)
+csv_output('all-state-changes.csv', summarized)
 
 def rss_output(path, summarized):
     with open(path, 'w') as rssfile:
@@ -543,11 +565,12 @@ def rss_output(path, summarized):
         ), file=rssfile)
 
 rss_output('battleground-state-changes.xml', battlegrounds_summarized)
+rss_output('all-state-changes.xml', summarized)
 
 # this file is deprecated and should not be used! it will be removed soontm
 with open("notification-updates.json", "w") as f:
     f.write(json.dumps({
         "_comment": "this file is deprecated and should not be used",
         "results_hash": RESULTS_HASH,
-        "states_updated": states_updated,
+        "states_updated": battleground_states_updated,
     }))
