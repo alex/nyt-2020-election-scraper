@@ -134,6 +134,7 @@ IterationSummary = collections.namedtuple(
         'votes_remaining',
         'new_votes',
         'new_votes_relevant',
+        'new_votes_formatted',
         'leading_candidate_partition',
         'trailing_candidate_partition',
         'precincts_reporting',
@@ -199,7 +200,7 @@ def string_summary(summary):
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
+        f'Δ: {summary.new_votes_formatted} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -254,7 +255,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td class="numeric">{summary.vote_differential:,}</td>
             <td class="numeric">{shown_votes_remaining}</td>
-            <td {counties_tooltip_attributes}>{summary.new_votes}</td>
+            <td {counties_tooltip_attributes}>{summary.new_votes_formatted}</td>
     '''
 
     if summary.leading_candidate_partition == 0 and summary.trailing_candidate_partition == 0:
@@ -383,8 +384,9 @@ def json_to_summary(
         candidate2_votes,
         vote_diff,
         votes_remaining,
-        f"{new_votes_relevant:7,}" if new_votes_relevant >= 0 else "Unknown",
+        new_votes,
         new_votes_relevant,
+        f"{new_votes_relevant:7,}" if new_votes_relevant >= 0 else "Unknown",
         leading_candidate_partition,
         trailing_candidate_partition,
         precincts_reporting,
