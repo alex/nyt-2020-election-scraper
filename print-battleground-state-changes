@@ -463,6 +463,7 @@ def txt_output(path, summarized, states_updated):
             print(tabulate([string_summary(summary) for summary in timestamped_results]), file=f)
 
 txt_output("battleground-state-changes.txt", battlegrounds_summarized, battleground_states_updated)
+txt_output("all-state-changes.txt", summarized, states_updated)
 
 def html_table(summarized):
     # The NYTimes array of states is not sorted alphabetically, so we'll use `sorted`
@@ -499,6 +500,7 @@ def html_output(path, html_table, states_updated):
         f.write(html)
 
 html_output("battleground-state-changes.html", html_table(battlegrounds_summarized), battleground_states_updated)
+html_output("all-state-changes.html", html_table(summarized), states_updated)
 
 def csv_output(path, summarized):
     with open(path, 'w') as csvfile:
@@ -509,6 +511,7 @@ def csv_output(path, summarized):
                 wr.writerow((state_formatted_name[state],) + row)
 
 csv_output('battleground-state-changes.csv', battlegrounds_summarized)
+csv_output('all-state-changes.csv', summarized)
 
 def rss_output(path, summarized):
     with open(path, 'w') as rssfile:
@@ -543,6 +546,7 @@ def rss_output(path, summarized):
         ), file=rssfile)
 
 rss_output('battleground-state-changes.xml', battlegrounds_summarized)
+rss_output('all-state-changes.xml', summarized)
 
 # this file is deprecated and should not be used! it will be removed soontm
 with open("notification-updates.json", "w") as f:
