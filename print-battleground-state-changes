@@ -199,7 +199,7 @@ def string_summary(summary):
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes_relevant:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
+        f'Δ: {summary.new_votes} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -254,25 +254,31 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td class="numeric">{summary.vote_differential:,}</td>
             <td class="numeric">{shown_votes_remaining}</td>
-            <td {counties_tooltip_attributes}>{summary.new_votes_relevant:7,}</td>
+            <td {counties_tooltip_attributes}>{summary.new_votes}</td>
     '''
 
-    if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
+    if summary.leading_candidate_partition == 0 and summary.trailing_candidate_partition == 0:
+        html += '<td>N/A</td>'
+    elif summary.leading_candidate_partition >= 0 or summary.trailing_candidate_partition >= 0:
+        # Since both must now positive or zero, so we're abs them because `-0`
+        # is a thing for floats.
         html += f'''
             <td>
-                {summary.leading_candidate_name} {summary.leading_candidate_partition:5.01%} /
-                {summary.trailing_candidate_partition:5.01%} {summary.trailing_candidate_name}
+                {summary.leading_candidate_name} {abs(summary.leading_candidate_partition):5.01%} /
+                {abs(summary.trailing_candidate_partition):5.01%} {summary.trailing_candidate_name}
             </td>
         '''
     else:
-        html += '<td>N/A</td>'
+        html += '<td>Unknown</td>'
 
-    if (summary.hurdle_mov_avg):
+    if summary.hurdle_mov_avg and summary.hurdle_mov_avg >= 0:
         html += f'''
             <td>
                 {summary.trailing_candidate_name} is averaging {summary.hurdle_mov_avg:5.01%}
             </td>
         '''
+    elif summary.hurdle_mov_avg and summary.hurdle_mov_avg < 0:
+        html += '<td>Unknown</td>'
     else:
         html += '<td>N/A</td>'
     
@@ -377,7 +383,7 @@ def json_to_summary(
         candidate2_votes,
         vote_diff,
         votes_remaining,
-        new_votes,
+        f"{new_votes_relevant:7,}" if new_votes_relevant >= 0 else "Unknown",
         new_votes_relevant,
         leading_candidate_partition,
         trailing_candidate_partition,
