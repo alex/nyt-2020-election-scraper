@@ -119,7 +119,7 @@ InputRecord = collections.namedtuple(
 
 class VoteDifferential(NamedTuple):
     amount: int
-    math_string: str
+    calculation: str # String to visualize the math performed for the amount
 
     def __str__(self):
         return str(self.amount)
@@ -127,7 +127,7 @@ class VoteDifferential(NamedTuple):
 
 class NewVotes(NamedTuple):
     amount: int
-    math_string: str
+    calculation: str # String to visualize the math performed for the amount
 
     def __str__(self):
         return str(self.amount)
@@ -250,8 +250,8 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
     '''
 
 def html_summary(state_slug: str, summary: IterationSummary):
-    new_votes_tooltip = f"<strong>Calculation</strong><br>{summary.new_votes.math_string}"
-    vote_differential_tooltip = f"<strong>Calculation</strong><br>{summary.vote_differential.math_string}"
+    new_votes_tooltip = f"<strong>Calculation</strong><br>{summary.new_votes.calculation}"
+    vote_differential_tooltip = f"<strong>Calculation</strong><br>{summary.vote_differential.calculation}"
 
     if summary.counties_partition:
         counties_partition = sorted(summary.counties_partition.items(), key=lambda x: x[1], reverse=True)
@@ -330,7 +330,7 @@ def json_to_summary(
     total_votes = sum([candidate['votes'] for candidate in row.candidates])
     vote_diff = VoteDifferential(
         amount=candidate1_votes - candidate2_votes,
-        math_string=f"{candidate1_votes:,} ({candidate1_name} votes) - {candidate2_votes:,} ({candidate2_name} votes)",
+        calculation=f"{candidate1_votes:,} ({candidate1_name} votes) - {candidate2_votes:,} ({candidate2_name} votes)",
     )
     votes = row.votes
     expected_votes = row.expected_votes
@@ -338,10 +338,10 @@ def json_to_summary(
     precincts_reporting = row.precincts_reporting
     precincts_total = row.precincts_total
     new_votes = (
-        NewVotes(amount=0, math_string="Unknown") if last_iteration_info.votes is None else
+        NewVotes(amount=0, calculation="Unknown") if last_iteration_info.votes is None else
         NewVotes(
             amount=(votes - last_iteration_info.votes),
-            math_string=f"{votes:,} (total votes) - {last_iteration_info.votes:,} (prev. total votes)"
+            calculation=f"{votes:,} (total votes) - {last_iteration_info.votes:,} (prev. total votes)"
         )
     )
 
