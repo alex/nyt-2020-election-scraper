@@ -9,7 +9,7 @@ assignees: ''
 
 **Describe the bug**
 
-Please make sure you're not reporting that the hurdle calculation is incorrect! Please see https://github.com/alex/nyt-2020-election-scraper/issues/194; the block breakdown does not match the hurdle rate because we're not tracking third party candidates. We don't have plans to change this.
+Please make sure you're not reporting that the hurdle calculation is incorrect! Please see https://github.com/alex/nyt-2020-election-scraper/pull/367; the block breakdown might not match the hurdle because of the way third-party candidates affect the calculations. We don't have plans to change this.
 
 **To Reproduce**
 Steps to reproduce the behavior:
