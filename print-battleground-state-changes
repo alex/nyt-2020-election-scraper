@@ -199,7 +199,7 @@ def string_summary(summary):
         '***' if summary.timestamp > thirty_ago else '---',
         f'{summary.leading_candidate_name} up {summary.vote_differential:,}',
         f'Left (est.): {summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown',
-        f'Δ: {summary.new_votes:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
+        f'Δ: {summary.new_votes_relevant:7,} ({f"{bumped_name} +{bumped:5.01%}" if (summary.leading_candidate_partition or summary.trailing_candidate_partition)  else "n/a"})',
         f'{summary.precincts_reporting/summary.precincts_total:.2%} precincts',
         f'{visible_hurdle}',
         f'& trends  {f"{summary.hurdle_mov_avg:.2%}" if summary.hurdle_mov_avg else "n/a"}'
@@ -224,7 +224,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
             <th class="has-tip" data-toggle="tooltip" title="Which candidate currently leads this state?">In The Lead</th>
             <th class="has-tip numeric" data-toggle="tooltip" title="How many votes separate the two candidates?">Vote Margin</th>
             <th class="has-tip numeric" data-toggle="tooltip" title="Approximately how many votes are remaining to be counted? These values might be off! Consult state websites and officials for the most accurate and up-to-date figures.">Votes Remaining (est.)</th>
-            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch? This includes third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
+            <th class="has-tip numeric" data-toggle="tooltip" title="How many votes were reported in this batch, excluding third-party votes. If available, an estimated county-level breakdown is shown, but it might be inaccurate!">Change</th>
             <th class="has-tip" data-toggle="tooltip" title="How were the votes in this batch, excluding third-party votes, split between the two candidates?">Batch Breakdown</th>
             <th class="has-tip" data-toggle="tooltip" title="How has the trailing candidate's share of recent batches trended? Computed using a moving average of previous 30k votes.">Batch Trend</th>
             <th class="has-tip" data-toggle="tooltip" title="What percentage of estimated remaining votes (excluding third-party votes) does the trailing candidate need to take the lead? Since this assumes the proportion of third-party votes remains the same, this might deviate from the breakdown in batches where this is not the case.">Hurdle</th>
@@ -254,7 +254,7 @@ def html_summary(state_slug: str, summary: IterationSummary):
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td class="numeric">{summary.vote_differential:,}</td>
             <td class="numeric">{shown_votes_remaining}</td>
-            <td {counties_tooltip_attributes}>{summary.new_votes:7,}</td>
+            <td {counties_tooltip_attributes}>{summary.new_votes_relevant:7,}</td>
     '''
 
     if (summary.leading_candidate_partition or summary.trailing_candidate_partition):
