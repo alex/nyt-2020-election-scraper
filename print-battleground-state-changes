@@ -194,12 +194,12 @@ def string_summary(summary):
     lead_part = summary.leading_candidate_partition - 50
 
     if summary.hurdle > 0:
-        visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}'
+        if summary.hurdle > 1:
+            visible_hurdle = f'{summary.trailing_candidate_name} needs over 100%'
+        else:
+            visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}'
     else:
         visible_hurdle = 'Unknown'
-
-    if summary.hurdle > 1:
-        visible_hurdle = f'{summary.trailing_candidate_name} needs over 100%'
 
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
@@ -290,7 +290,14 @@ def html_summary(state_slug: str, summary: IterationSummary, always_visible: boo
     else:
         html += '<td>N/A</td>'
     
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.1%}' if summary.hurdle > 0 else 'Unknown'
+    if summary.hurdle > 0:
+        if summary.hurdle > 1:
+            visible_hurdle = f'{summary.trailing_candidate_name} needs over 100%'
+        else:
+            visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}'
+    else:
+        visible_hurdle = 'Unknown'
+    
     html += f'''
             <td class="hurdle">{visible_hurdle}</td>
         </tr>
