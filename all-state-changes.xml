@@ -4,7 +4,7 @@
   <title>NYT 2020 Election Scraper RSS Feed</title>
   <link>https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html</link>
   <description>Latest results from battleground states.</description>
-  <lastBuildDate>Tue, 10 Nov 2020 20:56:40 -0000</lastBuildDate>
+  <lastBuildDate>Tue, 10 Nov 2020 21:13:21 -0000</lastBuildDate>
   <item>
    <description>Alaska (EV: 3): Trump +54598</description>
    <pubDate>Mon, 09 Nov 2020 19:14:19 -0000</pubDate>
@@ -56,9 +56,9 @@
    <guid isPermaLink="false">florida@1605017240.587</guid>
   </item>
   <item>
-   <description>Georgia (EV: 16): Biden +12651</description>
-   <pubDate>Tue, 10 Nov 2020 20:25:01 -0000</pubDate>
-   <guid isPermaLink="false">georgia@1605039901.472</guid>
+   <description>Georgia (EV: 16): Biden +12655</description>
+   <pubDate>Tue, 10 Nov 2020 21:13:21 -0000</pubDate>
+   <guid isPermaLink="false">georgia@1605042801.932</guid>
   </item>
   <item>
    <description>Hawaii (EV: 4): Biden +169200</description>
@@ -121,9 +121,9 @@
    <guid isPermaLink="false">michigan@1605021163.762</guid>
   </item>
   <item>
-   <description>Minnesota (EV: 10): Biden +233269</description>
-   <pubDate>Tue, 10 Nov 2020 20:41:20 -0000</pubDate>
-   <guid isPermaLink="false">minnesota@1605040880.64</guid>
+   <description>Minnesota (EV: 10): Biden +233270</description>
+   <pubDate>Tue, 10 Nov 2020 21:13:21 -0000</pubDate>
+   <guid isPermaLink="false">minnesota@1605042801.932</guid>
   </item>
   <item>
    <description>Missouri (EV: 10): Trump +468997</description>
@@ -161,9 +161,9 @@
    <guid isPermaLink="false">new-hampshire@1605039421.511</guid>
   </item>
   <item>
-   <description>New Jersey (EV: 14): Biden +647904</description>
-   <pubDate>Tue, 10 Nov 2020 20:33:21 -0000</pubDate>
-   <guid isPermaLink="false">new-jersey@1605040401.76</guid>
+   <description>New Jersey (EV: 14): Biden +646049</description>
+   <pubDate>Tue, 10 Nov 2020 21:13:21 -0000</pubDate>
+   <guid isPermaLink="false">new-jersey@1605042801.932</guid>
   </item>
   <item>
    <description>New Mexico (EV: 5): Biden +97221</description>
@@ -252,8 +252,8 @@
   </item>
   <item>
    <description>West Virginia (EV: 5): Trump +307807</description>
-   <pubDate>Tue, 10 Nov 2020 19:29:47 -0000</pubDate>
-   <guid isPermaLink="false">west-virginia@1605036587.853</guid>
+   <pubDate>Tue, 10 Nov 2020 21:13:21 -0000</pubDate>
+   <guid isPermaLink="false">west-virginia@1605042801.932</guid>
   </item>
   <item>
    <description>Wyoming (EV: 3): Trump +120009</description>
