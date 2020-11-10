@@ -233,7 +233,7 @@ def html_write_state_head(state: str, state_slug: str, summary: IterationSummary
         </thead>
     '''
 
-def html_summary(state_slug: str, summary: IterationSummary):
+def html_summary(state_slug: str, summary: IterationSummary, always_visible: bool):
     if summary.counties_partition:
         counties_partition = sorted(summary.counties_partition.items(), key=lambda x: x[1], reverse=True)
         counties_total = sum(summary.counties_partition.values())
@@ -249,8 +249,9 @@ def html_summary(state_slug: str, summary: IterationSummary):
     else:
         counties_tooltip_attributes = 'class="numeric"'
     shown_votes_remaining = f'{summary.votes_remaining:,}' if summary.votes_remaining > 0 else 'Unknown'
+    always_visible_attribute = ' class="always-visible"' if always_visible else ''
     html = f'''
-        <tr id='{state_slug}-{summary.timestamp.isoformat()}'>
+        <tr id="{state_slug}-{summary.timestamp.isoformat()}"{always_visible_attribute}>
             <td class="timestamp">{summary.timestamp.strftime('%Y-%m-%d %H:%M:%S')} UTC</td>
             <td class="{summary.leading_candidate_name}">{summary.leading_candidate_name}</td>
             <td class="numeric">{summary.vote_differential:,}</td>
@@ -480,8 +481,20 @@ def html_table(summarized):
         state_slug = state.split('(')[0].strip().replace(' ', '-').lower()
         yield f"<div class='table-responsive'><table id='{state_slug}' class='table table-bordered'>"
         yield html_write_state_head(state, state_slug, timestamped_results[0])
+        visible_rows = 0
+        last_change_value = None
         for summary in timestamped_results:
-            yield html_summary(state_slug=state_slug, summary=summary)
+            change_value = summary.new_votes_formatted.strip()
+            if visible_rows >= 3:
+                always_visible = False
+            elif {change_value, last_change_value} <= {'0', 'Unknown'}:
+                always_visible = False
+            else:
+                always_visible = True
+                visible_rows += 1
+
+            yield html_summary(state_slug=state_slug, summary=summary, always_visible=always_visible)
+            last_change_value = change_value
         yield "</table></div><hr>"
 
 def html_output(path, html_table, states_updated, other_page_html):
