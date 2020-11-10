@@ -307,6 +307,7 @@ def json_to_summary(
     row: InputRecord,
     last_iteration_info: IterationInfo,
     latest_candidate_votes: Dict[str, int],
+    expected_votes: int,
     batch_time: datetime.datetime,
 ) -> Tuple[IterationInfo, IterationSummary]:
     timestamp = datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -323,7 +324,6 @@ def json_to_summary(
     total_votes = sum([candidate['votes'] for candidate in row.candidates])
     vote_diff = candidate1_votes - candidate2_votes
     votes = row.votes
-    expected_votes = row.expected_votes
     votes_remaining = expected_votes - votes
     precincts_reporting = row.precincts_reporting
     precincts_total = row.precincts_total
@@ -421,6 +421,7 @@ for rows in records.values():
     )
 
     latest_candidate_votes = {c['candidate_key']: c['votes'] for c in rows[-1].candidates}
+    latest_expected_votes = rows[-1].expected_votes
 
     for row in rows:
         iteration_info, summary = json_to_summary(
@@ -428,6 +429,7 @@ for rows in records.values():
             row,
             last_iteration_info,
             latest_candidate_votes,
+            latest_expected_votes,
             batch_time=datetime.datetime.strptime(row.timestamp, '%Y-%m-%dT%H:%M:%S.%fZ'),
         )
 
