@@ -193,8 +193,13 @@ def string_summary(summary):
 
     lead_part = summary.leading_candidate_partition - 50
 
-    visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}' if summary.hurdle > 0 else 'Unknown'
-    visible_hurdle = f'{summary.trailing_candidate_name} needs >1000%' if summary.hurdle > 10
+    if summary.hurdle > 0:
+        visible_hurdle = f'{summary.trailing_candidate_name} needs {summary.hurdle:.2%}'
+
+    if summary.hurdle > 10:
+        visible_hurdle = f'{summary.trailing_candidate_name} needs >1000%'
+    else:
+        visible_hurdle = 'Unknown'
 
     return [
         f'{summary.timestamp.strftime("%Y-%m-%d %H:%M")}',
