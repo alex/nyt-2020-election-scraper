@@ -303,6 +303,7 @@ records = fetch_all_records()
 # Where we’ll aggregate the data from the JSON files
 summarized = {}
 state_formatted_name = {}
+state_abbrev = {}
 
 def json_to_summary(
     state_name: str,
@@ -404,16 +405,15 @@ def json_to_summary(
     return iteration_info, summary
 
 states_updated = []
-states_updated_abbrev = []
 
 for rows in records.values():
     latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
 
     state_name = rows[0].state_name
-    state_abbrev = rows[0].state_abbrev
 
     summarized[state_name] = []
     state_formatted_name[state_name] = f"{state_name} (EV: {rows[0].electoral_votes})"
+    state_abbrev[state_name] = rows[0].state_abbrev
 
     last_iteration_info = IterationInfo(
         vote_diff=None,
@@ -450,7 +450,6 @@ for rows in records.values():
 
     if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
         states_updated.append(state_name)
-        states_updated_abbrev.append(state_abbrev)
 
 # Pull out the battleground state summaries
 battlegrounds_summarized = {
@@ -510,6 +509,8 @@ def html_output(path, html_table, states_updated, other_page_html):
     with open("battleground-state-changes.html.tmpl", "r", encoding='utf8') as f:
         html_template += f.read()
     TEMPLATE_HASH = hashlib.sha256(html_template.encode('utf8')).hexdigest()
+
+    states_updated_abbrev = [state_abbrev[state_name] for state_name in states_updated]
 
     with open(path,"w", encoding='utf8') as f:
         page_metadata = json.dumps({
