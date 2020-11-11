@@ -27,7 +27,7 @@ STATE_INDEXES = range(51) # 50 States + DC
 
 CACHE_DIR = '_cache'
 # Bump this with any changes to `fetch_all_records`
-CACHE_VERSION = 1
+CACHE_VERSION = 2
 
 def git_commits_for(path):
     return subprocess.check_output(['git', 'log', "--format=%H", path]).strip().decode().splitlines()
@@ -77,6 +77,7 @@ def fetch_all_records():
             record = InputRecord(
                 timestamp,
                 race['state_name'],
+                race['state_id'],
                 race['electoral_votes'],
                 race['candidates'].as_list(),
                 race['votes'],
@@ -106,6 +107,7 @@ InputRecord = collections.namedtuple(
     [
         'timestamp',
         'state_name',
+        'state_abbrev',
         'electoral_votes',
         'candidates',
         'votes',
@@ -402,11 +404,14 @@ def json_to_summary(
     return iteration_info, summary
 
 states_updated = []
+states_updated_abbrev = []
 
 for rows in records.values():
     latest_batch_time = datetime.datetime.strptime(rows[-1].timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
 
     state_name = rows[0].state_name
+    state_abbrev = rows[0].state_abbrev
+
     summarized[state_name] = []
     state_formatted_name[state_name] = f"{state_name} (EV: {rows[0].electoral_votes})"
 
@@ -445,6 +450,7 @@ for rows in records.values():
 
     if summarized[state_name] and summarized[state_name][0].timestamp == latest_batch_time:
         states_updated.append(state_name)
+        states_updated_abbrev.append(state_abbrev)
 
 # Pull out the battleground state summaries
 battlegrounds_summarized = {
@@ -509,7 +515,7 @@ def html_output(path, html_table, states_updated, other_page_html):
         page_metadata = json.dumps({
             "template_hash": TEMPLATE_HASH,
             "results_hash": RESULTS_HASH,
-            "states_updated": states_updated,
+            "states_updated": states_updated_abbrev,
         })
 
         html = html_template \
