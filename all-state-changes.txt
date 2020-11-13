@@ -1,8 +1,8 @@
-------------------------------  --------------------------------------------------------------------------------
-Last updated:                   2020-11-13 16:03 UTC
-Latest batch received: (Idaho)  2020-11-13 15:52 UTC
-Prettier web version:           https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
-------------------------------  --------------------------------------------------------------------------------
+-------------------------------------------------------------------------  --------------------------------------------------------------------------------
+Last updated:                                                              2020-11-13 16:31 UTC
+Latest batch received: (Colorado, Indiana, North Carolina, West Virginia)  2020-11-13 16:28 UTC
+Prettier web version:                                                      https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
+-------------------------------------------------------------------------  --------------------------------------------------------------------------------
 
 Alabama (EV: 9) Total Votes: (Trump: 1,434,159, Biden: 843,473)
 ----------------  ---  ----------------  -------------------  ---------------------------  ----------------  --------------------  ----------------
@@ -113,7 +113,7 @@ Arizona (EV: 11) Total Votes: (Biden: 1,668,684, Trump: 1,657,250)
 
 Arkansas (EV: 6) Total Votes: (Trump: 757,107, Biden: 418,078)
 ----------------  ---  ----------------  -------------------  -------------------------  ----------------  -------------------  ----------------
-2020-11-13 15:36  ***  Trump up 339,029  Left (est.): 40,597  Δ:      21 (Trump +31.0%)  93.52% precincts  Biden needs 479.73%  & trends  32.21%
+2020-11-13 15:36  ---  Trump up 339,029  Left (est.): 40,597  Δ:      21 (Trump +31.0%)  93.52% precincts  Biden needs 479.73%  & trends  32.21%
 2020-11-13 15:15  ---  Trump up 339,016  Left (est.): 40,619  Δ:      12 (Trump +33.3%)  93.52% precincts  Biden needs 479.48%  & trends  32.22%
 2020-11-13 14:58  ---  Trump up 339,008  Left (est.): 40,631  Δ:       5 (Biden +10.0%)  93.52% precincts  Biden needs 479.34%  & trends  32.22%
 2020-11-12 22:07  ---  Trump up 339,009  Left (est.): 40,636  Δ:      15 (Trump +16.7%)  93.52% precincts  Biden needs 479.29%  & trends  32.21%
@@ -221,8 +221,9 @@ California (EV: 55) Total Votes: (Biden: 10,443,145, Trump: 5,521,319)
 2020-11-04 13:28  ---  Biden up 3,829,646  Left (est.): 3,964,821  Δ:       0 (n/a)             72.69% precincts  Trump needs 99.34%   & trends  n/a
 ----------------  ---  ------------------  ----------------------  ---------------------------  ----------------  -------------------  ----------------
 
-Colorado (EV: 9) Total Votes: (Biden: 1,783,261, Trump: 1,347,677)
+Colorado (EV: 9) Total Votes: (Biden: 1,783,291, Trump: 1,347,705)
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  --------------------  ----------------
+2020-11-13 16:28  ***  Biden up 435,586  Left (est.): 5,372    Δ:      58 (Biden + 1.7%)  96.92% precincts  Trump needs 4215.88%  & trends  29.28%
 2020-11-12 22:47  ---  Biden up 435,584  Left (est.): 5,433    Δ:     243 (Trump + 5.6%)  96.92% precincts  Trump needs 4169.09%  & trends  29.24%
 2020-11-12 19:38  ---  Biden up 435,611  Left (est.): 5,688    Δ:      30 (Trump +36.7%)  96.92% precincts  Trump needs 3984.67%  & trends  29.02%
 2020-11-11 22:51  ---  Biden up 435,633  Left (est.): 5,719    Δ:       0 (n/a)           96.92% precincts  Trump needs 3963.54%  & trends  28.96%
@@ -658,7 +659,7 @@ Hawaii (EV: 4) Total Votes: (Biden: 366,070, Trump: 196,800)
 
 Idaho (EV: 4) Total Votes: (Trump: 554,128, Biden: 287,031)
 ----------------  ---  ----------------  -------------------  -------------------------  ----------------  -------------------  ----------------
-2020-11-13 16:01  ***  Trump up 267,097  Unknown              Δ:     149 (Trump +23.2%)  99.90% precincts  Unknown              & trends  13.18%
+2020-11-13 16:01  ---  Trump up 267,097  Unknown              Δ:     149 (Trump +23.2%)  99.90% precincts  Unknown              & trends  13.18%
 2020-11-11 22:51  ---  Trump up 267,028  Unknown              Δ:       0 (n/a)           99.90% precincts  Unknown              & trends  13.11%
 2020-11-06 15:35  ---  Trump up 267,028  Unknown              Δ:   5,529 (Trump +38.5%)  99.90% precincts  Unknown              & trends  13.11%
 2020-11-05 01:21  ---  Trump up 262,771  Unknown              Δ:  24,125 (Trump +36.5%)  98.34% precincts  Unknown              & trends  13.48%
@@ -711,8 +712,9 @@ Illinois (EV: 20) Total Votes: (Biden: 3,351,012, Trump: 2,407,096)
 2020-11-04 13:28  ---  Biden up 611,495  Left (est.): 1,540,930  Δ:       0 (n/a)           73.06% precincts  Trump needs 70.24%   & trends  n/a
 ----------------  ---  ----------------  ----------------------  -------------------------  ----------------  -------------------  ----------------
 
-Indiana (EV: 11) Total Votes: (Trump: 1,727,865, Biden: 1,239,939)
+Indiana (EV: 11) Total Votes: (Trump: 1,727,881, Biden: 1,239,945)
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  --------------------  ----------------
+2020-11-13 16:28  ***  Trump up 487,936  Unknown               Δ:      22 (Trump +22.7%)  96.68% precincts  Unknown               & trends  66.21%
 2020-11-12 21:15  ---  Trump up 487,926  Unknown               Δ:       2 (Trump + 0.0%)  96.68% precincts  Unknown               & trends  66.24%
 2020-11-12 17:10  ---  Trump up 487,926  Unknown               Δ:      33 (Trump +31.8%)  96.68% precincts  Unknown               & trends  66.24%
 2020-11-12 15:19  ---  Trump up 487,905  Unknown               Δ:     765 (Trump +28.8%)  96.68% precincts  Unknown               & trends  66.30%
@@ -726,7 +728,7 @@ Indiana (EV: 11) Total Votes: (Trump: 1,727,865, Biden: 1,239,939)
 2020-11-06 15:45  ---  Trump up 486,559  Unknown               Δ:     389 (Biden +44.3%)  96.58% precincts  Unknown               & trends  70.32%
 2020-11-06 14:12  ---  Trump up 486,904  Unknown               Δ:  19,841 (Biden +20.3%)  96.58% precincts  Unknown               & trends  70.00%
 2020-11-06 13:48  ---  Trump up 494,975  Left (est.): 6,851    Δ:  28,046 (Biden +19.3%)  96.14% precincts  Biden needs 3741.56%  & trends  67.58%
-2020-11-06 13:40  ---  Trump up 505,817  Left (est.): 35,864   Δ:  20,092 (Trump + 7.6%)  96.14% precincts  Biden needs 770.64%   & trends  42.59%
+2020-11-06 13:40  ---  Trump up 505,817  Left (est.): 35,864   Δ:  20,092 (Trump + 7.6%)  96.14% precincts  Biden needs 770.63%   & trends  42.59%
 2020-11-05 23:10  ---  Trump up 502,773  Left (est.): 56,387   Δ:  12,225 (Trump + 7.1%)  96.12% precincts  Biden needs 505.59%   & trends  34.84%
 2020-11-05 22:15  ---  Trump up 501,044  Left (est.): 68,733   Δ:  10,347 (Trump +18.2%)  95.71% precincts  Biden needs 422.47%   & trends  36.54%
 2020-11-05 20:14  ---  Trump up 497,277  Left (est.): 79,176   Δ:   4,427 (Trump +30.8%)  95.37% precincts  Biden needs 370.91%   & trends  41.81%
@@ -1057,7 +1059,7 @@ Maine (EV: 4) Total Votes: (Biden: 420,357, Trump: 341,949)
 
 Maryland (EV: 10) Total Votes: (Biden: 1,812,573, Trump: 931,530)
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  -------------------  ----------------
-2020-11-13 15:44  ***  Biden up 881,043  Left (est.): 205,038  Δ:   6,250 (Biden +42.4%)  89.40% precincts  Trump needs 269.01%  & trends  15.51%
+2020-11-13 15:44  ---  Biden up 881,043  Left (est.): 205,038  Δ:   6,250 (Biden +42.4%)  89.40% precincts  Trump needs 269.01%  & trends  15.51%
 2020-11-13 03:59  ---  Biden up 875,743  Left (est.): 211,365  Δ:  24,349 (Biden +32.4%)  89.05% precincts  Trump needs 261.18%  & trends  21.18%
 2020-11-13 01:00  ---  Biden up 859,962  Left (est.): 236,112  Δ:  11,418 (Biden +13.4%)  88.56% precincts  Trump needs 235.64%  & trends  36.47%
 2020-11-13 00:09  ---  Biden up 856,912  Left (est.): 247,762  Δ:   1,957 (Biden +11.1%)  88.26% precincts  Trump needs 226.28%  & trends  32.71%
@@ -1775,10 +1777,11 @@ New York (EV: 29) Total Votes: (Biden: 3,733,016, Trump: 2,862,593)
 2020-11-04 13:28  ---  Biden up 1,254,581  Left (est.): 1,822,606  Δ:       0 (n/a)           78.13% precincts  Trump needs 84.91%  & trends  n/a
 ----------------  ---  ------------------  ----------------------  -------------------------  ----------------  ------------------  ----------------
 
-North Carolina (EV: 15) Total Votes: (Trump: 2,744,891, Biden: 2,673,403)
+North Carolina (EV: 15) Total Votes: (Trump: 2,746,338, Biden: 2,674,895)
 ----------------  ---  ---------------  --------------------  -------------------------  ----------------  ------------------  ----------------
-2020-11-13 15:36  ***  Trump up 71,488  Left (est.): 157,410  Δ: Unknown (Biden + 2.3%)  94.97% precincts  Biden needs 73.03%  & trends  58.60%
-2020-11-13 14:50  ---  Trump up 71,466  Left (est.): 156,914  Δ:     394 (Trump +24.6%)  94.93% precincts  Biden needs 73.09%  & trends  58.48%
+2020-11-13 16:28  ***  Trump up 71,443  Left (est.): 154,371  Δ:   2,939 (Biden + 0.8%)  95.53% precincts  Biden needs 73.47%  & trends  56.72%
+2020-11-13 15:36  ---  Trump up 71,488  Left (est.): 157,410  Δ: Unknown (Biden + 2.3%)  94.97% precincts  Biden needs 73.03%  & trends  58.60%
+2020-11-13 14:50  ---  Trump up 71,466  Left (est.): 156,914  Δ:     394 (Trump +24.6%)  94.93% precincts  Biden needs 73.10%  & trends  58.48%
 2020-11-13 13:18  ---  Trump up 71,272  Left (est.): 157,319  Δ:   1,181 (Biden + 5.4%)  94.67% precincts  Biden needs 72.97%  & trends  58.91%
 2020-11-13 02:53  ---  Trump up 71,399  Left (est.): 159,198  Δ:   2,324 (Biden + 6.2%)  94.48% precincts  Biden needs 72.74%  & trends  58.99%
 2020-11-13 02:44  ---  Trump up 71,689  Left (est.): 161,985  Δ:   1,887 (Trump + 5.0%)  94.29% precincts  Biden needs 72.44%  & trends  59.22%
@@ -1801,7 +1804,7 @@ North Carolina (EV: 15) Total Votes: (Trump: 2,744,891, Biden: 2,673,403)
 2020-11-10 01:37  ---  Trump up 74,855  Left (est.): 186,740  Δ:     291 (Biden +11.2%)  91.10% precincts  Biden needs 70.33%  & trends  63.91%
 2020-11-09 23:51  ---  Trump up 74,920  Left (est.): 187,047  Δ:     772 (Biden +15.0%)  91.10% precincts  Biden needs 70.31%  & trends  64.04%
 2020-11-09 22:05  ---  Trump up 75,152  Left (est.): 187,459  Δ:      19 (Trump +18.4%)  91.10% precincts  Biden needs 70.33%  & trends  63.90%
-2020-11-09 21:52  ---  Trump up 75,145  Left (est.): 187,478  Δ:     233 (Biden + 1.9%)  91.10% precincts  Biden needs 70.32%  & trends  64.01%
+2020-11-09 21:52  ---  Trump up 75,145  Left (est.): 187,478  Δ:     233 (Biden + 1.9%)  91.10% precincts  Biden needs 70.33%  & trends  64.01%
 2020-11-09 20:19  ---  Trump up 75,154  Left (est.): 187,629  Δ:     887 (Biden +15.1%)  91.10% precincts  Biden needs 70.31%  & trends  64.53%
 2020-11-09 17:17  ---  Trump up 75,421  Left (est.): 188,235  Δ:      98 (Trump + 7.1%)  91.10% precincts  Biden needs 70.32%  & trends  64.42%
 2020-11-09 13:57  ---  Trump up 75,407  Left (est.): 188,334  Δ:      12 (Trump + 0.0%)  91.10% precincts  Biden needs 70.30%  & trends  64.90%
@@ -1892,7 +1895,7 @@ Oregon (EV: 7) Total Votes: (Biden: 1,329,567, Trump: 949,646)
 
 Pennsylvania (EV: 20) Total Votes: (Biden: 3,400,463, Trump: 3,341,954)
 ----------------  ---  ----------------  ----------------------  -------------------------  ----------------  -------------------  ----------------
-2020-11-13 15:52  ***  Biden up 58,509   Unknown                 Δ:     529 (Biden + 6.5%)  97.35% precincts  Unknown              & trends  39.20%
+2020-11-13 15:52  ---  Biden up 58,509   Unknown                 Δ:     529 (Biden + 6.5%)  97.35% precincts  Unknown              & trends  39.20%
 2020-11-13 13:33  ---  Biden up 58,440   Unknown                 Δ:   4,398 (Biden +42.2%)  97.33% precincts  Unknown              & trends  39.09%
 2020-11-13 01:29  ---  Biden up 54,726   Left (est.): 3,847      Δ:   3,999 (Biden + 5.7%)  97.33% precincts  Trump needs 770.42%  & trends  41.77%
 2020-11-12 22:23  ---  Biden up 54,273   Left (est.): 7,914      Δ:   1,374 (Trump +12.4%)  97.25% precincts  Trump needs 397.30%  & trends  39.51%
@@ -2546,6 +2549,7 @@ Washington (EV: 12) Total Votes: (Biden: 2,351,916, Trump: 1,567,887)
 
 West Virginia (EV: 5) Total Votes: (Trump: 542,670, Biden: 234,197)
 ----------------  ---  ----------------  ------------------  -------------------------  ----------------  --------------------  ----------------
+2020-11-13 16:28  ***  Trump up 308,473  Unknown             Δ:       0 (n/a)           99.12% precincts  Unknown               & trends  34.85%
 2020-11-12 20:15  ---  Trump up 308,473  Unknown             Δ:       0 (n/a)           99.12% precincts  Unknown               & trends  34.85%
 2020-11-12 17:34  ---  Trump up 308,473  Unknown             Δ:       0 (n/a)           99.12% precincts  Unknown               & trends  34.85%
 2020-11-11 22:51  ---  Trump up 308,473  Unknown             Δ:       0 (n/a)           99.12% precincts  Unknown               & trends  34.85%

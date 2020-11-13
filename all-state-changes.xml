@@ -4,7 +4,7 @@
   <title>NYT 2020 Election Scraper RSS Feed</title>
   <link>https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html</link>
   <description>Latest results from battleground states.</description>
-  <lastBuildDate>Fri, 13 Nov 2020 15:52:12 -0000</lastBuildDate>
+  <lastBuildDate>Fri, 13 Nov 2020 16:28:30 -0000</lastBuildDate>
   <item>
    <description>Alaska (EV: 3): Trump +35163</description>
    <pubDate>Fri, 13 Nov 2020 14:17:31 -0000</pubDate>
@@ -31,9 +31,9 @@
    <guid isPermaLink="false">california@1605235449.406</guid>
   </item>
   <item>
-   <description>Colorado (EV: 9): Biden +435584</description>
-   <pubDate>Thu, 12 Nov 2020 22:47:44 -0000</pubDate>
-   <guid isPermaLink="false">colorado@1605221264.968</guid>
+   <description>Colorado (EV: 9): Biden +435586</description>
+   <pubDate>Fri, 13 Nov 2020 16:28:30 -0000</pubDate>
+   <guid isPermaLink="false">colorado@1605284910.766</guid>
   </item>
   <item>
    <description>Connecticut (EV: 7): Biden +364992</description>
@@ -81,9 +81,9 @@
    <guid isPermaLink="false">illinois@1605198843.066</guid>
   </item>
   <item>
-   <description>Indiana (EV: 11): Trump +487926</description>
-   <pubDate>Thu, 12 Nov 2020 21:15:04 -0000</pubDate>
-   <guid isPermaLink="false">indiana@1605215704.237</guid>
+   <description>Indiana (EV: 11): Trump +487936</description>
+   <pubDate>Fri, 13 Nov 2020 16:28:30 -0000</pubDate>
+   <guid isPermaLink="false">indiana@1605284910.766</guid>
   </item>
   <item>
    <description>Kansas (EV: 6): Trump +202171</description>
@@ -141,9 +141,9 @@
    <guid isPermaLink="false">montana@1605191104.354</guid>
   </item>
   <item>
-   <description>North Carolina (EV: 15): Trump +71488</description>
-   <pubDate>Fri, 13 Nov 2020 15:36:10 -0000</pubDate>
-   <guid isPermaLink="false">north-carolina@1605281770.334</guid>
+   <description>North Carolina (EV: 15): Trump +71443</description>
+   <pubDate>Fri, 13 Nov 2020 16:28:30 -0000</pubDate>
+   <guid isPermaLink="false">north-carolina@1605284910.766</guid>
   </item>
   <item>
    <description>North Dakota (EV: 3): Trump +120684</description>
@@ -252,8 +252,8 @@
   </item>
   <item>
    <description>West Virginia (EV: 5): Trump +308473</description>
-   <pubDate>Thu, 12 Nov 2020 20:15:45 -0000</pubDate>
-   <guid isPermaLink="false">west-virginia@1605212145.17</guid>
+   <pubDate>Fri, 13 Nov 2020 16:28:30 -0000</pubDate>
+   <guid isPermaLink="false">west-virginia@1605284910.766</guid>
   </item>
   <item>
    <description>Wyoming (EV: 3): Trump +120068</description>
