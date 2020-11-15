@@ -1,8 +1,8 @@
-----------------------  --------------------------------------------------------------------------------
-Last updated:           2020-11-15 19:44 UTC
-Latest batch received:  2020-11-15 18:50 UTC
-Prettier web version:   https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
-----------------------  --------------------------------------------------------------------------------
+----------------------------------  --------------------------------------------------------------------------------
+Last updated:                       2020-11-15 19:52 UTC
+Latest batch received: (Minnesota)  2020-11-15 18:50 UTC
+Prettier web version:               https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
+----------------------------------  --------------------------------------------------------------------------------
 
 Alabama (EV: 9) Total Votes: (Trump: 1,434,159, Biden: 843,473)
 ----------------  ---  ----------------  -------------------  ---------------------------  ----------------  --------------------  ----------------
@@ -1369,8 +1369,9 @@ Michigan (EV: 16) Total Votes: (Biden: 2,795,975, Trump: 2,648,577)
 2020-11-04 13:28  ---  Trump up 27,533   Left (est.): 638,549  Δ:       0 (n/a)           84.22% precincts  Biden needs 52.19%    & trends  n/a
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  --------------------  ----------------
 
-Minnesota (EV: 10) Total Votes: (Biden: 1,718,739, Trump: 1,485,345)
+Minnesota (EV: 10) Total Votes: (Biden: 1,716,312, Trump: 1,483,750)
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  -------------------  ----------------
+2020-11-15 19:50  ***  Biden up 232,562  Left (est.): 84,446   Δ: Unknown (Biden +10.3%)  94.43% precincts  Trump needs 190.64%  & trends  51.08%
 2020-11-12 16:34  ---  Biden up 233,394  Left (est.): 80,331   Δ:       2 (Trump +50.0%)  94.43% precincts  Trump needs 198.37%  & trends  52.78%
 2020-11-12 16:04  ---  Biden up 233,396  Left (est.): 80,333   Δ:       6 (Biden + 0.0%)  94.43% precincts  Trump needs 198.37%  & trends  52.77%
 2020-11-12 15:53  ---  Biden up 233,396  Left (est.): 80,339   Δ:       3 (Trump +50.0%)  94.43% precincts  Trump needs 198.36%  & trends  52.77%
@@ -1424,7 +1425,7 @@ Minnesota (EV: 10) Total Votes: (Biden: 1,718,739, Trump: 1,485,345)
 2020-11-09 21:52  ---  Biden up 233,117  Left (est.): 82,286   Δ:       2 (Biden + 0.0%)  94.06% precincts  Trump needs 194.67%  & trends  52.33%
 2020-11-09 21:44  ---  Biden up 233,117  Left (est.): 82,288   Δ: Unknown (Trump +50.0%)  94.06% precincts  Trump needs 194.67%  & trends  50.39%
 2020-11-09 21:25  ---  Biden up 232,318  Left (est.): 81,489   Δ:       3 (Trump +50.0%)  94.06% precincts  Trump needs 195.59%  & trends  52.33%
-2020-11-09 19:14  ---  Biden up 232,321  Left (est.): 81,492   Δ:      15 (Biden +10.0%)  94.06% precincts  Trump needs 195.59%  & trends  52.33%
+2020-11-09 19:14  ---  Biden up 232,321  Left (est.): 81,492   Δ:      15 (Biden +10.0%)  94.06% precincts  Trump needs 195.58%  & trends  52.33%
 2020-11-09 18:56  ---  Biden up 232,318  Left (est.): 81,510   Δ:       4 (Biden + 0.0%)  94.04% precincts  Trump needs 195.55%  & trends  52.32%
 2020-11-09 18:48  ---  Biden up 232,318  Left (est.): 81,514   Δ:       9 (Biden + 5.6%)  94.04% precincts  Trump needs 195.54%  & trends  52.32%
 2020-11-09 18:30  ---  Biden up 232,317  Left (est.): 81,524   Δ:       0 (n/a)           94.04% precincts  Trump needs 195.53%  & trends  52.31%
@@ -1445,7 +1446,7 @@ Minnesota (EV: 10) Total Votes: (Biden: 1,718,739, Trump: 1,485,345)
 2020-11-06 22:43  ---  Biden up 232,316  Left (est.): 81,997   Δ:       3 (Trump +50.0%)  94.01% precincts  Trump needs 194.69%  & trends  51.93%
 2020-11-06 22:32  ---  Biden up 232,319  Left (est.): 82,000   Δ:       2 (Biden + 0.0%)  94.01% precincts  Trump needs 194.68%  & trends  51.92%
 2020-11-06 22:24  ---  Biden up 232,319  Left (est.): 82,002   Δ:      14 (Trump + 7.1%)  94.01% precincts  Trump needs 194.68%  & trends  51.92%
-2020-11-06 22:14  ---  Biden up 232,321  Left (est.): 82,016   Δ:       1 (Trump +50.0%)  94.01% precincts  Trump needs 194.66%  & trends  51.90%
+2020-11-06 22:14  ---  Biden up 232,321  Left (est.): 82,016   Δ:       1 (Trump +50.0%)  94.01% precincts  Trump needs 194.65%  & trends  51.90%
 2020-11-06 22:03  ---  Biden up 232,322  Left (est.): 82,017   Δ:       2 (Trump +50.0%)  94.01% precincts  Trump needs 194.65%  & trends  51.90%
 2020-11-06 21:54  ---  Biden up 232,324  Left (est.): 82,019   Δ:       1 (Biden +50.0%)  94.01% precincts  Trump needs 194.65%  & trends  51.90%
 2020-11-06 21:30  ---  Biden up 232,323  Left (est.): 82,020   Δ:      47 (Biden + 5.3%)  94.01% precincts  Trump needs 194.65%  & trends  51.90%
@@ -1541,7 +1542,7 @@ Minnesota (EV: 10) Total Votes: (Biden: 1,718,739, Trump: 1,485,345)
 2020-11-04 16:19  ---  Biden up 228,525  Left (est.): 150,311  Δ:     498 (Trump + 6.4%)  91.68% precincts  Trump needs 127.64%  & trends  63.01%
 2020-11-04 16:01  ---  Biden up 228,589  Left (est.): 150,828  Δ:     719 (Trump +15.0%)  91.65% precincts  Trump needs 127.40%  & trends  63.65%
 2020-11-04 15:52  ---  Biden up 228,804  Left (est.): 151,575  Δ:     525 (Trump +14.0%)  91.61% precincts  Trump needs 127.09%  & trends  63.44%
-2020-11-04 15:31  ---  Biden up 228,951  Left (est.): 152,110  Δ:     252 (Biden + 1.6%)  91.58% precincts  Trump needs 126.87%  & trends  63.36%
+2020-11-04 15:31  ---  Biden up 228,951  Left (est.): 152,110  Δ:     252 (Biden + 1.6%)  91.58% precincts  Trump needs 126.86%  & trends  63.36%
 2020-11-04 15:21  ---  Biden up 228,943  Left (est.): 152,370  Δ:     928 (Trump +16.6%)  91.58% precincts  Trump needs 126.73%  & trends  64.40%
 2020-11-04 15:17  ---  Biden up 229,251  Left (est.): 153,330  Δ:   2,690 (Trump +13.6%)  91.51% precincts  Trump needs 126.35%  & trends  63.64%
 2020-11-04 13:28  ---  Biden up 229,985  Left (est.): 156,079  Δ:       0 (n/a)           91.27% precincts  Trump needs 125.25%  & trends  n/a
