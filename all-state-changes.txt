@@ -1,6 +1,6 @@
 -------------------------------------  --------------------------------------------------------------------------------
-Last updated:                          2020-11-19 21:00 UTC
-Latest batch received: (Pennsylvania)  2020-11-19 20:57 UTC
+Last updated:                          2020-11-19 21:18 UTC
+Latest batch received: (Pennsylvania)  2020-11-19 21:16 UTC
 Prettier web version:                  https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
 -------------------------------------  --------------------------------------------------------------------------------
 
@@ -209,7 +209,7 @@ Arkansas (EV: 6) Total Votes: (Trump: 759,714, Biden: 423,502)
 
 California (EV: 55) Total Votes: (Biden: 10,950,162, Trump: 5,883,886)
 ----------------  ---  ------------------  ----------------------  ---------------------------  ----------------  -------------------  ----------------
-2020-11-19 20:43  ***  Biden up 5,066,276  Unknown                 Δ:       2 (Biden + 0.0%)    98.82% precincts  Unknown              & trends  43.24%
+2020-11-19 20:43  ---  Biden up 5,066,276  Unknown                 Δ:       2 (Biden + 0.0%)    98.82% precincts  Unknown              & trends  43.24%
 2020-11-19 05:43  ---  Biden up 5,066,276  Unknown                 Δ:     311 (Biden + 7.9%)    98.82% precincts  Unknown              & trends  43.24%
 2020-11-19 02:44  ---  Biden up 5,066,227  Unknown                 Δ:  24,646 (Biden + 7.7%)    98.82% precincts  Unknown              & trends  43.37%
 2020-11-18 23:44  ---  Biden up 5,062,423  Unknown                 Δ:   4,338 (Biden + 1.7%)    98.81% precincts  Unknown              & trends  45.13%
@@ -784,7 +784,7 @@ Georgia (EV: 16) Total Votes: (Biden: 2,473,383, Trump: 2,459,825)
 
 Hawaii (EV: 4) Total Votes: (Biden: 366,130, Trump: 196,864)
 ----------------  ---  ----------------  -------  -------------------------  -----------------  -------  ----------------
-2020-11-19 20:34  ***  Biden up 169,266  Unknown  Δ:     124 (Trump + 1.6%)  100.00% precincts  Unknown  & trends  48.93%
+2020-11-19 20:34  ---  Biden up 169,266  Unknown  Δ:     124 (Trump + 1.6%)  100.00% precincts  Unknown  & trends  48.93%
 2020-11-13 01:51  ---  Biden up 169,270  Unknown  Δ:     466 (Biden + 7.5%)  100.00% precincts  Unknown  & trends  48.91%
 2020-11-04 17:33  ---  Biden up 169,200  Unknown  Δ:  20,759 (Biden + 0.9%)  100.00% precincts  Unknown  & trends  49.05%
 2020-11-04 13:28  ---  Biden up 168,807  Unknown  Δ:       0 (n/a)           100.00% precincts  Unknown  & trends  n/a
@@ -2287,8 +2287,9 @@ Oregon (EV: 7) Total Votes: (Biden: 1,336,534, Trump: 954,412)
 2020-11-04 13:28  ---  Biden up 377,096  Left (est.): 194,495  Δ:       0 (n/a)           94.23% precincts  Trump needs 150.00%    & trends  n/a
 ----------------  ---  ----------------  --------------------  -------------------------  ----------------  ---------------------  ----------------
 
-Pennsylvania (EV: 20) Total Votes: (Biden: 3,453,930, Trump: 3,371,616)
+Pennsylvania (EV: 20) Total Votes: (Biden: 3,453,940, Trump: 3,371,639)
 ----------------  ---  ----------------  ----------------------  -------------------------  ----------------  -------------------  ----------------
+2020-11-19 21:16  ***  Biden up 82,301   Unknown                 Δ:      33 (Trump +19.7%)  98.09% precincts  Unknown              & trends  35.30%
 2020-11-19 20:57  ***  Biden up 82,314   Unknown                 Δ:     104 (Biden +12.5%)  98.09% precincts  Unknown              & trends  35.29%
 2020-11-19 20:22  ---  Biden up 82,288   Unknown                 Δ:     167 (Trump + 0.3%)  98.09% precincts  Unknown              & trends  35.37%
 2020-11-19 20:18  ---  Biden up 82,289   Unknown                 Δ:      40 (Trump +30.0%)  98.09% precincts  Unknown              & trends  35.42%
