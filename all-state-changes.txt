@@ -1,8 +1,8 @@
--------------------------------------------  --------------------------------------------------------------------------------
-Last updated:                                2020-12-02 20:19 UTC
-Latest batch received: (Illinois, New York)  2020-12-02 19:04 UTC
-Prettier web version:                        https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
--------------------------------------------  --------------------------------------------------------------------------------
+----------------------  --------------------------------------------------------------------------------
+Last updated:           2020-12-02 21:14 UTC
+Latest batch received:  2020-12-02 19:04 UTC
+Prettier web version:   https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
+----------------------  --------------------------------------------------------------------------------
 
 Alabama (EV: 9) Total Votes: (Trump: 1,441,170, Biden: 849,624)
 ----------------  ---  ----------------  -------------------  ---------------------------  -----------------  -----------------------  ----------------
@@ -907,7 +907,7 @@ Idaho (EV: 4) Total Votes: (Trump: 554,118, Biden: 287,021)
 
 Illinois (EV: 20) Total Votes: (Biden: 3,461,763, Trump: 2,438,696)
 ----------------  ---  ------------------  ----------------------  --------------------------  ----------------  --------------------  ----------------
-2020-12-02 20:07  ***  Biden up 1,023,067  Left (est.): 17,002     Δ:     343 (Trump + 3.1%)   89.69% precincts  Trump needs 3119.48%  & trends  27.47%
+2020-12-02 20:07  ---  Biden up 1,023,067  Left (est.): 17,002     Δ:     343 (Trump + 3.1%)   89.69% precincts  Trump needs 3119.48%  & trends  27.47%
 2020-12-02 16:33  ---  Biden up 1,023,088  Left (est.): 17,358     Δ:   1,750 (Biden + 6.6%)   89.62% precincts  Trump needs 3056.59%  & trends  26.99%
 2020-11-24 15:49  ---  Biden up 1,022,856  Left (est.): 19,230     Δ:      31 (Trump + 1.6%)   89.49% precincts  Trump needs 2763.29%  & trends  25.13%
 2020-11-24 15:28  ---  Biden up 1,022,857  Left (est.): 19,261     Δ:   9,070 (Biden +24.6%)   89.49% precincts  Trump needs 2758.93%  & trends  25.08%
@@ -2291,7 +2291,7 @@ New Mexico (EV: 5) Total Votes: (Biden: 501,614, Trump: 401,894)
 
 New York (EV: 29) Total Votes: (Biden: 4,943,074, Trump: 3,148,139)
 ----------------  ---  ------------------  ----------------------  -------------------------  ----------------  -------------------  ----------------
-2020-12-02 20:07  ***  Biden up 1,794,935  Left (est.): 694,536    Δ:      28 (Biden +28.6%)  95.86% precincts  Trump needs 181.12%  & trends  16.02%
+2020-12-02 20:07  ---  Biden up 1,794,935  Left (est.): 694,536    Δ:      28 (Biden +28.6%)  95.86% precincts  Trump needs 181.12%  & trends  16.02%
 2020-12-01 22:59  ---  Biden up 1,794,919  Left (est.): 694,487    Δ: 266,662 (Biden +34.0%)  95.80% precincts  Trump needs 181.13%  & trends  16.02%
 2020-12-01 22:20  ---  Biden up 1,613,695  Left (est.): 963,791    Δ: 529,134 (Biden +38.0%)  92.77% precincts  Trump needs 134.95%  & trends  12.00%
 2020-12-01 16:39  ---  Biden up 1,211,591  Left (est.): 1,497,843  Δ:  35,140 (Biden +21.5%)  88.78% precincts  Trump needs 91.04%   & trends  28.52%
