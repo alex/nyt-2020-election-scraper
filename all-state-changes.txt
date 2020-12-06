@@ -1,8 +1,8 @@
----------------------------------------------------  --------------------------------------------------------------------------------
-Last updated:                                        2020-12-06 14:21 UTC
-Latest batch received: (Mississippi, West Virginia)  2020-12-05 23:17 UTC
-Prettier web version:                                https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
----------------------------------------------------  --------------------------------------------------------------------------------
+----------------------  --------------------------------------------------------------------------------
+Last updated:           2020-12-06 15:19 UTC
+Latest batch received:  2020-12-05 23:17 UTC
+Prettier web version:   https://alex.github.io/nyt-2020-election-scraper/battleground-state-changes.html
+----------------------  --------------------------------------------------------------------------------
 
 Alabama (EV: 9) Total Votes: (Trump: 1,441,168, Biden: 849,648)
 ----------------  ---  ----------------  -------------------  ---------------------------  -----------------  -----------------------  ----------------
@@ -1895,7 +1895,7 @@ Minnesota (EV: 10) Total Votes: (Biden: 1,717,077, Trump: 1,484,065)
 
 Mississippi (EV: 6) Total Votes: (Trump: 756,764, Biden: 539,398)
 ----------------  ---  ----------------  --------------------  --------------------------  -----------------  -------------------  ----------------
-2020-12-06 14:16  ***  Trump up 217,366  Left (est.): 12,735   Δ: Unknown (Biden +102.4%)  99.89% precincts   Biden needs 915.94%  & trends  69.29%
+2020-12-06 14:16  ---  Trump up 217,366  Left (est.): 12,735   Δ: Unknown (Biden +102.4%)  99.89% precincts   Biden needs 915.94%  & trends  69.29%
 2020-11-19 15:46  ---  Trump up 217,237  Left (est.): 12,673   Δ:   4,453 (Biden + 5.4%)   99.89% precincts   Biden needs 919.66%  & trends  69.45%
 2020-11-19 15:23  ---  Trump up 217,718  Left (est.): 17,155   Δ:   2,710 (Biden +31.3%)   100.00% precincts  Biden needs 693.87%  & trends  72.90%
 2020-11-19 14:43  ---  Trump up 219,416  Left (est.): 19,870   Δ:   1,579 (Biden +39.0%)   100.00% precincts  Biden needs 610.23%  & trends  72.65%
@@ -3497,7 +3497,7 @@ Washington (EV: 12) Total Votes: (Biden: 2,369,612, Trump: 1,584,651)
 
 West Virginia (EV: 5) Total Votes: (Trump: 545,382, Biden: 235,984)
 ----------------  ---  ----------------  ------------------  -------------------------  -----------------  ---------------------  ----------------
-2020-12-06 14:16  ***  Trump up 309,398  Unknown             Δ:       0 (n/a)           100.00% precincts  Unknown                & trends  35.60%
+2020-12-06 14:16  ---  Trump up 309,398  Unknown             Δ:       0 (n/a)           100.00% precincts  Unknown                & trends  35.60%
 2020-12-01 15:21  ---  Trump up 309,398  Unknown             Δ:     468 (Trump +20.7%)  99.12% precincts   Unknown                & trends  35.60%
 2020-11-24 15:40  ---  Trump up 309,204  Left (est.): 448    Δ:       0 (n/a)           99.12% precincts   Biden needs 35146.16%  & trends  35.68%
 2020-11-23 20:33  ---  Trump up 309,204  Left (est.): 448    Δ:       0 (n/a)           99.12% precincts   Biden needs 35146.16%  & trends  35.68%
